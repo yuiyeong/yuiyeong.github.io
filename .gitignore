@@ -48,3 +48,6 @@ venv.bak/
 
 !.idea/codeStyles
 !.idea/runConfigurations
+
+# Mac os
+.DS_Store
