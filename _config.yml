@@ -14,12 +14,12 @@ timezone: Asia/Seoul
 # jekyll-seo-tag settings › https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md
 # ↓ --------------------------
 
-title: TurboTurtle's Blog
+title: 급발진 거북이
 
-tagline: turbo-turtle 의 기록
+tagline: 급발진 거북이의 여정
 
 description: >- 
-  나(a.k.a TurboTurtle)의 기록.
+  내가 보고 듣고 느끼고 생각한 것들의 모음집
   Python, Djnago, FastAPI, Machine Learning, Deeplearning 등 공부한 것들의 기록
 
 # Fill in the protocol & hostname for your site.
