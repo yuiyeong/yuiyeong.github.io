@@ -3,9 +3,10 @@ layout: null
 ---
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- 블로그 포스트 -->
   {% for post in site.posts %}
   <url>
-    <loc>{{ site.url }}{{ post.url }}</loc>
+    <loc>{{ site.url }}{{ post.url | uri_escape }}</loc>
     {% if post.lastmod %}
     <lastmod>{{ post.lastmod | date: "%Y-%m-%d" }}</lastmod>
     {% else %}
@@ -13,15 +14,31 @@ layout: null
     {% endif %}
   </url>
   {% endfor %}
-  
-  {% for page in site.pages %}
-  {% if page.layout != nil and page.layout != 'feed' and page.url != '/404.html' %}
+
+  <!-- 카테고리 페이지 -->
+  {% for category in site.categories %}
   <url>
-    <loc>{{ site.url }}{{ page.url }}</loc>
-    {% if page.lastmod %}
-    <lastmod>{{ page.lastmod | date: "%Y-%m-%d" }}</lastmod>
-    {% endif %}
+    <loc>{{ site.url }}/categories/{{ category[0] | slugify | uri_escape }}/</loc>
   </url>
-  {% endif %}
   {% endfor %}
+
+  <!-- 태그 페이지 -->
+  {% for tag in site.tags %}
+  <url>
+    <loc>{{ site.url }}/tags/{{ tag[0] | uri_escape }}/</loc>
+  </url>
+  {% endfor %}
+
+  <!-- 특정 주요 페이지만 포함 -->
+  <url>
+    <loc>{{ site.url }}/</loc>
+  </url>
+
+  <!-- SEO 관련 중요 파일 -->
+  <url>
+    <loc>{{ site.url }}/robots.txt</loc>
+  </url>
+  <url>
+    <loc>{{ site.url }}/sitemap.xml</loc>
+  </url>
 </urlset>
