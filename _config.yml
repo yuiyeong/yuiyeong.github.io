@@ -51,6 +51,9 @@ webmaster_verifications:
   facebook: # fill in your Facebook verification code
 
 # ↑ --------------------------
+sitemap:
+  path: sitemap.xml
+
 # The end of `jekyll-seo-tag` settings
 
 # Web Analytics Settings
