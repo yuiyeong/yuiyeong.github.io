@@ -1,7 +1,7 @@
 ---
-title: (연습) 서울 인구 데이터 분석 (w. Pandas)
+title: 🐼 (연습) 서울 인구 데이터 분석 (w. Pandas)
 date: 2025-04-03 11:52:00 +0900
-categories: [ PYTHON, DATA_ANALYSIS ]
+categories: [ PYTHON, PANDAS ]
 tags: [ '급발진거북이', 'pandas', 'python', '데이터분석', '서울 열린데이터 광장' ]
 toc: true
 comments: false
@@ -27,11 +27,11 @@ math: true
 
    ![section_preview01.png](/assets/img/section_preview01.png)
 
-2. 팝업 창에서 다운로드 버튼 다시 클릭
+1. 팝업 창에서 다운로드 버튼 다시 클릭
 
    ![section_preview02.png](/assets/img/section_preview02.png)
 
-3. **이 노트북이 있는 폴더**에 다운로드 받은 엑셀을 옮기기
+1. **이 노트북이 있는 폴더**에 다운로드 받은 엑셀을 옮기기
 
 ## 🏋️ Pandas 로 조작해보기
 
@@ -131,7 +131,7 @@ df.head()
 
 - 실행결과
 
-```
+```shell
 모든 컬럼명: Index(['동', '세대', '전체 수', '총 남자 수', '총 여자 수', '총 한국인 수', '총 한국인 남자 수',
        '총 한국인 여자 수', '총 외국인 수', '총 외국인 남자 수', '총 외국인 여자 수', '세대 당 평균 인구 수',
        '총 65세 이상 고령자 수'],
@@ -157,7 +157,7 @@ df.info()
 
 - 실행결과
 
-```
+```shell
 <class 'pandas.core.frame.DataFrame'>
 RangeIndex: 25 entries, 1 to 25
 Data columns (total 13 columns):

@@ -1,7 +1,7 @@
 ---
-title: NumPy Cheat Sheet
+title: 😜 NumPy Cheat Sheet
 date: 2025-04-01 12:26:00 +0900
-categories: [ PYTHON, DATA_ANALYSIS ]
+categories: [ PYTHON, NUMPY ]
 tags: [ '급발진거북이', 'python', 'numpy', 'cheat sheet' ]
 toc: true
 comments: false
@@ -11,7 +11,7 @@ math: true
 
 ## 🗺️ 마인드맵
 
-```
+```shell
                         ┌── array() ── [1,2,3] → ndarray([1,2,3])
                         │
                         ├── zeros() ── shape=(2,3) → [[0,0,0],[0,0,0]]

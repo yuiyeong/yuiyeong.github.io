@@ -1,7 +1,7 @@
 ---
-title: Pandas 켠김에 왕까지
+title: 🐼 Pandas 켠김에 왕까지
 date: 2025-04-03 10:09:00 +0900
-categories: [ PYTHON, DATA_ANALYSIS ]
+categories: [ PYTHON, PANDAS ]
 tags: [ '급발진거북이', 'pandas', 'excel', 'csv', 'python', '파이썬', '데이터분석' ]
 toc: true
 comments: false
@@ -10,8 +10,8 @@ math: true
 ---
 
 > 💡 `import pandas as pd`
->
-> 위 구문으로 [Pandas](https://pandas.pydata.org/docs/) 를 사용한다고 전제한다.
+
+위 구문으로 [Pandas](https://pandas.pydata.org/docs/) 를 사용한다고 전제한다.
 
 ## ⭐ 설치 및 환경
 

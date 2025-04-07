@@ -1,7 +1,7 @@
 ---
-title: Selenium with Python Cheat Sheet
+title: 😜 Selenium with Python Cheat Sheet
 date: 2025-03-31 19:59:00 +0900
-categories: [ PYTHON, DATA_ANALYSIS ]
+categories: [ PYTHON, CRAWLING ]
 tags: [ '급발진거북이', 'python', 'crawling', '크롤링', 'selenium', '셀레니움', '파이썬' ]
 toc: true
 comments: false
@@ -36,6 +36,8 @@ driver.get("https://example.com")
 
 # 브라우저 종료
 driver.quit()
+
+
 ```
 
 ## 🔍 요소 찾기 (Element Location)
@@ -62,6 +64,8 @@ element = driver.find_element(By.PARTIAL_LINK_TEXT, "회원")
 # 자식 요소 찾기
 parent = driver.find_element(By.ID, "parent")
 child = parent.find_element(By.CSS_SELECTOR, ".child-class")
+
+
 ```
 
 ## 🖱️ 요소 상호작용
@@ -91,6 +95,8 @@ is_enabled = driver.find_element(By.ID, "button").is_enabled()
 
 # 체크박스나 라디오 버튼이 선택되었는지 확인
 is_selected = driver.find_element(By.ID, "checkbox").is_selected()
+
+
 ```
 
 ## ⏱️ 대기 전략 (Waiting)
@@ -122,6 +128,8 @@ wait.until(EC.all_of(
 
 # 간단한 시간 지연 (권장하지 않음, 명시적 대기 대신 사용)
 time.sleep(2)
+
+
 ```
 
 ## 📜 스크롤 및 JavaScript 실행
@@ -153,6 +161,8 @@ while True:
     if new_height == last_height:
         break  # 더 이상 새 콘텐츠가 로드되지 않으면 종료
     last_height = new_height
+
+
 ```
 
 ## 🪟 프레임 및 창 처리
@@ -178,6 +188,8 @@ for window in all_windows:
         break
 # 원래 창으로 돌아가기
 driver.switch_to.window(original_window)
+
+
 ```
 
 ## ⚠️ 경고창(Alert) 처리
@@ -193,6 +205,8 @@ alert.dismiss()
 
 # 경고창에 텍스트 입력
 alert.send_keys("텍스트 입력")
+
+
 ```
 
 ## 🍪 쿠키 및 로컬스토리지 처리
@@ -212,6 +226,8 @@ driver.execute_script("window.localStorage.setItem('key', 'value');")
 
 # 로컬스토리지 항목 가져오기
 value = driver.execute_script("return window.localStorage.getItem('key');")
+
+
 ```
 
 ## 📁 파일 다운로드 및 업로드
@@ -230,6 +246,8 @@ driver = webdriver.Chrome(service=service, options=options)
 # 파일 업로드 (input type="file" 요소)
 file_input = driver.find_element(By.ID, "file-upload")
 file_input.send_keys("/path/to/file.jpg")
+
+
 ```
 
 ## ⚙️ 헤드리스 모드 및 옵션 설정
@@ -253,6 +271,8 @@ options.add_argument("--disable-gpu")
 options.add_argument("--blink-settings=imagesEnabled=false")
 
 driver = webdriver.Chrome(service=service, options=options)
+
+
 ```
 
 ## 💾 데이터 추출 및 저장
@@ -285,6 +305,8 @@ df.to_csv("products.csv", index=False, encoding="utf-8-sig")
 # JSON으로 저장
 with open("products.json", "w", encoding="utf-8") as f:
     json.dump(products, f, ensure_ascii=False, indent=4)
+
+
 ```
 
 ## 💡 유용한 팁
@@ -314,5 +336,7 @@ driver.back()
 
 # 브라우저 히스토리 앞으로 가기
 driver.forward()
+
+
 ```
 

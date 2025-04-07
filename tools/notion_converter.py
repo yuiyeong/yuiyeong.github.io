@@ -55,7 +55,10 @@ class PageMetadata:
         self.id = kwargs["id"]
 
         properties = kwargs["properties"]
+        page_emoji = kwargs["icon"].get("emoji")
         self.title = properties["title"]["title"][0]["plain_text"]
+        if page_emoji:
+            self.title = f"{page_emoji} {self.title}"
         self.simple_name = properties["simple_name"]["rich_text"][0]["plain_text"]
         self.category = properties["category"]["select"]["name"]
         self.subcategory = properties["subcategory"]["select"]["name"]

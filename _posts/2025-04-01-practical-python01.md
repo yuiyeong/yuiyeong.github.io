@@ -1,8 +1,8 @@
 ---
-title: Python 실용 팁 01
+title: 😀 Python 실용 팁 01
 date: 2025-04-01 17:15:00 +0900
-categories: [PYTHON, ETC]
-tags: ['급발진거북이', 'python']
+categories: [ PYTHON, ETC ]
+tags: [ '급발진거북이', 'python' ]
 toc: true
 comments: false
 mermaid: true
@@ -17,7 +17,6 @@ math: true
 
 `str()`은 객체의 '사용자 친화적인' 문자열 표현을 반환한다.
 
-
 ```python
 # 정수
 print(str(42))  # 출력: 42
@@ -27,6 +26,7 @@ print(str([1, 2, 3]))  # 출력: [1, 2, 3]
 
 # 날짜
 import datetime
+
 today = datetime.datetime.now()
 print(str(today))  # 출력: 2025-04-01 12:34:56.789012
 
@@ -36,7 +36,6 @@ print(str(today))  # 출력: 2025-04-01 12:34:56.789012
 
 `repr()`은 객체의 '공식적인' 문자열 표현을 반환하며, 가능하면 객체를 재생성할 수 있는 Python 코드를 반환한다.
 
-
 ```python
 # 정수
 print(repr(42))  # 출력: 42
@@ -45,11 +44,12 @@ print(repr(42))  # 출력: 42
 print(repr([1, 2, 3]))  # 출력: [1, 2, 3]
 
 # 문자열
-print(str('Hello'))     # 출력: Hello
-print(repr('Hello'))    # 출력: 'Hello' (따옴표 포함)
+print(str('Hello'))  # 출력: Hello
+print(repr('Hello'))  # 출력: 'Hello' (따옴표 포함)
 
 # 날짜
 import datetime
+
 today = datetime.datetime.now()
 print(repr(today))  # 출력: datetime.datetime(2025, 4, 1, 12, 34, 56, 789012)
 
@@ -59,33 +59,31 @@ print(repr(today))  # 출력: datetime.datetime(2025, 4, 1, 12, 34, 56, 789012)
 
 - **목적**:
 
-	- `str()`: 사람이 읽기 쉬운 형태로 출력
+    - `str()`: 사람이 읽기 쉬운 형태로 출력
 
-	- `repr()`: 디버깅과 개발용으로, 객체를 재생성할 수 있는 정보 포함
+    - `repr()`: 디버깅과 개발용으로, 객체를 재생성할 수 있는 정보 포함
 
 - **특수문자 처리**:
 
-	- `str()`: 특수문자를 그대로 보여줌
+    - `str()`: 특수문자를 그대로 보여줌
 
-	- `repr()`: 이스케이프 시퀀스로 표시
+    - `repr()`: 이스케이프 시퀀스로 표시
 
-	
 ```python
 s = 'Hello\nWorld'
-print(str(s))    # Hello
-                 # World
-print(repr(s))   # 'Hello\nWorld'
+print(str(s))  # Hello
+# World
+print(repr(s))  # 'Hello\nWorld'
 
 ```
 
 - **클래스 구현**:
 
-	- `str()`: 객체의 `__str__` 메서드 호출
+    - `str()`: 객체의 `__str__` 메서드 호출
 
-	- `repr()`: 객체의 `__repr__` 메서드 호출
+    - `repr()`: 객체의 `__repr__` 메서드 호출
 
 ### 사용자 정의 클래스에서의 활용
-
 
 ```python
 class Person:
@@ -99,39 +97,39 @@ class Person:
     def __repr__(self):
         return f"Person(name='{self.name}', age={self.age})"
 
+
 p = Person("홍길동", 30)
-print(str(p))   # 출력: 홍길동, 30세
+print(str(p))  # 출력: 홍길동, 30세
 print(repr(p))  # 출력: Person(name='홍길동', age=30)
 
 ```
 
-> 💡 직접 클래스를 만들 때는 최소한 `__repr__`은 구현하는 것이 좋다. 
+> 💡 직접 클래스를 만들 때는 최소한 `__repr__`은 구현하는 것이 좋다.
 `__str__`이 없으면 파이썬은 자동으로 `__repr__`을 사용하지만, 반대는 적용되지 않는다!
 
 ### 언제 무엇을 사용해야 할까?
 
 - `**str()**`** 사용 시기**:
 
-	- 최종 사용자에게 보여줄 텍스트
+    - 최종 사용자에게 보여줄 텍스트
 
-	- 로그 메시지
+    - 로그 메시지
 
-	- 사용자 인터페이스 표시
+    - 사용자 인터페이스 표시
 
 - `**repr()**`** 사용 시기**:
 
-	- 디버깅
+    - 디버깅
 
-	- 개발 중 객체 검사
+    - 개발 중 객체 검사
 
-	- 로깅 시스템에서 객체의 정확한 상태 기록
+    - 로깅 시스템에서 객체의 정확한 상태 기록
 
-	- Python 인터프리터에서 객체 검사 (기본적으로 REPL에서는 `repr` 사용)
+    - Python 인터프리터에서 객체 검사 (기본적으로 REPL에서는 `repr` 사용)
 
 ## 🧩 eval() 함수 활용하기
 
 `eval()`은 문자열로 표현된 Python 표현식을 평가하고 실행하는 함수다.
-
 
 ```python
 x = 1
@@ -151,9 +149,9 @@ print(recreated_list)  # 출력: [1, 2, 3]
 
 `repr()`의 주요 목적 중 하나는 `eval(repr(obj)) == obj`가 가능하도록 하는 것이다. 이는 복잡한 객체를 문자열로 저장했다가 다시 복원할 때 유용하다.
 
-
 ```python
 import datetime
+
 today = datetime.datetime.now()
 today_repr = repr(today)
 print(today_repr)  # datetime.datetime(2025, 4, 1, 12, 34, 56, 789012)
@@ -177,14 +175,14 @@ print(recreated_date == today)  # True
 
 > ⚠️ 사용자 입력을 직접 `eval()` 에 전달하면 심각한 보안 위험이 발생할 수 있다. 악의적인 코드 실행 가능성이 있기 때문에 주의해야 한다!
 
-
 ```python
 # 위험한 예
-user_input = "__import__('os').system('rm -rf /')" # 시스템 파일 삭제 명령
+user_input = "__import__('os').system('rm -rf /')"  # 시스템 파일 삭제 명령
 # eval(user_input)  # 절대 실행하지 말 것!
 
 # 안전한 대안: ast.literal_eval 사용
 import ast
+
 safe_data = ast.literal_eval('[1, 2, 3]')  # 안전하게 리스트로 변환
 print(safe_data)  # [1, 2, 3]
 
@@ -213,7 +211,6 @@ print(safe_data)  # [1, 2, 3]
 
 ### 예시
 
-
 ```python
 def outer_function(x):
     # 외부 함수의 변수
@@ -227,6 +224,7 @@ def outer_function(x):
     # 내부 함수 반환
     return inner_function
 
+
 # 클로저 생성
 closure = outer_function(10)
 # 클로저 실행
@@ -235,10 +233,10 @@ print(result)  # 출력: 15
 
 ```
 
-위 코드에서 `inner_function`은 `outer_function`의 지역 변수인 `outer_var`를 참조하고 있다. `outer_function`이 실행을 완료한 후에도 반환된 `inner_function`은 여전히 `outer_var`의 값을 기억하고 있다. 이것이 바로 클로저의 핵심이다!
+위 코드에서 `inner_function`은 `outer_function`의 지역 변수인 `outer_var`를 참조하고 있다. `outer_function`이 실행을 완료한 후에도 반환된
+`inner_function`은 여전히 `outer_var`의 값을 기억하고 있다. 이것이 바로 클로저의 핵심이다!
 
 ### 클로저의 응용 - 카운터
-
 
 ```python
 def make_counter():
@@ -250,6 +248,7 @@ def make_counter():
         return count
 
     return counter
+
 
 counter = make_counter()
 print(counter())  # 출력: 1
@@ -274,18 +273,20 @@ print(counter())  # 출력: 3
 
 ### 기본 데코레이터 예시
 
-
 ```python
 def my_decorator(func):
     def wrapper():
         print("함수 실행 전")
         func()
         print("함수 실행 후")
+
     return wrapper
+
 
 @my_decorator
 def say_hello():
     print("안녕하세요!")
+
 
 # 데코레이터 사용
 say_hello()
@@ -298,7 +299,6 @@ say_hello()
 
 `@my_decorator` 구문은 사실 다음과 동일하다.
 
-
 ```python
 say_hello = my_decorator(say_hello)
 
@@ -308,7 +308,6 @@ say_hello = my_decorator(say_hello)
 
 ### 인자를 받는 함수에 데코레이터 적용
 
-
 ```python
 def my_decorator(func):
     def wrapper(*args, **kwargs):
@@ -316,11 +315,14 @@ def my_decorator(func):
         result = func(*args, **kwargs)
         print("함수 실행 후")
         return result
+
     return wrapper
+
 
 @my_decorator
 def add(a, b):
     return a + b
+
 
 result = add(3, 5)
 print(f"결과: {result}")
@@ -335,7 +337,6 @@ print(f"결과: {result}")
 
 ### 인자를 받는 데코레이터
 
-
 ```python
 def repeat(n):
     def decorator(func):
@@ -344,13 +345,17 @@ def repeat(n):
             for _ in range(n):
                 result = func(*args, **kwargs)
             return result
+
         return wrapper
+
     return decorator
+
 
 @repeat(3)
 def say_hello(name):
     print(f"안녕하세요, {name}님!")
     return "완료"
+
 
 result = say_hello("홍길동")
 # 출력:
@@ -370,18 +375,17 @@ result = say_hello("홍길동")
 
 - 기능 확장의 차이
 
-	- 클로저: 주로 상태 유지와 데이터 은닉에 초점
+    - 클로저: 주로 상태 유지와 데이터 은닉에 초점
 
-	- 데코레이터: 함수의 기능 확장과 횡단 관심사(cross-cutting concerns) 처리에 초점
+    - 데코레이터: 함수의 기능 확장과 횡단 관심사(cross-cutting concerns) 처리에 초점
 
 - 구현 방식의 차이
 
-	- 클로저: 내부 함수가 외부 함수의 변수를 저장하고 활용
+    - 클로저: 내부 함수가 외부 함수의 변수를 저장하고 활용
 
-	- 데코레이터: 함수를 인자로 받아 기능을 추가한 새로운 함수를 반환
+    - 데코레이터: 함수를 인자로 받아 기능을 추가한 새로운 함수를 반환
 
 ### 클로저와 데코레이터를 함께 사용하는 예시
-
 
 ```python
 def counter_decorator(func):
@@ -395,9 +399,11 @@ def counter_decorator(func):
 
     return wrapper
 
+
 @counter_decorator
 def hello(name):
     return f"안녕하세요, {name}님!"
+
 
 print(hello("철수"))  # 함수 'hello'이(가) 1번째 호출되었습니다. \n 안녕하세요, 철수님!
 print(hello("영희"))  # 함수 'hello'이(가) 2번째 호출되었습니다. \n 안녕하세요, 영희님!
@@ -418,9 +424,9 @@ print(hello("영희"))  # 함수 'hello'이(가) 2번째 호출되었습니다. 
 
 ### 실행 시간 측정 데코레이터
 
-
 ```python
 import time
+
 
 def measure_time(func):
     def wrapper(*args, **kwargs):
@@ -429,19 +435,21 @@ def measure_time(func):
         end_time = time.time()
         print(f"{func.__name__} 함수 실행 시간: {end_time - start_time:.5f}초")
         return result
+
     return wrapper
+
 
 @measure_time
 def slow_function():
     time.sleep(1)
     return "작업 완료"
 
+
 slow_function()  # slow_function 함수 실행 시간: 1.00123초
 
 ```
 
 ### 캐싱(메모이제이션) 데코레이터
-
 
 ```python
 def memoize(func):
@@ -454,11 +462,13 @@ def memoize(func):
 
     return wrapper
 
+
 @memoize
 def fibonacci(n):
     if n <= 1:
         return n
-    return fibonacci(n-1) + fibonacci(n-2)
+    return fibonacci(n - 1) + fibonacci(n - 2)
+
 
 print(fibonacci(35))  # 매우 빠르게 계산됨
 
@@ -471,7 +481,6 @@ print(fibonacci(35))  # 매우 빠르게 계산됨
 ### Counter 기본 사용법
 
 `Counter`는 해시 가능한 객체를 세는 dict의 서브클래스다. 요소를 키로, 개수를 값으로 저장한다.
-
 
 ```python
 from collections import Counter
@@ -491,7 +500,6 @@ print(fruit_counter)  # Counter({'apple': 3, 'orange': 2, 'banana': 1})
 
 ### most_common() - 가장 흔한 요소 찾기
 
-
 ```python
 # 가장 흔한 요소부터 내림차순으로 모든 요소 반환
 print(fruit_counter.most_common())  # [('apple', 3), ('orange', 2), ('banana', 1)]
@@ -505,7 +513,6 @@ print(fruit_counter.most_common(2))  # [('apple', 3), ('orange', 2)]
 
 각 요소를 그 개수만큼 반복해서 반환한다:
 
-
 ```python
 c = Counter(a=3, b=1, c=0)
 print(list(c.elements()))  # ['a', 'a', 'a', 'b']
@@ -516,7 +523,6 @@ print(list(c.elements()))  # ['a', 'a', 'a', 'b']
 ### update() - 카운터 갱신하기
 
 다른 카운터나 반복 가능한 객체로 카운터를 갱신한다:
-
 
 ```python
 c = Counter(['apple', 'orange'])
@@ -529,7 +535,6 @@ print(c)  # Counter({'apple': 2, 'banana': 2, 'orange': 1})
 
 다른 카운터의 개수를 뺀다:
 
-
 ```python
 c = Counter(a=4, b=2, c=0)
 d = Counter(a=1, b=2, c=3)
@@ -541,7 +546,6 @@ print(c)  # Counter({'a': 3, 'b': 0, 'c': -3})
 ### Counter의 수학 연산
 
 `Counter` 객체는 다양한 수학 연산을 지원한다:
-
 
 ```python
 c1 = Counter(a=3, b=1)
@@ -565,15 +569,16 @@ print(c1 - c2)  # Counter({'a': 2})
 
 ### 텍스트 분석: 단어 빈도 계산
 
-
 ```python
 import re
 from collections import Counter
+
 
 def word_frequency(text):
     # 소문자로 변환하고 단어만 추출
     words = re.findall(r'\b\w+\b', text.lower())
     return Counter(words)
+
 
 sample_text = """
 Python is a programming language that lets you work quickly
@@ -590,13 +595,14 @@ print(word_counts.most_common(5))
 
 ### 데이터 검증: 중복 항목 찾기
 
-
 ```python
 from collections import Counter
+
 
 def find_duplicates(items):
     counts = Counter(items)
     return {item: count for item, count in counts.items() if count > 1}
+
 
 user_ids = [101, 102, 103, 101, 104, 105, 102, 106]
 print(find_duplicates(user_ids))  # {101: 2, 102: 2}
@@ -604,7 +610,6 @@ print(find_duplicates(user_ids))  # {101: 2, 102: 2}
 ```
 
 ### 투표 집계
-
 
 ```python
 from collections import Counter
@@ -631,7 +636,6 @@ print(f"당선자: {winner} ({vote_counts[winner]}표)")  # 당선자: John (4�
 
 - `defaultdict`는 더 일반적인 목적으로 사용되며 원하는 타입의 기본값을 설정할 수 있다.
 
-
 ```python
 from collections import Counter, defaultdict
 
@@ -647,7 +651,7 @@ string_dict = defaultdict(str)
 list_dict = defaultdict(list)
 
 print(string_dict['non-existent'])  # '' (빈 문자열)
-print(list_dict['non-existent'])    # [] (빈 리스트)
+print(list_dict['non-existent'])  # [] (빈 리스트)
 
 ```
 

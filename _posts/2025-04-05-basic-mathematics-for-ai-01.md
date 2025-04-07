@@ -1,8 +1,8 @@
 ---
-title: 기초 수학 for 인공지능 01
+title: 🎲 기초 수학 for 인공지능 01; 확률
 date: 2025-04-05 06:02:00 +0900
 categories: [ MATHEMATICS, PROBABILITY ]
-tags: [ '급발진거북이' ]
+tags: [ '급발진거북이', 'numpy', 'mathematics', '기초수학', '확률' ]
 toc: true
 comments: false
 mermaid: true
@@ -656,6 +656,7 @@ $$ B = \text{"짝수가 나오는 사건"} = {2, 4, 6} $$
 ```python
 import numpy as np
 
+
 # 배반사건 확인 함수
 def are_mutually_exclusive(event_A, event_B):
     intersection = set(event_A).intersection(set(event_B))
@@ -1193,6 +1194,7 @@ print(f"이메일 4 (무료+회의): 스팸 확률 = {email4_prob:.4f} ({email4_
 실제 스팸 필터에서는 훨씬 많은 단어를 고려하고, 단어의 위치, 빈도, 다른 특성(이메일 발신자, HTML 사용 여부 등)도 함께 고려하지만, 기본 원리는 이 예시와 동일하게 베이즈 정리에 기반한다.
 
 > 💡 이후 수학을 더 공부하게 된다면, 아래의 내용을 알아 두는 것도 좋다!
-> - 확률 분포: 이산/연속 확률 분포에서의 조건부 확률
-> - 체인 룰: $ P(A,B,C) = P(A|B,C) * P(B|C) * P(C) $와 같은 결합확률의 분해
-> - 최대 우도 추정(MLE): 조건부 확률을 최대화하는 모델 파라미터 찾기
+>
+>   - 확률 분포: 이산/연속 확률 분포에서의 조건부 확률
+>   - 체인 룰: $ P(A,B,C) = P(A|B,C) * P(B|C) * P(C) $와 같은 결합확률의 분해
+>   - 최대 우도 추정(MLE): 조건부 확률을 최대화하는 모델 파라미터 찾기

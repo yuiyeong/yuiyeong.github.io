@@ -1,8 +1,8 @@
 ---
-title: Crawling 맛 보기(w. selenium)
+title: 🐍 Crawling 맛 보기(w. selenium)
 date: 2025-03-27 15:56:00 +0900
-categories: [PYTHON, DATA_ANALYSIS]
-tags: ['급발진거북이', 'python', 'crawling', '크롤링', 'selenium', '셀레니움']
+categories: [ PYTHON, CRAWLING ]
+tags: [ '급발진거북이', 'python', 'crawling', '크롤링', 'selenium', '셀레니움' ]
 toc: true
 comments: false
 mermaid: true
@@ -14,7 +14,6 @@ math: true
 필요한 package 는 `selenium` 과 `webdriver-manager` 이다.
 
 아래 명령어를 사용해서 설치한다.
-
 
 ```shell
 pip install selenium webdriver-manager
@@ -28,7 +27,7 @@ pip install selenium webdriver-manager
 
 Selenium 은 웹 브라우저를 자동화하는 도구이고, 아래와 같은 기능을 할 수 있다.
 
--  웹 페이지 자동 탐색
+- 웹 페이지 자동 탐색
 
 - 클릭, 입력, 스크롤 등 사용자 동작 시뮬레이션
 
@@ -36,7 +35,8 @@ Selenium 은 웹 브라우저를 자동화하는 도구이고, 아래와 같은 
 
 - 동적으로 생성되는 콘텐츠 수집 가능
 
-특히, 마지막이 제일 중요한데, 요즘은 대부분의 사이트가 Next.js 와 같은 프레임워크로 웹 사이트를 만들기 때문에 웹 사이트들이 거의 동적 생성 콘텐츠로 되어있다. 즉, Selenium 을 사용하면 그 콘텐츠로 수집할 수 있게 되는 것이다.
+특히, 마지막이 제일 중요한데, 요즘은 대부분의 사이트가 Next.js 와 같은 프레임워크로 웹 사이트를 만들기 때문에 웹 사이트들이 거의 동적 생성 콘텐츠로 되어있다. 즉, Selenium 을 사용하면 그 콘텐츠로
+수집할 수 있게 되는 것이다.
 
 ### webdriver-manager
 
@@ -50,7 +50,8 @@ webdriver-manager 는 브라우저별 WebDriver를 관리하는 도구이고, �
 
 ### Selenium 만으로 크롤링을 할 수 있을 것 같은데, 왜 webdriver-manager 가 필요할까?
 
-selenium 으로 브라우저를 제어하기 위해서는 별도의 WebDriver 가 필요하다. 즉, 내 컴퓨터에 설치되어있는 브라우저(나의 경우는 Chrome 을 사용한다.) 에 맞는 WebDriver 를 설치해야하는 것이다.
+selenium 으로 브라우저를 제어하기 위해서는 별도의 WebDriver 가 필요하다. 즉, 내 컴퓨터에 설치되어있는 브라우저(나의 경우는 Chrome 을 사용한다.) 에 맞는 WebDriver 를 설치해야하는
+것이다.
 
 그런데 이 driver 관리가 번거롭다. (driver 관리는 항상 번거롭다…)
 
@@ -72,14 +73,13 @@ selenium 으로 브라우저를 제어하기 위해서는 별도의 WebDriver �
 
 로컬에서 Chrome 브라우저를 사용하고 있기때문에, Chrome 의 driver 를 켠다.
 
-
 ```python
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 
 service = Service(ChromeDriverManager().install())
-chrome_driver = webdriver.Chrome(service=service) # => 크롬 browser 가 켜진다.
+chrome_driver = webdriver.Chrome(service=service)  # => 크롬 browser 가 켜진다.
 ```
 
 ![selenium_chrome_driver01.png](/assets/img/selenium_chrome_driver01.png)
@@ -92,16 +92,14 @@ chrome_driver = webdriver.Chrome(service=service) # => 크롬 browser 가 켜진
 
 browser 를 종료하려면 즉, driver 의 세션을 정상적으로 종료하려면 아래의 코드를 실행하면된다.
 
-
 ```python
-chrome_driver.quit() # driver 의 session 을 종료한다.
-service.stop() # chrome driver 를 만들 때 넣어준 service 도 멈춰주는 것이 좋다.
+chrome_driver.quit()  # driver 의 session 을 종료한다.
+service.stop()  # chrome driver 를 만들 때 넣어준 service 도 멈춰주는 것이 좋다.
 ```
 
 ### 특정 웹 사이트로 이동하기
 
 이동하고자 하는 사이트의 url 을 가지고 `get()` 을 호출하면 된다.
-
 
 ```python
 url = "https://yuiyeong.github.io"
@@ -124,7 +122,6 @@ article tag 에 card-wrapper 를 class 로 가지는 HTMLDomElement 가 글 내�
 
 이걸 바탕으로 selenium 에서 글 data 를 가져오게 하는 코드가 아래의 코드이다.
 
-
 ```python
 from selenium.webdriver.common.by import By
 
@@ -136,7 +133,8 @@ text = first_article.find_element(By.CLASS_NAME, "card-text").text
 post_meta = first_article.find_element(By.CLASS_NAME, "post-meta").text
 ```
 
-`Selenium` 에서 `WebElement` 를 찾는 함수로, `find_element` 와 `find_elements` 를 사용한다. 전자는 찾은 것 중 첫번째 `WebElement` 를 반환하고, 후자는 찾은 모든 `WebElement` 를 list 로 반환한다.
+`Selenium` 에서 `WebElement` 를 찾는 함수로, `find_element` 와 `find_elements` 를 사용한다. 전자는 찾은 것 중 첫번째 `WebElement` 를 반환하고, 후자는 찾은
+모든 `WebElement` 를 list 로 반환한다.
 
 위 코드에서는 `find_element` 를 사용해서, 첫번째 글을 감싸고 있는 WebElement 를 가져왔다.
 
@@ -144,14 +142,13 @@ post_meta = first_article.find_element(By.CLASS_NAME, "post-meta").text
 
 모든 글을 가져오고 싶다면, find_element 대신에 find_elements 를 사용하고, 각 article WebElement 를 for loop 을 돌면서 정보를 가져오는 코드로 변경하면 된다.
 
-
 ```python
 articles = chrome_driver.find_element(By.TAG_NAME, "article")
 for article in articles:
-		link = article.find_element(By.TAG_NAME, "a").get_attribute("href")
-		title = article.find_element(By.CLASS_NAME, "card-title").text
-		text = article.find_element(By.CLASS_NAME, "card-text").text
-		post_meta = article.find_element(By.CLASS_NAME, "post-meta").text
+    link = article.find_element(By.TAG_NAME, "a").get_attribute("href")
+    title = article.find_element(By.CLASS_NAME, "card-title").text
+    text = article.find_element(By.CLASS_NAME, "card-text").text
+    post_meta = article.find_element(By.CLASS_NAME, "post-meta").text
 ```
 
 그럼 대표적으로 사용하는 By 종류는 어떻게 될까?
@@ -160,9 +157,8 @@ for article in articles:
 
 - By.ID
 
-	HTML 요소의 id 속성으로 요소를 찾는다. 가장 빠르고 안정적인 방법이다.
+  HTML 요소의 id 속성으로 요소를 찾는다. 가장 빠르고 안정적인 방법이다.
 
-	
 ```python
 from selenium.webdriver.common.by import By
 
@@ -173,9 +169,8 @@ element = driver.find_element(By.ID, "login-button")
 
 - By.NAME
 
-	name 속성으로 요소를 찾는다. 주로 폼 요소에서 사용된다.
+  name 속성으로 요소를 찾는다. 주로 폼 요소에서 사용된다.
 
-	
 ```python
 # NAME으로 요소 찾기
 search_field = driver.find_element(By.NAME, "q")  # Google 검색창
@@ -184,9 +179,8 @@ search_field = driver.find_element(By.NAME, "q")  # Google 검색창
 
 - By.CLASS_NAME
 
-	class 속성으로 요소를 찾는다.
+  class 속성으로 요소를 찾는다.
 
-	
 ```python
 # CLASS_NAME으로 요소 찾기
 menu_items = driver.find_elements(By.CLASS_NAME, "menu-item")
@@ -195,9 +189,8 @@ menu_items = driver.find_elements(By.CLASS_NAME, "menu-item")
 
 - By.TAG_NAME
 
-	HTML 태그 이름으로 요소를 찾는다.
+  HTML 태그 이름으로 요소를 찾는다.
 
-	
 ```python
 # TAG_NAME으로 요소 찾기
 all_links = driver.find_elements(By.TAG_NAME, "a")
@@ -207,9 +200,8 @@ all_inputs = driver.find_elements(By.TAG_NAME, "input")
 
 - By.LINK_TEXT
 
-	링크 텍스트가 정확히 일치하는 요소를 찾는다.
+  링크 텍스트가 정확히 일치하는 요소를 찾는다.
 
-	
 ```python
 # LINK_TEXT로 요소 찾기
 contact_link = driver.find_element(By.LINK_TEXT, "Contact Us")
@@ -218,9 +210,8 @@ contact_link = driver.find_element(By.LINK_TEXT, "Contact Us")
 
 - By.PARTIAL_LINK_TEXT
 
-	링크 텍스트의 일부만 일치해도 찾는다.
+  링크 텍스트의 일부만 일치해도 찾는다.
 
-	
 ```python
 # PARTIAL_LINK_TEXT로 요소 찾기
 help_link = driver.find_element(By.PARTIAL_LINK_TEXT, "Help")  # "Help Center"나 "Get Help" 등 찾을 수 있음
@@ -229,9 +220,8 @@ help_link = driver.find_element(By.PARTIAL_LINK_TEXT, "Help")  # "Help Center"�
 
 - By.CSS_SELECTOR
 
-	[CSS 선택자](https://developer.mozilla.org/ko/docs/Web/CSS/CSS_selectors)로 요소를 찾는다. 매우 유연하고 강력하다.
+  [CSS 선택자](https://developer.mozilla.org/ko/docs/Web/CSS/CSS_selectors)로 요소를 찾는다. 매우 유연하고 강력하다.
 
-	
 ```python
 # CSS_SELECTOR로 요소 찾기
 active_items = driver.find_elements(By.CSS_SELECTOR, ".item.active")
@@ -243,9 +233,8 @@ input_with_placeholder = driver.find_element(By.CSS_SELECTOR, "input[placeholder
 
 - By.XPATH
 
-	[XPath 표현식](https://developer.mozilla.org/ko/docs/Web/XML/XPath)으로 요소를 찾는다. 매우 강력하지만 CSS 선택자보다 느릴 수 있다.
+  [XPath 표현식](https://developer.mozilla.org/ko/docs/Web/XML/XPath)으로 요소를 찾는다. 매우 강력하지만 CSS 선택자보다 느릴 수 있다.
 
-	
 ```python
 # XPATH로 요소 찾기
 submit_button = driver.find_element(By.XPATH, "//button[@type='submit']")
@@ -257,10 +246,14 @@ dynamic_element = driver.find_element(By.XPATH, "//*[contains(@class, 'dynamic-'
 ```
 
 - 일반적으로 요소를 찾을 때는 다음과 같은 우선순위로 By 를 사용하는 것이 좋다.
-  	- ID(가장 빠르고 안정적)
-  	- NAME 
-  	- CSS_SELECTOR (유연하고 강력함)
-  	- XPATH (가장 유연하지만 상대적으로 느림)
+
+    1. ID (가장 빠르고 안정적)
+
+    1. NAME
+
+    1. CSS_SELECTOR (유연하고 강력함)
+
+    1. XPATH (가장 유연하지만 상대적으로 느림)
 
 ## 🚴‍♀️ Headless 모드로 실행하
 
@@ -279,7 +272,6 @@ dynamic_element = driver.find_element(By.XPATH, "//*[contains(@class, 'dynamic-'
 - 멀티태스킹: 컴퓨터를 다른 작업에 사용하면서 백그라운드에서 크롤링을 실행 가능
 
 ### 설정 방법
-
 
 ```python
 from selenium import webdriver
@@ -312,9 +304,9 @@ driver.get("https://example.com")
 
 - 사용자 에이전트 설정: 일부 웹사이트는 헤드리스 브라우저를 봇으로 인식하고 차단할 수 있습니다. 이 경우 사용자 에이전트를 설정해주는 것이 좋다.
 
-	
 ```python
-options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36")
+options.add_argument(
+    "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36")
 
 ```
 
@@ -324,7 +316,6 @@ options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) Apple
 
 - 추가 옵션 설정
 
-	
 ```python
 options.add_argument("--disable-gpu")  # GPU 가속 비활성화
 options.add_argument("--no-sandbox")  # 리눅스 환경에서 필요할 수 있음
@@ -342,7 +333,6 @@ options.add_argument("--blink-settings=imagesEnabled=false")  # 이미지 로딩
 ### execute_script()
 
 JavaScript 코드를 직접 실행할 수 있도록 해주는 함수이다. 이 함수를 통해 브라우저에서 직접 JavaScript를 실행하여 동적 콘텐츠를 조작하거나 가져올 수 있다.
-
 
 ```python
 # 스크롤을 페이지 맨 아래로 내리기
@@ -374,7 +364,6 @@ js_variable = driver.execute_script("return window.someGlobalVariable;")
 
 명시적 대기를 구현하는 클래스로, 특정 조건이 만족될 때까지 지정된 시간 동안 대기한다.
 
-
 ```python
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -399,7 +388,6 @@ element = WebDriverWait(driver, 10).until(
 `WebDriverWait`와 함께 사용되는 사전 정의된 조건들로, 다양한 대기 조건을 제공한다.
 
 주요 expected_conditions:
-
 
 ```python
 # 요소가 존재할 때까지 대기
@@ -438,7 +426,6 @@ EC.new_window_is_opened(current_windows)
 
 - 무한 스크롤 처리
 
-	
 ```python
 # 무한 스크롤 페이지에서 모든 콘텐츠 로드
 SCROLL_PAUSE_TIME = 1.5
@@ -464,7 +451,6 @@ items = driver.find_elements(By.CSS_SELECTOR, ".item")
 
 - 비동기 버튼 클릭 및 콘텐츠 로드 대기
 
-	
 ```python
 # "더 보기" 버튼을 클릭하여 추가 콘텐츠 로드
 load_more_button = driver.find_element(By.ID, "load-more")
@@ -488,7 +474,6 @@ new_items = driver.find_elements(By.CSS_SELECTOR, ".item")
 
 - iframe 내부의 동적 콘텐츠 처리
 
-	
 ```python
 # iframe으로 전환
 iframe = driver.find_element(By.ID, "content-frame")
@@ -509,7 +494,6 @@ driver.switch_to.default_content()
 
 - SPA 네비게이션
 
-	
 ```python
 # React/Vue/Angular 앱의 메뉴 클릭
 menu_item = driver.find_element(By.CSS_SELECTOR, ".nav-item[data-route='products']")
@@ -536,7 +520,6 @@ products = content_element.find_elements(By.CSS_SELECTOR, ".product-item")
 
 ### execute_script 기본 사용법
 
-
 ```python
 driver.execute_script(script, *args)
 ```
@@ -553,7 +536,6 @@ JavaScript의 `return` 문을 사용하면 `execute_script` 함수도 그 값을
 
 1. 값을 반환하는 경우:
 
-	
 ```python
 height = driver.execute_script("return document.body.scrollHeight;")
 # height에는 페이지 높이 값이 저장됨
@@ -562,7 +544,6 @@ height = driver.execute_script("return document.body.scrollHeight;")
 
 1. 값을 반환하지 않는 경우:
 
-	
 ```python
 driver.execute_script("window.scrollTo(0, 100);")
 # 액션만 수행하고 아무것도 반환하지 않음 (None 반환)
@@ -573,7 +554,6 @@ driver.execute_script("window.scrollTo(0, 100);")
 
 - WebElement 인자 전달하기
 
-	
 ```python
 element = driver.find_element(By.ID, "my-element")
 driver.execute_script("arguments[0].scrollIntoView(true);", element)
@@ -582,7 +562,6 @@ driver.execute_script("arguments[0].scrollIntoView(true);", element)
 
 - 여러 인자 전달하기
 
-	
 ```python
 x, y = 100, 200
 driver.execute_script("window.scrollTo(arguments[0], arguments[1]);", x, y)
@@ -591,7 +570,6 @@ driver.execute_script("window.scrollTo(arguments[0], arguments[1]);", x, y)
 
 - 복잡한 JavaScript 로직 실행하기
 
-	
 ```python
 script = """
 let elements = document.querySelectorAll('.product');
@@ -611,7 +589,6 @@ products = driver.execute_script(script)
 
 - 비동기 JavaScript 처리
 
-	
 ```python
 # 간단한 타이머 설정
 driver.execute_script("""
@@ -624,7 +601,6 @@ setTimeout(function() {
 
 - JavaScript 변수 접근하기
 
-	
 ```python
 # 페이지에 정의된 전역 변수 접근
 app_data = driver.execute_script("return window.appData;")
