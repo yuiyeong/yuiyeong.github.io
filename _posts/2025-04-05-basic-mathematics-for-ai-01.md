@@ -1,8 +1,8 @@
 ---
 title: 기초 수학 for 인공지능 01
 date: 2025-04-05 06:02:00 +0900
-categories: [MATHEMATICS, PROBABILITY]
-tags: ['급발진거북이']
+categories: [ MATHEMATICS, PROBABILITY ]
+tags: [ '급발진거북이' ]
 toc: true
 comments: false
 mermaid: true
@@ -70,18 +70,18 @@ $$ 10 + 15 = 25 $$
 
 ### Python 예시
 
-
 ```python
 # 두 집합의 합집합 원소 개수 구하기
 programming_club = {"김철수", "이영희", "박민수", "정지우", "최동현", "한미래", "오예슬", "윤성준", "임하늘", "조태양"}
-data_analysis_club = {"강하늘", "구름비", "남하얀", "도하람", "라온희", "마루미", "바람솔", "사랑이", "아리안", "자유롭", "차미소", "카라스", "타우너", "파랑새", "하늘빛"}
+data_analysis_club = {"강하늘", "구름비", "남하얀", "도하람", "라온희", "마루미", "바람솔", "사랑이", "아리안", "자유롭", "차미소", "카라스", "타우너", "파랑새",
+                      "하늘빛"}
 
 # 합의 법칙: 두 집합의 크기를 더함 (단, 중복 없을 때)
 total_possibilities = len(programming_club) + len(data_analysis_club)
 print(f"한 명을 뽑는 경우의 수: {total_possibilities}")
 
 # 만약 두 집합에 중복 원소가 있을 경우 (합집합을 구해야 함)
-both_clubs = {"김철수", "이영희", "강하늘"} # 가정: 두 동아리 모두 속한 학생
+both_clubs = {"김철수", "이영희", "강하늘"}  # 가정: 두 동아리 모두 속한 학생
 programming_club_2 = programming_club.union(both_clubs)
 data_analysis_club_2 = data_analysis_club.union(both_clubs)
 
@@ -110,14 +110,13 @@ $$ P(A \cap B) = P(A) \times P(B|A) $$
 
 ### 실생활 예시
 
-4개의 셔츠와 3개의 바지를 가지고 있을 때, 가능한 복장 조합은, 
+4개의 셔츠와 3개의 바지를 가지고 있을 때, 가능한 복장 조합은,
 
 $$ 4 \times 3 = 12 $$
 
 - (4개의 셔츠 중 1개를 고르는 경우의 수는 4가지) x (3개의 바지 중 1개를 고르는 경우의 수 3가지) → 12
 
 ### Python 예시
-
 
 ```python
 # 곱의 법칙 사용
@@ -148,7 +147,7 @@ for outfit in outfits[:3]:  # 처음 3개만 출력
 
 ## 🎲 독립 사건 (Independent Event)
 
-두 사건이 서로 영향을 주지 않을 때, 즉 *하나의 사건이 일어나도 다른 사건의 확률에 영향을 주지 않는 경우*를 말합니다. 
+두 사건이 서로 영향을 주지 않을 때, 즉 *하나의 사건이 일어나도 다른 사건의 확률에 영향을 주지 않는 경우*를 말합니다.
 
 사건 $ A $ 와 $ B $ 가 *독립*일 때, $ A $ 와 $ B $ 가 동시에 일어날 확률은,
 
@@ -159,7 +158,6 @@ $$ P(A \cap B) = P(A) \times P(B) $$
 동전을 두 번 던질 때, 첫 번째 던진 결과는 두 번째 던지는 결과에 영향을 주지 않는다.
 
 ### Python 예시
-
 
 ```python
 import numpy as np
@@ -191,7 +189,7 @@ print(f"두 동전 모두 앞면일 확률 (독립 가정): {p_heads_first * p_h
 
 - 교차 검증(Cross-Validation): 훈련 데이터와 테스트 데이터의 독립성 확보
 
-> 💡 많은 머신러닝 알고리즘이 데이터의 독립성을 가정!
+> 💡 많은 머신러닝 알고리즘이 데이터의 독립성을 가정!
 
 ## 📚 순열 (Permutation)
 
@@ -215,7 +213,6 @@ $$ _5P_3 = \frac{5!}{(5-3)!} = \frac{5!}{2!} = 60 $$
 
 ### Python 예시
 
-
 ```python
 import itertools
 
@@ -229,16 +226,19 @@ permutations = list(itertools.permutations(candidates, positions))
 print(f"가능한 임원 구성 수: {len(permutations)}")
 print("가능한 임원 구성 예시 (처음 3개):")
 for i, perm in enumerate(permutations[:3]):
-    print(f"{i+1}. 회장: {perm[0]}, 부회장: {perm[1]}, 총무: {perm[2]}")
+    print(f"{i + 1}. 회장: {perm[0]}, 부회장: {perm[1]}, 총무: {perm[2]}")
+
 
 # 순열 직접 계산
 def permutation(n, r):
     return factorial(n) // factorial(n - r)
 
+
 def factorial(n):
     if n == 0 or n == 1:
         return 1
     return n * factorial(n - 1)
+
 
 print(f"₅P₃ = {permutation(5, 3)}")
 
@@ -252,7 +252,7 @@ print(f"₅P₃ = {permutation(5, 3)}")
 
 - 데이터 증강(Data Augmentation): 이미지나 시퀀스 데이터에서 순서를 바꿔 새로운 학습 데이터 생성
 
-> 💡 순열은 *시퀀스 데이터*를 다루는 모델에서 가능한 순서의 경우의 수를 이해하고, *최적의 순서*를 찾는 데 중요!
+> 💡 순열은 *시퀀스 데이터*를 다루는 모델에서 가능한 순서의 경우의 수를 이해하고, *최적의 순서*를 찾는 데 중요!
 
 ## 🔄 조합 (Combination)
 
@@ -276,10 +276,9 @@ $$ _{10}P_3 = \frac{10!}{7!} = 10 \times 9 \times 8 = 720 $$
 
 - 그러나 조합에서는 순서를 고려하지 않으므로, 각 3명의 가능한 배열 수인 3!(=6)으로 나눠야 한다.
 
-$$ {10}C_3 = \frac{{10}P_3}{3!} = \frac{720}{6} = 120 $$
+$$ _{10}C_3 = \frac{_{10}P_3}{3!} = \frac{720}{6} = 120 $$
 
 ### Python 예시
-
 
 ```python
 import itertools
@@ -296,11 +295,13 @@ combinations = list(itertools.combinations(students, team_size))
 print(f"가능한 팀 구성 수: {len(combinations)}")
 print("가능한 팀 구성 예시 (처음 3개):")
 for i, comb in enumerate(combinations[:3]):
-    print(f"{i+1}. 팀원: {', '.join(comb)}")
+    print(f"{i + 1}. 팀원: {', '.join(comb)}")
+
 
 # 조합 직접 계산
 def combination(n, r):
     return math.factorial(n) // (math.factorial(r) * math.factorial(n - r))
+
 
 print(f"₁₀C₃ = {combination(10, 3)}")
 ```
@@ -313,7 +314,7 @@ print(f"₁₀C₃ = {combination(10, 3)}")
 
 - 배깅(Bagging): 랜덤 포레스트와 같은 알고리즘에서 데이터 샘플링
 
-> 💡 조합은 모델의 하이퍼파라미터 튜닝, 특성 선택, 모델 앙상블 구성 등 최적의 부분집합을 선택하는 많은 문제에서 핵심적인 개념
+> 💡 조합은 모델의 하이퍼파라미터 튜닝, 특성 선택, 모델 앙상블 구성 등 최적의 부분집합을 선택하는 많은 문제에서 핵심적인 개념
 
 ## 🧪 확률론의 기본 개념 - 시행 (Experiment)
 
@@ -325,9 +326,9 @@ print(f"₁₀C₃ = {combination(10, 3)}")
 
 ### Python 예시
 
-
 ```python
 import numpy as np
+
 
 # 동전 던지기 시행 시뮬레이션
 def coin_flip_experiment(num_trials=1000):
@@ -335,15 +336,18 @@ def coin_flip_experiment(num_trials=1000):
     results = np.random.randint(0, 2, num_trials)
     return results
 
+
 # 시행 실행
 trials = coin_flip_experiment(10)
 print("10번의 동전 던지기 결과:", ["앞면" if r == 0 else "뒷면" for r in trials])
+
 
 # 주사위 굴리기 시행
 def dice_roll_experiment(num_trials=1000):
     # 1부터 6까지의 숫자
     results = np.random.randint(1, 7, num_trials)
     return results
+
 
 # 시행 실행
 dice_trials = dice_roll_experiment(10)
@@ -359,9 +363,9 @@ print("10번의 주사위 굴리기 결과:", dice_trials)
 
 - 샘플링: 몬테카를로 방법과 같은 샘플링 기법의 기초
 
-> 💡 시행의 개념은 머신러닝에서 실험 설계와 데이터 수집의 기본! 모델의 성능 평가 및 신뢰성 있는 결과 도출을 위해 중요하다.
+> 💡 시행의 개념은 머신러닝에서 실험 설계와 데이터 수집의 기본! 모델의 성능 평가 및 신뢰성 있는 결과 도출을 위해 중요하다.
 
-## 🌐  확률론의 기본 개념 - 표본공간 (Sample Space)
+## 🌐 확률론의 기본 개념 - 표본공간 (Sample Space)
 
 특정 시행에서 *발생 가능한 모든 결과*의 집합이다. 보통 Ω(오메가)로 표기.
 
@@ -378,7 +382,6 @@ $$ \Omega = {앞면, 뒷면} $$
 $$ \Omega = {1, 2, 3, 4, 5, 6} $$
 
 ### Python 예시
-
 
 ```python
 # 표본공간 정의
@@ -416,9 +419,9 @@ print(f"카드 표본공간의 일부: {cards_sample_space[:5]}")
 
 ### Python 예시
 
-
 ```python
 import random
+
 
 # 주사위 굴리기 시행에서 근원사건 발생 확인
 def check_elementary_event(event_value, num_trials=10000):
@@ -433,10 +436,11 @@ def check_elementary_event(event_value, num_trials=10000):
 
     return probability
 
+
 # 주사위에서 3이 나오는 근원사건의 확률
 prob_3 = check_elementary_event(3)
 print(f"주사위에서 3이 나올 확률(시뮬레이션): {prob_3:.4f}")
-print(f"주사위에서 3이 나올 이론적 확률: {1/6:.4f}")
+print(f"주사위에서 3이 나올 이론적 확률: {1 / 6:.4f}")
 
 ```
 
@@ -466,9 +470,9 @@ $$ A = {2, 4, 6} $$
 
 ### Python 예시
 
-
 ```python
 import numpy as np
+
 
 # 주사위 굴리기 시행에서 사건 정의 및 확인
 def check_event_probability(event_function, num_trials=10000):
@@ -483,13 +487,16 @@ def check_event_probability(event_function, num_trials=10000):
 
     return probability
 
+
 # 짝수가 나오는 사건
 def is_even(roll):
     return roll % 2 == 0
 
+
 # 5보다 큰 수가 나오는 사건
 def is_greater_than_five(roll):
     return roll > 5
+
 
 prob_even = check_event_probability(is_even)
 prob_greater_than_five = check_event_probability(is_greater_than_five)
@@ -526,11 +533,11 @@ $$ A\cup B = \text{"3 이하이거나 짝수가 나오는 사건"} = {1, 2, 3, 4
 
 ### Python 예시
 
-
 ```python
 # 합사건 계산
 def union_event(event_A, event_B):
     return set(event_A).union(set(event_B))
+
 
 # 주사위 사건 정의
 event_less_than_or_equal_3 = [1, 2, 3]
@@ -544,11 +551,14 @@ print(f"A∪B = {union_result}")
 prob_union = len(union_result) / 6
 print(f"P(A∪B) = {prob_union:.4f}")
 
+
 # 시뮬레이션으로 확인
 def is_in_union_event(roll):
     return roll <= 3 or roll % 2 == 0
 
+
 import numpy as np
+
 rolls = np.random.randint(1, 7, 10000)
 union_count = sum(is_in_union_event(roll) for roll in rolls)
 prob_union_sim = union_count / 10000
@@ -584,11 +594,11 @@ $$ A\cap B = \text{"3 이하이면서 짝수가 나오는 사건"} = {2} $$
 
 ### Python 예시
 
-
 ```python
 # 곱사건 계산
 def intersection_event(event_A, event_B):
     return set(event_A).intersection(set(event_B))
+
 
 # 주사위 사건 정의
 event_less_than_or_equal_3 = [1, 2, 3]
@@ -602,11 +612,14 @@ print(f"A∩B = {intersection_result}")
 prob_intersection = len(intersection_result) / 6
 print(f"P(A∩B) = {prob_intersection:.4f}")
 
+
 # 시뮬레이션으로 확인
 def is_in_intersection_event(roll):
     return roll <= 3 and roll % 2 == 0
 
+
 import numpy as np
+
 rolls = np.random.randint(1, 7, 10000)
 intersection_count = sum(is_in_intersection_event(roll) for roll in rolls)
 prob_intersection_sim = intersection_count / 10000
@@ -640,12 +653,14 @@ $$ B = \text{"짝수가 나오는 사건"} = {2, 4, 6} $$
 
 ### Python 예시
 
-
 ```python
+import numpy as np
+
 # 배반사건 확인 함수
 def are_mutually_exclusive(event_A, event_B):
     intersection = set(event_A).intersection(set(event_B))
     return len(intersection) == 0
+
 
 # 주사위 사건 정의
 event_odd = [1, 3, 5]
@@ -658,6 +673,7 @@ print(f"홀수와 짝수는 배반사건인가? {are_mutually_exclusive(event_od
 print(f"소수와 짝수는 배반사건인가? {are_mutually_exclusive(event_prime, event_even)}")
 print(f"소수와 3 미만은 배반사건인가? {are_mutually_exclusive(event_prime, event_less_than_3)}")
 
+
 # 시뮬레이션으로 확인
 def simultaneous_events_count(event_func_A, event_func_B, num_trials=10000):
     count = 0
@@ -667,11 +683,14 @@ def simultaneous_events_count(event_func_A, event_func_B, num_trials=10000):
             count += 1
     return count
 
+
 def is_odd(roll):
     return roll % 2 == 1
 
+
 def is_even(roll):
     return roll % 2 == 0
+
 
 simultaneous_count = simultaneous_events_count(is_odd, is_even)
 print(f"홀수와 짝수가 동시에 발생한 횟수(10000번 시행): {simultaneous_count}")
@@ -704,11 +723,11 @@ $$ A^c = \text{"홀수가 나오는 사건"} = {1, 3, 5} $$
 
 ### Python 예시
 
-
 ```python
 # 여사건 계산 함수
 def complement_event(event, sample_space):
     return [x for x in sample_space if x not in event]
+
 
 # 주사위 표본공간과 사건 정의
 dice_sample_space = [1, 2, 3, 4, 5, 6]
@@ -726,14 +745,18 @@ print(f"3보다 큰 수의 여사건: {complement_greater_than_3}")
 prob_complement_even = len(complement_even) / len(dice_sample_space)
 print(f"P(A^c) = {prob_complement_even}, P(A) = {1 - prob_complement_even}")
 
+
 # 시뮬레이션으로 확인
 def is_even(roll):
     return roll % 2 == 0
 
+
 def is_not_even(roll):
     return not is_even(roll)
 
+
 import numpy as np
+
 rolls = np.random.randint(1, 7, 10000)
 not_even_count = sum(is_not_even(roll) for roll in rolls)
 prob_not_even_sim = not_even_count / 10000
@@ -767,11 +790,11 @@ $$ P(짝수) = \frac{n({2, 4, 6})}{n({1, 2, 3, 4, 5, 6})} = \frac{3}{6} = \frac{
 
 ### Python 예시
 
-
 ```python
 # 수학적 확률 계산 함수
 def mathematical_probability(event, sample_space):
     return len(event) / len(sample_space)
+
 
 # 주사위 표본공간과 사건 정의
 dice_sample_space = [1, 2, 3, 4, 5, 6]
@@ -798,7 +821,7 @@ print(f"P(4보다 큰 수) = {prob_greater_than_4}")
 
 - 랜덤 초기화: 신경망의 가중치 초기화 등에 사용
 
-> 💡 수학적 확률은 확률론의 기초가 되며, 모든 가능성이 동등하게 중요한 상황에서의 확률 모델링에 필수적이다.
+> 💡 수학적 확률은 확률론의 기초가 되며, 모든 가능성이 동등하게 중요한 상황에서의 확률 모델링에 필수적이다.
 
 ## 📈 확률의 계산 방법 - 통계적 확률 (Statistical Probability)
 
@@ -816,9 +839,9 @@ $$ \frac{540}{1000} = 0.54 $$
 
 ### Python 예시
 
-
 ```python
 import numpy as np
+
 
 # 통계적 확률 계산을 위한 시뮬레이션
 def statistical_probability_simulation(event_function, num_trials=10000):
@@ -834,13 +857,16 @@ def statistical_probability_simulation(event_function, num_trials=10000):
     # 통계적 확률 계산
     return event_count / num_trials
 
+
 # 짝수가 나오는 사건 정의
 def is_even(outcome):
     return outcome % 2 == 0
 
+
 # 통계적 확률 계산
 prob_even_statistical = statistical_probability_simulation(is_even, 100000)
 print(f"P(짝수) 통계적 확률 (100,000번 시행): {prob_even_statistical:.4f}")
+
 
 # 동전 던지기 시뮬레이션
 def coin_flip_simulation(num_flips=10000):
@@ -848,6 +874,7 @@ def coin_flip_simulation(num_flips=10000):
     flips = np.random.randint(0, 2, num_flips)
     heads_count = np.sum(flips == 0)
     return heads_count / num_flips
+
 
 prob_heads = coin_flip_simulation(100000)
 print(f"P(앞면) 통계적 확률 (100,000번 시행): {prob_heads:.4f}")
@@ -862,7 +889,7 @@ print(f"P(앞면) 통계적 확률 (100,000번 시행): {prob_heads:.4f}")
 
 - 교차 검증(Cross-Validation): 모델 성능의 통계적 추정
 
-> 💡 통계적 확률은 *실제 데이터에서 패턴과 확률을 추정하는 머신러닝의 핵심 개념*으로, 모델이 데이터에서 학습하는 방식의 기반이 된다!
+> 💡 통계적 확률은 *실제 데이터에서 패턴과 확률을 추정하는 머신러닝의 핵심 개념*으로, 모델이 데이터에서 학습하는 방식의 기반이 된다!
 
 ## ➕ 확률의 덧셈법칙 (Addition Rule of Probability)
 
@@ -884,16 +911,16 @@ $$ P(A \cup B) = P(A) + P(B) - P(A \cap B) = \frac{3}{6} + \frac{3}{6} - \frac{1
 
 ### Python 예시
 
-
 ```python
 # 확률의 덧셈법칙 계산 함수
 def addition_rule(prob_A, prob_B, prob_intersection):
     return prob_A + prob_B - prob_intersection
 
+
 # 주사위 사건의 확률
-prob_odd = 3/6  # P(홀수) = P({1, 3, 5})
-prob_greater_equal_4 = 3/6  # P(4 이상) = P({4, 5, 6})
-prob_intersection = 1/6  # P(홀수 ∩ 4 이상) = P({5})
+prob_odd = 3 / 6  # P(홀수) = P({1, 3, 5})
+prob_greater_equal_4 = 3 / 6  # P(4 이상) = P({4, 5, 6})
+prob_intersection = 1 / 6  # P(홀수 ∩ 4 이상) = P({5})
 
 # 덧셈법칙으로 합사건의 확률 계산
 prob_union = addition_rule(prob_odd, prob_greater_equal_4, prob_intersection)
@@ -901,8 +928,11 @@ print(f"P(홀수 ∪ 4 이상) = {prob_union}")
 
 # 시뮬레이션으로 확인
 import numpy as np
+
+
 def is_odd_or_greater_equal_4(outcome):
     return outcome % 2 == 1 or outcome >= 4
+
 
 dice_rolls = np.random.randint(1, 7, 100000)
 event_count = sum(is_odd_or_greater_equal_4(roll) for roll in dice_rolls)
@@ -918,7 +948,7 @@ print(f"P(홀수 ∪ 4 이상) 시뮬레이션 결과: {prob_union_sim:.4f}")
 
 - 오류 분석: 여러 유형의 오류 중 하나라도 발생할 확률 계산
 
-> 💡 덧셈법칙은 복잡한 사건의 확률을 더 간단한 확률들로 분해하여 계산할 수 있게 해주며, 특히 여러 조건 중 하나라도 만족하는 경우를 모델링할 때 필수적이다.
+> 💡 덧셈법칙은 복잡한 사건의 확률을 더 간단한 확률들로 분해하여 계산할 수 있게 해주며, 특히 여러 조건 중 하나라도 만족하는 경우를 모델링할 때 필수적이다.
 
 ## 🔮 조건부 확률 (Conditional Probability)
 
@@ -934,11 +964,11 @@ $$ P(\text{첫번째 주사위=3 | 합=8}) = \frac{P(\text{첫번째 주사위=3
 
 ### Python 예시
 
-
 ```python
 # 조건부 확률 계산 함수
 def conditional_probability(event_A_and_B, event_B):
     return len(event_A_and_B) / len(event_B)
+
 
 # 두 주사위를 던지는 표본공간
 sample_space = [(i, j) for i in range(1, 7) for j in range(1, 7)]
@@ -954,6 +984,8 @@ print(f"P(첫번째 주사위=3 | 합=8) = {prob_first_3_given_sum_8}")
 
 # 시뮬레이션으로 확인
 import numpy as np
+
+
 def simulate_conditional_probability(num_trials=100000):
     # 두 주사위 굴리기
     die1 = np.random.randint(1, 7, num_trials)
@@ -968,6 +1000,7 @@ def simulate_conditional_probability(num_trials=100000):
     prob = np.mean(first_die_values == 3)
     return prob
 
+
 prob_sim = simulate_conditional_probability()
 print(f"P(첫번째 주사위=3 | 합=8) 시뮬레이션 결과: {prob_sim:.4f}")
 
@@ -981,13 +1014,13 @@ print(f"P(첫번째 주사위=3 | 합=8) 시뮬레이션 결과: {prob_sim:.4f}"
 
 - 즉, 머신러닝/딥러닝에서 중요한 이유는,
 
-	- 분류 모델의 기초: 나이브 베이즈, 로지스틱 회귀 등의 분류 알고리즘은 조건부 확률에 기반한다.
+    - 분류 모델의 기초: 나이브 베이즈, 로지스틱 회귀 등의 분류 알고리즘은 조건부 확률에 기반한다.
 
-	- 확률적 의사결정: 머신러닝 모델은 종종 "이 입력이 주어졌을 때, 출력이 Y일 확률"을 계산한다.
+    - 확률적 의사결정: 머신러닝 모델은 종종 "이 입력이 주어졌을 때, 출력이 Y일 확률"을 계산한다.
 
-	- 베이지안 추론: 불확실성을 다루는 베이지안 방법론의 핵심 개념이다.
+    - 베이지안 추론: 불확실성을 다루는 베이지안 방법론의 핵심 개념이다.
 
-	- 생성 모델: GAN, VAE 같은 생성 모델들은 조건부 확률 분포를 학습한다.
+    - 생성 모델: GAN, VAE 같은 생성 모델들은 조건부 확률 분포를 학습한다.
 
 <br/>
 
@@ -1006,7 +1039,6 @@ $$ P(A|B) = \frac{P(B|A) \times P(A)}{P(B)} $$
 1. 이를 1번 식에 대입하면 $ P(A|B) = \frac{P(B|A) \times P(A)}{P(B)} $
 
 ### Python 예시: 의료 검사 문제
-
 
 ```python
 # 베이즈 정리를 이용한 의료 검사 문제
@@ -1030,13 +1062,12 @@ p_positive = p_positive_given_disease * p_disease + p_positive_given_no_disease 
 p_disease_given_positive = (p_positive_given_disease * p_disease) / p_positive
 
 print(f"검사 양성일 때 실제 질병이 있을 확률: {p_disease_given_positive:.4f}")
-print(f"즉, 양성 판정을 받은 사람 중 약 {p_disease_given_positive*100:.1f}%만이 실제 질병이 있습니다.")
+print(f"즉, 양성 판정을 받은 사람 중 약 {p_disease_given_positive * 100:.1f}%만이 실제 질병이 있습니다.")
 ```
 
 ### Python 예시: 스팸 필터링
 
 - 특정 단어들이 등장했을 때 그 메일이 스팸일 확률
-
 
 ```python
 # 베이즈 정리를 이용한 이메일 스팸 필터 예시
@@ -1044,20 +1075,21 @@ print(f"즉, 양성 판정을 받은 사람 중 약 {p_disease_given_positive*10
 # 기본 통계 (가정)
 # 1. 전체 이메일 중 30%가 스팸이라고 가정 (사전 확률)
 p_spam = 0.3  # P(스팸)
-p_ham = 0.7   # P(정상)
+p_ham = 0.7  # P(정상)
 
 # 2. 특정 단어들의 조건부 확률
 # "무료"라는 단어가 포함될 확률
-p_free_given_spam = 0.6   # P("무료"|스팸) - 스팸에서 "무료" 단어 포함 확률
-p_free_given_ham = 0.05   # P("무료"|정상) - 정상에서 "무료" 단어 포함 확률
+p_free_given_spam = 0.6  # P("무료"|스팸) - 스팸에서 "무료" 단어 포함 확률
+p_free_given_ham = 0.05  # P("무료"|정상) - 정상에서 "무료" 단어 포함 확률
 
 # "당첨"이라는 단어가 포함될 확률
-p_win_given_spam = 0.4    # P("당첨"|스팸)
-p_win_given_ham = 0.02    # P("당첨"|정상)
+p_win_given_spam = 0.4  # P("당첨"|스팸)
+p_win_given_ham = 0.02  # P("당첨"|정상)
 
 # "회의"라는 단어가 포함될 확률
 p_meeting_given_spam = 0.05  # P("회의"|스팸)
-p_meeting_given_ham = 0.3    # P("회의"|정상)
+p_meeting_given_ham = 0.3  # P("회의"|정상)
+
 
 # 3. 베이즈 정리를 적용한 스팸 필터 함수
 def calculate_spam_probability(has_free, has_win, has_meeting):
@@ -1108,44 +1140,45 @@ def calculate_spam_probability(has_free, has_win, has_meeting):
 
     return p_spam_given_words
 
+
 # 여러 이메일 예시에 대한 스팸 확률 계산
 print("이메일 예시와 스팸 확률:")
 
 # 이메일 1: "무료", "당첨" 포함, "회의" 미포함
 email1_prob = calculate_spam_probability(True, True, False)
-print(f"이메일 1 (무료+당첨): 스팸 확률 = {email1_prob:.4f} ({email1_prob*100:.1f}%)")
+print(f"이메일 1 (무료+당첨): 스팸 확률 = {email1_prob:.4f} ({email1_prob * 100:.1f}%)")
 
 # 이메일 2: "무료" 포함, "당첨", "회의" 미포함
 email2_prob = calculate_spam_probability(True, False, False)
-print(f"이메일 2 (무료만): 스팸 확률 = {email2_prob:.4f} ({email2_prob*100:.1f}%)")
+print(f"이메일 2 (무료만): 스팸 확률 = {email2_prob:.4f} ({email2_prob * 100:.1f}%)")
 
 # 이메일 3: "회의" 포함, "무료", "당첨" 미포함
 email3_prob = calculate_spam_probability(False, False, True)
-print(f"이메일 3 (회의만): 스팸 확률 = {email3_prob:.4f} ({email3_prob*100:.1f}%)")
+print(f"이메일 3 (회의만): 스팸 확률 = {email3_prob:.4f} ({email3_prob * 100:.1f}%)")
 
 # 이메일 4: "무료", "회의" 포함, "당첨" 미포함
 email4_prob = calculate_spam_probability(True, False, True)
-print(f"이메일 4 (무료+회의): 스팸 확률 = {email4_prob:.4f} ({email4_prob*100:.1f}%)")
+print(f"이메일 4 (무료+회의): 스팸 확률 = {email4_prob:.4f} ({email4_prob * 100:.1f}%)")
 
 ```
 
 - 사전 확률(Prior)
 
-	- 전체 이메일 중 30%가 스팸이라고 가정: P(스팸) = 0.3
+    - 전체 이메일 중 30%가 스팸이라고 가정: P(스팸) = 0.3
 
 - 가능도(Likelihood)
 
-	- 각 단어가 스팸 또는 정상 이메일에 나타날 조건부 확률
+    - 각 단어가 스팸 또는 정상 이메일에 나타날 조건부 확률
 
-	- 예: P("무료"|스팸) = 0.6은 스팸 이메일의 60%에 "무료"라는 단어가 포함됨을 의미
+    - 예: P("무료"|스팸) = 0.6은 스팸 이메일의 60%에 "무료"라는 단어가 포함됨을 의미
 
 - 증거(Evidence)
 
-	- 특정 단어 조합이 나타날 확률: P(단어들) = P(단어들|스팸)×P(스팸) + P(단어들|정상)×P(정상)
+    - 특정 단어 조합이 나타날 확률: P(단어들) = P(단어들|스팸)×P(스팸) + P(단어들|정상)×P(정상)
 
 - 사후 확률(Posterior)
 
-	- 베이즈 정리 적용: P(스팸|단어들) = P(단어들|스팸)×P(스팸) / P(단어들)
+    - 베이즈 정리 적용: P(스팸|단어들) = P(단어들|스팸)×P(스팸) / P(단어들)
 
 ### 실제 응용에서의 스팸 필터링 예시 의미
 
@@ -1163,4 +1196,3 @@ print(f"이메일 4 (무료+회의): 스팸 확률 = {email4_prob:.4f} ({email4_
 > - 확률 분포: 이산/연속 확률 분포에서의 조건부 확률
 > - 체인 룰: $ P(A,B,C) = P(A|B,C) * P(B|C) * P(C) $와 같은 결합확률의 분해
 > - 최대 우도 추정(MLE): 조건부 확률을 최대화하는 모델 파라미터 찾기
-
