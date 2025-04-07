@@ -10,8 +10,8 @@ math: true
 ---
 
 > 💡 `import pandas as pd`
-
-위 구문으로 [Pandas](https://pandas.pydata.org/docs/) 를 사용한다고 전제한다.
+>
+> 위 구문으로 [Pandas](https://pandas.pydata.org/docs/) 를 사용한다고 전제한다.
 
 ## ⭐ 설치 및 환경
 
@@ -65,7 +65,7 @@ series = pd.Series(data)
 - 자주 사용하는 속성 값
 
 ```python
-import numpy as pd
+import numpy as np
 import pandas as pd
 
 se = pd.Series(np.arange(10) ** 2, name="Number")
