@@ -13,7 +13,31 @@ math: true
 
 위 구문으로 [Pandas](https://pandas.pydata.org/docs/) 를 사용한다고 전제한다.
 
-## ⭐ 설치 및 환경
+## ⚡TL;DR
+
+> 💡 이 글은 Python 기초 지식이 있다라고 가정하고 진행한다.
+
+- 기본 개념 - Pandas 의 핵심 데이터 구조인 Series 와 DataFrame 에 대한 이해
+
+- 데이터 다루기 - CSV, Excel, JSON 등 다양한 형식의 데이터 불러오기와 저장하기
+
+- 데이터 탐색 - head(), tail(), info(), describe() 등으로 데이터 살펴보기
+
+- 데이터 선택 - 행과 열 선택하기, loc 와 iloc 활용법
+
+- 데이터 필터링 - 조건에 맞는 데이터 추출하기, Boolean 인덱싱
+
+- 결측값 처리 - 결측값 확인, 제거, 대체 방법
+
+- 데이터 변형 - 타입 변환, 데이터 이동, 결합하기
+
+- 통계 분석 - 기본 통계 함수, 그룹별 통계, 피벗 테이블
+
+## 📓 실습 Jupyter Notebook
+
+-
+
+## 🛠️ 설치 및 환경
 
 - 가상환경은 [pyenv](https://github.com/pyenv/pyenv) 와 `pyenv` 의 [virtualenv](https://github.com/pyenv/pyenv-virtualenv)
   플러그인을 사용해서 만들었다.
@@ -30,13 +54,29 @@ math: true
 pip install pandas==2.2.3
 ```
 
-## 💾 Pandas 의 Data 형태
+## 📊 Pandas의 기본 데이터 구조
 
-### Series
+### 📈 Series: 1차원 데이터의 강력한 표현
 
-- 정의: 시리즈(Series)는 데이터가 순차적으로 나열된 1차원 배열 형태
+```mermaid
+graph LR
+    subgraph "Series: 1차원 데이터 구조"
+        direction LR
+        idx["Index"] --- val["Values"]
+        idx1["0"] --> val1["10"]
+        idx2["1"] --> val2["20"]
+        idx3["2"] --> val3["30"]
+        idx4["3"] --> val4["40"]
+        classDef index fill: #f9d5e5, stroke: #333, stroke-width: 1px
+        classDef value fill: #b8e0d2, stroke: #333, stroke-width: 1px
+        class idx, idx1, idx2, idx3, idx4 index
+        class val, val1, val2, val3, val4 value
+    end
+```
 
-- 구조: 인덱스(index)와 값(value)이 일대일로 대응되는 구조
+- 데이터가 순차적으로 나열된 1차원 배열 형태
+
+- 인덱스(index)와 값(value)이 일대일로 대응되는 구조
 
 - pandas 에서 사용하는 일종의 리스트
 
@@ -86,11 +126,13 @@ se.dtypes  # dtype('int64')
 se.values  # array([ 0,  1,  4,  9, 16, 25, 36, 49, 64, 81])
 ```
 
-### DataFrame
+### 📑 DataFrame: 표 형태의 2차원 데이터 처리
 
-- 정의: 데이터프레임(DataFrame)은 행(row)과 열(column)로 구성된 2차원 배열 형태
+![basic_dataframe.png](/assets/img/basic_dataframe.png)
 
-- 구조: 여러 개의 Series가 모여 표 형태를 이룸 (각 열이 하나의 Series 객체)
+- 행(row)과 열(column)로 구성된 2차원 배열 형태
+
+- 여러 개의 Series가 모여 표 형태를 이룸 (각 열이 하나의 Series 객체)
 
 - dict 로 만들기
 
@@ -126,6 +168,9 @@ import pandas as pd
 names = pd.Series(["홍길동", "김철수", "이영희"])
 ages = pd.Series([20, 25, 21])
 gender = pd.Series(["남", "남", "여"])
+df = pd.DataFrame({
+    "이름": names, "나이": ages, "성별": gender
+})
 ```
 
 - 자주 사용하는 속성 값
@@ -162,7 +207,7 @@ df.values
 #        ['이영희', 30, '여']], dtype=object)
 ```
 
-## 🔨 다양한 DataFrame 만드는 방법
+## 🔄 다양한 방법으로 DataFrame 만들기
 
 - Pandas 는 다양한 형태의 외부 파일을 읽어와서 DataFrame 을 생성하는 함수를 제공
 
@@ -249,7 +294,7 @@ df.to_html('countries.html',  # 저장할 파일 경로
            escape=False)  # HTML 태그를 이스케이프하지 않음(HTML 태그 허용)
 ```
 
-## 🔎 DataFrame 의 데이터 내용 살펴보기
+## 🔍 데이터 탐색하기
 
 ### head(행의 갯수)
 
@@ -404,7 +449,7 @@ print(df.describe(include='all'))
 # max     NaN  45.000000  NaN  6500000.000000
 ```
 
-## 🔢 DataFrame 의 행과 열
+## 📋 행과 열 다루기
 
 ### column(열) 선택하기
 
@@ -544,7 +589,7 @@ print(df.iloc[0:2, 1:3])
 # 1  25  남
 ```
 
-## 🧪 조건에 맞는 데이터 추출
+## 🧪 데이터 필터링과 조건부 선택
 
 ### 데이터 정렬하기
 
@@ -633,7 +678,7 @@ print(selected_names_df)
 # 2  이영희  30  여
 ```
 
-## ⚠️결측값
+## ⚠️ 결측값 처리하기
 
 ### 결측값 확인하기
 
@@ -723,7 +768,11 @@ print(df_drop_subset)
 
 - 결측값을 바로 위의 값과 동일하게 변경: `데이터명.fillna(method='ffill')`
 
+    - 위 함수가 곧 deprecated 될 것이기 때문에, `ffill()` 함수를 권장
+
 - 결측값을 바로 아래의 값과 동일하게 변경: `데이터명.fillna(method='bfill')`
+
+    - 위 함수가 곧 deprecated 될 것이기 때문에, `bfill()` 함수를 권장
 
 ```python
 # 모든 결측값 0으로 대치
@@ -815,10 +864,298 @@ print("\n변환 후 타입 확인:")
 print(df["나이_문자열"].dtype)
 # 변환 후 타입 확인:
 # dtype('O')
+```
+
+## 📊 DataFrame 과 데이터 통계
+
+### 기본 통계 함수
+
+- `.mean()`: 평균값
+
+- `.median()`: 중앙값
+
+- `.describe()`: 다양한 통계량 요약
+
+- `.min()`: 최솟값
+
+- `.max()`: 최댓값
+
+- `.std()`: 표준편차
+
+- `.var()`: 분산
+
+- `.quantile()`: 사분위수
+
+- `.corr()`: 상관계수
+
+```python
+# 기본 통계 함수 예시 데이터
+stats_df = pd.DataFrame({
+    "점수": [85, 92, 78, 90, 87],
+    "나이": [22, 20, 25, 23, 21],
+    "경력": [1, 0, 3, 2, 1]
+})
+
+# 평균값
+print("평균값:")
+print(stats_df.mean())
+# 평균값:
+# 점수    86.4
+# 나이    22.2
+# 경력     1.4
+# dtype: float64
+
+# 중앙값
+print("\n중앙값:")
+print(stats_df.median())
+# 중앙값:
+# 점수    87.0
+# 나이    22.0
+# 경력     1.0
+# dtype: float64
+
+# 기술통계량 요약
+print("\n기술통계량 요약:")
+print(stats_df.describe())
+# 기술통계량 요약:
+#             점수        나이        경력
+# count   5.00000   5.00000   5.00000
+# mean   86.40000  22.20000   1.40000
+# std     5.41295   1.92354   1.14018
+# min    78.00000  20.00000   0.00000
+# 25%    85.00000  21.00000   1.00000
+# 50%    87.00000  22.00000   1.00000
+# 75%    90.00000  23.00000   2.00000
+# max    92.00000  25.00000   3.00000
+
+# 최댓값과 최솟값
+print("\n최댓값:")
+print(stats_df.max())
+# 최댓값:
+# 점수    92
+# 나이    25
+# 경력     3
+# dtype: int64
+
+print("\n최솟값:")
+print(stats_df.min())
+# 최솟값:
+# 점수    78
+# 나이    20
+# 경력     0
+# dtype: int64
+
+# 표준편차
+print("\n표준편차:")
+print(stats_df.std())
+# 표준편차:
+# 점수    5.412947
+# 나이    1.923538
+# 경력    1.140175
+# dtype: float64
+
+# 특정 분위수
+print("\n75% 분위수:")
+print(stats_df.quantile(0.75))
+# 75% 분위수:
+# 점수    90.0
+# 나이    23.0
+# 경력     2.0
+# dtype: float64
+
+# 상관계수
+print("\n상관계수:")
+print(stats_df.corr())
+# 상관계수:
+#           점수        나이        경력
+# 점수  1.000000 -0.747018 -0.677525
+# 나이 -0.747018  1.000000  0.901388
+# 경력 -0.677525  0.901388  1.000000
 
 ```
 
-## ⚡ DataFrame 의 다양한 함수
+### 그룹별 통계
+
+- `.groupby()`: 그룹별 집계하여 통계 계산
+
+- `.groupby()` 한 뒤에 통계관련 함수를 적용할 수 있다.
+
+```python
+# 그룹별 통계 예시 데이터
+group_df = pd.DataFrame({
+    "부서": ["영업", "개발", "영업", "마케팅", "개발", "영업", "마케팅"],
+    "성별": ["남", "여", "여", "남", "남", "남", "여"],
+    "급여": [350, 480, 320, 400, 520, 380, 450],
+    "보너스": [50, 70, 40, 60, 80, 60, 70]
+})
+
+# 부서별 평균 급여
+dept_salary_mean = group_df.groupby("부서")["급여"].mean()
+print("부서별 평균 급여:")
+print(dept_salary_mean)
+# 부서별 평균 급여:
+# 부서
+# 개발      500.0
+# 마케팅     425.0
+# 영업      350.0
+# Name: 급여, dtype: float64
+
+# 부서 및 성별로 그룹화하여 여러 통계량 계산
+multi_group = group_df.groupby(["부서", "성별"]).agg({
+    "급여": ["mean", "min", "max"],
+    "보너스": ["mean", "sum"]
+})
+print("\n부서 및 성별 그룹별 통계:")
+print(multi_group)
+# 부서 및 성별 그룹별 통계:
+#             급여                보너스
+#            mean  min  max      mean sum
+# 부서  성별
+# 개발  남    520  520  520      80.0  80
+#     여    480  480  480      70.0  70
+# 마케팅 남    400  400  400      60.0  60
+#     여    450  450  450      70.0  70
+# 영업  남    365  350  380      55.0 110
+#     여    320  320  320      40.0  40
+
+# 그룹화 후 필터링 (급여 평균이 400 이상인 부서만)
+high_salary_dept = group_df.groupby("부서").filter(lambda x: x["급여"].mean() >= 400)
+print("\n평균 급여가 400 이상인 부서 데이터:")
+print(high_salary_dept)
+# 평균 급여가 400 이상인 부서 데이터:
+#    부서 성별  급여 보너스
+# 1  개발  여  480   70
+# 3  마케팅  남  400   60
+# 4  개발  남  520   80
+# 6  마케팅  여  450   70
+
+```
+
+### 값 개수 집계
+
+- `.value_counts()`를 이용하여, column 별 개수 집계
+
+```python
+# 값 개수 집계 예시 데이터
+count_df = pd.DataFrame({
+    "과일": ["사과", "바나나", "사과", "딸기", "바나나", "사과", "딸기", "사과"],
+    "크기": ["중", "대", "소", "중", "중", "대", "소", "중"]
+})
+
+# 과일 종류별 개수 집계
+fruit_counts = count_df["과일"].value_counts()
+print("과일 종류별 개수:")
+print(fruit_counts)
+# 과일 종류별 개수:
+# 사과      4
+# 바나나     2
+# 딸기      2
+# Name: count, dtype: int64
+
+# 크기별 개수 집계 (비율 포함)
+size_counts = count_df["크기"].value_counts(normalize=True)
+print("\n크기별 개수 (비율):")
+print(size_counts)
+# 크기별 개수 (비율):
+# 중    0.5
+# 소    0.25
+# 대    0.25
+# Name: 크기, dtype: float64
+
+# 두 컬럼의 조합 개수 집계
+combination_counts = count_df.value_counts()
+print("\n과일과 크기 조합 개수:")
+print(combination_counts)
+# 과일과 크기 조합 개수:
+# 과일   크기
+# 사과   중     3
+# 딸기   소     1
+# 사과   대     1
+# 사과   소     1
+# 딸기   중     1
+# 바나나  대     1
+# 바나나  중     1
+# dtype: int64
+
+# 결측치 포함하여 개수 집계
+count_df_with_na = count_df.copy()
+count_df_with_na.loc[0, "크기"] = None
+na_counts = count_df_with_na["크기"].value_counts(dropna=False)
+print("\n결측치 포함 크기별 개수:")
+print(na_counts)
+# 결측치 포함 크기별 개수:
+# 중       3
+# 소       2
+# 대       2
+# NaN     1
+# Name: 크기, dtype: int64
+```
+
+## 🧩 고급 데이터 조작 기법
+
+### agg 함수 활용하기
+
+- `.agg()`: 여러 함수를 동시에 적용하여 집계
+
+- 열별로 다른 함수 적용 가능
+
+- 사용자 정의 함수와 내장 함수 혼합 사용 가능
+
+```python
+# agg 함수 예시 데이터
+agg_df = pd.DataFrame({
+    "이름": ["김철수", "이영희", "박지훈", "정미나", "최재윤"],
+    "나이": [25, 30, 28, 22, 35],
+    "급여": [2800000, 3500000, 3200000, 2500000, 4000000],
+    "근무일수": [22, 20, 21, 19, 23]
+})
+
+# 단일 컬럼에 여러 함수 적용
+print("급여 통계:")
+print(agg_df["급여"].agg(["min", "max", "mean", "median"]))
+# 급여 통계:
+# min       2500000
+# max       4000000
+# mean      3200000
+# median    3200000
+# Name: 급여, dtype: int64
+
+# 여러 컬럼에 다양한 함수 적용
+aggregated = agg_df.agg({
+    "나이": ["min", "max", "mean"],
+    "급여": ["mean", "std"],
+    "근무일수": ["sum", "mean"]
+})
+print("\n여러 컬럼에 다양한 함수 적용:")
+print(aggregated)
+
+
+# 여러 컬럼에 다양한 함수 적용:
+#              나이          급여      근무일수
+#             min max      mean       std  sum mean
+# 0           22  35  3200000.0  568330.95  105   21
+
+# 사용자 정의 함수와 내장 함수 혼합
+def range_diff(x):
+    return x.max() - x.min()
+
+
+def top_n_mean(x, n=2):
+    return x.nlargest(n).mean()
+
+
+mixed_agg = agg_df.agg({
+    "나이": ["mean", range_diff],
+    "급여": ["mean", lambda x: top_n_mean(x, 2)]
+})
+print("\n사용자 정의 함수 포함 집계:")
+print(mixed_agg)
+# 사용자 정의 함수 포함 집계:
+#              나이         급여
+#            mean range_diff      mean <lambda>
+# 0           28         13  3200000  3750000
+
+```
 
 ### datetime 다루기
 
@@ -845,13 +1182,14 @@ custom_dates = pd.DataFrame({
     "날짜": ["15/01/2023", "20/02/2023", "25/03/2023"]
 })
 custom_dates["날짜_datetime"] = pd.to_datetime(custom_dates["날짜"], format="%d/%m/%Y")
-print("\n특정 형식의 문자열을 날짜로 변환:")
+print("\\n특정 형식의 문자열을 날짜로 변환:")
 print(custom_dates)
 # 특정 형식의 문자열을 날짜로 변환:
 #           날짜 날짜_datetime
 # 0  15/01/2023   2023-01-15
 # 1  20/02/2023   2023-02-20
 # 2  25/03/2023   2023-03-25
+
 
 ```
 
@@ -874,13 +1212,14 @@ print(date_df)
 date_df["연도"] = date_df["날짜_datetime"].dt.year
 date_df["월"] = date_df["날짜_datetime"].dt.month
 date_df["요일"] = date_df["날짜_datetime"].dt.day_name()
-print("\ndt 연산자 활용:")
+print("\\ndt 연산자 활용:")
 print(date_df[["날짜_datetime", "연도", "월", "요일"]])
 # dt 연산자 활용:
 #   날짜_datetime  연도  월      요일
 # 0   2023-01-15  2023  1  Sunday
 # 1   2023-02-20  2023  2  Monday
 # 2   2023-03-25  2023  3  Saturday
+
 
 ```
 
@@ -904,6 +1243,7 @@ print(date_df[["날짜_datetime", "7일_후", "1개월_후", "1년_전"]])
 # 0   2023-01-15 2023-01-22 2023-02-15 2022-01-15
 # 1   2023-02-20 2023-02-27 2023-03-20 2022-02-20
 # 2   2023-03-25 2023-04-01 2023-04-25 2022-03-25
+
 
 ```
 
@@ -938,7 +1278,7 @@ print(contains_python)
 
 # 문자열 대치
 replaced_text = text_df["텍스트"].str.replace("Python", "Python 3.12")
-print("\n문자열 대치:")
+print("\\n문자열 대치:")
 print(replaced_text)
 # 문자열 대치:
 # 0        Python 3.12 3.9
@@ -949,7 +1289,7 @@ print(replaced_text)
 
 # 문자열 분할
 split_text = text_df["텍스트"].str.split(" ", expand=True)
-print("\n문자열 분할:")
+print("\\n문자열 분할:")
 print(split_text)
 # 문자열 분할:
 #         0         1        2
@@ -961,7 +1301,7 @@ print(split_text)
 # 대소문자 변환
 lower_text = text_df["텍스트"].str.lower()
 upper_text = text_df["텍스트"].str.upper()
-print("\n소문자 변환:")
+print("\\n소문자 변환:")
 print(lower_text)
 # 소문자 변환:
 # 0        python 3.9
@@ -970,7 +1310,7 @@ print(lower_text)
 # 3     python example
 # Name: 텍스트, dtype: object
 
-print("\n대문자 변환:")
+print("\\n대문자 변환:")
 print(upper_text)
 # 대문자 변환:
 # 0        PYTHON 3.9
@@ -979,9 +1319,234 @@ print(upper_text)
 # 3     PYTHON EXAMPLE
 # Name: 텍스트, dtype: object
 
+
 ```
 
-### 데이터 결합하기
+### 데이터 이동시키기 - rolling
+
+- `.rolling(window=윈도우크기)`: 지정된 윈도우 크기만큼 데이터를 묶어 연산
+
+- 주로 시계열 데이터의 이동평균, 누적합 등을 계산할 때 사용
+
+- 주요 옵션
+
+    - `window`: 윈도우 크기 지정
+
+    - `min_periods`: 연산에 필요한 최소 데이터 수
+
+    - `center`: 결과를 윈도우 중앙에 위치시킬지 여부
+
+```python
+# 롤링 함수 예시 데이터
+import numpy as np
+
+rolling_df = pd.DataFrame({
+    "날짜": pd.date_range(start="2023-01-01", periods=10, freq="D"),
+    "매출": [120, 135, 140, 155, 165, 150, 145, 160, 175, 190]
+})
+rolling_df.set_index("날짜", inplace=True)
+
+# 3일 이동평균
+rolling_mean = rolling_df["매출"].rolling(window=3).mean()
+print("3일 이동평균:")
+print(rolling_mean)
+# 3일 이동평균:
+# 날짜
+# 2023-01-01         NaN
+# 2023-01-02         NaN
+# 2023-01-03    131.6667
+# 2023-01-04    143.3333
+# 2023-01-05    153.3333
+# 2023-01-06    156.6667
+# 2023-01-07    153.3333
+# 2023-01-08    151.6667
+# 2023-01-09    160.0000
+# 2023-01-10    175.0000
+# Name: 매출, dtype: float64
+
+# 여러 통계량 계산
+rolling_stats = rolling_df["매출"].rolling(window=4).agg(["min", "max", "mean", "std"])
+print("\n4일 롤링 통계량:")
+print(rolling_stats)
+# 4일 롤링 통계량:
+#                  min   max        mean        std
+# 날짜
+# 2023-01-01       NaN   NaN         NaN        NaN
+# 2023-01-02       NaN   NaN         NaN        NaN
+# 2023-01-03       NaN   NaN         NaN        NaN
+# 2023-01-04     120.0  155.0  137.500000  14.434877
+# 2023-01-05     135.0  165.0  148.750000  13.150080
+# 2023-01-06     140.0  165.0  152.500000  10.308300
+# 2023-01-07     145.0  165.0  153.750000   8.539126
+# 2023-01-08     145.0  165.0  155.000000   8.164966
+# 2023-01-09     145.0  175.0  157.500000  13.227954
+# 2023-01-10     145.0  190.0  167.500000  19.364917
+
+# 중앙에 값 위치시키기
+centered_rolling = rolling_df["매출"].rolling(window=3, center=True).mean()
+print("\n중앙 위치 3일 이동평균:")
+print(centered_rolling)
+# 중앙 위치 3일 이동평균:
+# 날짜
+# 2023-01-01         NaN
+# 2023-01-02    131.6667
+# 2023-01-03    143.3333
+# 2023-01-04    153.3333
+# 2023-01-05    156.6667
+# 2023-01-06    153.3333
+# 2023-01-07    151.6667
+# 2023-01-08    160.0000
+# 2023-01-09    175.0000
+# 2023-01-10         NaN
+# Name: 매출, dtype: float64
+```
+
+### 데이터 이동시키기 - shift
+
+- `.shift(periods=n)`: 데이터를 n만큼 이동시킴 (양수: 아래로, 음수: 위로)
+
+- 주로 시계열 데이터에서 전일 대비 증감, 성장률 등을 계산할 때 활용
+
+- 날짜 또는 시간 인덱스가 있는 경우 `freq` 매개변수로 시간 단위 지정 가능
+
+```python
+# 시프트 함수 예시 데이터
+shift_df = pd.DataFrame({
+    "날짜": pd.date_range(start="2023-01-01", periods=5, freq="D"),
+    "매출": [100, 120, 115, 130, 145]
+})
+shift_df.set_index("날짜", inplace=True)
+
+# 데이터 한 행 아래로 이동
+print("한 행 아래로 이동:")
+print(shift_df["매출"].shift(1))
+# 한 행 아래로 이동:
+# 날짜
+# 2023-01-01      NaN
+# 2023-01-02    100.0
+# 2023-01-03    120.0
+# 2023-01-04    115.0
+# 2023-01-05    130.0
+# Name: 매출, dtype: float64
+
+# 데이터 한 행 위로 이동
+print("\n한 행 위로 이동:")
+print(shift_df["매출"].shift(-1))
+# 한 행 위로 이동:
+# 날짜
+# 2023-01-01    120.0
+# 2023-01-02    115.0
+# 2023-01-03    130.0
+# 2023-01-04    145.0
+# 2023-01-05      NaN
+# Name: 매출, dtype: float64
+
+# 전일 대비 증감 계산
+shift_df["전일대비증감"] = shift_df["매출"] - shift_df["매출"].shift(1)
+print("\n전일 대비 증감:")
+print(shift_df)
+# 전일 대비 증감:
+#             매출  전일대비증감
+# 날짜
+# 2023-01-01  100        NaN
+# 2023-01-02  120       20.0
+# 2023-01-03  115       -5.0
+# 2023-01-04  130       15.0
+# 2023-01-05  145       15.0
+
+# 성장률 계산
+shift_df["성장률"] = (shift_df["매출"] / shift_df["매출"].shift(1) - 1) * 100
+print("\n성장률(%):")
+print(shift_df[["매출", "성장률"]])
+# 성장률(%):
+#             매출        성장률
+# 날짜
+# 2023-01-01  100         NaN
+# 2023-01-02  120  20.000000
+# 2023-01-03  115  -4.166667
+# 2023-01-04  130  13.043478
+# 2023-01-05  145  11.538462
+```
+
+### 데이터 결합하기 - concat
+
+- `pd.concat([데이터1, 데이터2, ...], axis=0/1)`: 여러 데이터프레임을 행/열 방향으로 연결
+
+- 주요 옵션:
+
+    - `axis`: 연결 방향 (0: 행 방향, 1: 열 방향)
+
+    - `join`: 조인 방식 ('inner', 'outer')
+
+    - `ignore_index`: 기존 인덱스 무시 여부
+
+```python
+# concat 함수 예시 데이터
+df1 = pd.DataFrame({
+    "A": [1, 2, 3],
+    "B": [10, 20, 30]
+})
+
+df2 = pd.DataFrame({
+    "A": [4, 5, 6],
+    "B": [40, 50, 60]
+})
+
+df3 = pd.DataFrame({
+    "C": [100, 200, 300],
+    "D": [1000, 2000, 3000]
+})
+
+# 행 방향 연결 (위아래로)
+vertical_concat = pd.concat([df1, df2], axis=0)
+print("행 방향으로 연결:")
+print(vertical_concat)
+# 행 방향으로 연결:
+#    A   B
+# 0  1  10
+# 1  2  20
+# 2  3  30
+# 0  4  40
+# 1  5  50
+# 2  6  60
+
+# 인덱스 재설정
+vertical_concat_reset = pd.concat([df1, df2], axis=0, ignore_index=True)
+print("\n인덱스 재설정 후 행 방향 연결:")
+print(vertical_concat_reset)
+# 인덱스 재설정 후 행 방향 연결:
+#    A   B
+# 0  1  10
+# 1  2  20
+# 2  3  30
+# 3  4  40
+# 4  5  50
+# 5  6  60
+
+# 열 방향 연결 (좌우로)
+horizontal_concat = pd.concat([df1, df3], axis=1)
+print("\n열 방향으로 연결:")
+print(horizontal_concat)
+# 열 방향으로 연결:
+#    A   B    C     D
+# 0  1  10  100  1000
+# 1  2  20  200  2000
+# 2  3  30  300  3000
+
+# inner join으로 연결 (공통 인덱스만)
+df4 = pd.DataFrame({
+    "E": [7, 8, 9]
+}, index=[2, 3, 4])
+
+inner_concat = pd.concat([df1, df4], axis=1, join="inner")
+print("\n공통 인덱스만 inner join으로 연결:")
+print(inner_concat)
+# 공통 인덱스만 inner join으로 연결:
+#    A   B  E
+# 2  3  30  7
+```
+
+### 데이터 결합하기 - merge
 
 - `pd.merge(데이터1, 데이터2, on=기준컬럼, how=결합방법)`
 
@@ -1042,206 +1607,291 @@ print(merge_diff_cols)
 # 1    103  박지훈        1      1   인사팀
 # 2    102  이미나        2      2   개발팀
 # 3    104  정수연        3      3  마케팅팀
-
 ```
 
-### apply, map 함수 활용하기
+### crosstab 함수 활용하기
 
-- apply: 사용자 정의 함수를 데이터에 적용
+- `pd.crosstab()`: 범주형 변수 간의 빈도표 작성
 
-    - `.apply(함수, axis=0/1)`
+- 주요 옵션:
 
-    - 간단한 함수는 lambda로 구현 가능
+    - `index`, `columns`: 행과 열에 사용할 변수
 
-- map: 값을 특정 값으로 치환
+    - `values`: 집계할 값
 
-    - `데이터명[컬럼명].map(매핑 딕셔너리)`
+    - `aggfunc`: 집계 함수
 
-```python
-# apply 예시
-def calculate_bonus(row):
-    if row["급여"] >= 5000000:
-        return row["급여"] * 0.1
-    else:
-        return row["급여"] * 0.05
-
-
-salary_df = pd.DataFrame({
-    "이름": ["김철수", "이영희", "박민수", "정지영"],
-    "급여": [3500000, 4200000, 5500000, 6000000]
-})
-
-# apply로 함수 적용
-salary_df["보너스"] = salary_df.apply(calculate_bonus, axis=1)
-print("apply 함수 활용:")
-print(salary_df)
-# apply 함수 활용:
-#     이름      급여     보너스
-# 0  김철수  3500000  175000.0
-# 1  이영희  4200000  210000.0
-# 2  박민수  5500000  550000.0
-# 3  정지영  6000000  600000.0
-
-# lambda로 간단한 함수 적용
-salary_df["세후급여"] = salary_df.apply(lambda row: row["급여"] * 0.9, axis=1)
-print("\nlambda 함수 활용:")
-print(salary_df[["이름", "급여", "세후급여"]])
-# lambda 함수 활용:
-#     이름      급여    세후급여
-# 0  김철수  3500000  3150000.0
-# 1  이영희  4200000  3780000.0
-# 2  박민수  5500000  4950000.0
-# 3  정지영  6000000  5400000.0
-
-# map 예시
-gender_df = pd.DataFrame({
-    "이름": ["김철수", "이영희", "박지훈", "정미나"],
-    "성별코드": ["M", "F", "M", "F"]
-})
-
-# 매핑 딕셔너리 생성
-gender_map = {"M": "남성", "F": "여성"}
-
-# map으로 값 치환
-gender_df["성별"] = gender_df["성별코드"].map(gender_map)
-print("\nmap 함수 활용:")
-print(gender_df)
-# map 함수 활용:
-#     이름 성별코드  성별
-# 0  김철수     M  남성
-# 1  이영희     F  여성
-# 2  박지훈     M  남성
-# 3  정미나     F  여성
-
-```
-
-## 📊 DataFrame 과 데이터 통계
-
-### 기본 통계 함수
-
-- `.mean()`: 평균값
-
-- `.median()`: 중앙값
-
-- `.describe()`: 다양한 통계량 요약
-
-- `.agg()`: 여러 개의 열에 다양한 함수를 적용
-
-- `.groupby()`: 그룹별 집계
-
-- `.value_counts()`: 값의 개수
+    - `margins`: 합계 표시 여
 
 ```python
-# 통계 예시 데이터
-stats_df = pd.DataFrame({
-    "부서": ["영업", "개발", "영업", "마케팅", "개발", "영업"],
-    "직급": ["대리", "과장", "과장", "대리", "사원", "사원"],
-    "판매량": [120, 85, 130, 75, 90, 110],
-    "매출액": [15000000, 8500000, 16000000, 7500000, 9000000, 12000000]
+# crosstab 예시 데이터
+cross_df = pd.DataFrame({
+    "부서": ["영업", "개발", "인사", "영업", "개발", "인사", "영업", "개발"],
+    "성별": ["남", "남", "여", "여", "여", "남", "남", "남"],
+    "직급": ["사원", "대리", "과장", "대리", "사원", "부장", "과장", "사원"],
+    "실적": [90, 85, 95, 88, 92, 97, 93, 89]
 })
 
-# 기본 통계
-print("평균값:")
-print(stats_df[["판매량", "매출액"]].mean())
-# 평균값:
-# 판매량        101.666667
-# 매출액    11333333.333333
-# dtype: float64
-
-print("\n중앙값:")
-print(stats_df[["판매량", "매출액"]].median())
-# 중앙값:
-# 판매량        100.0
-# 매출액    10500000.0
-# dtype: float64
-
-# describe 통계 요약
-print("\n통계 요약:")
-print(stats_df[["판매량", "매출액"]].describe())
-# 통계 요약:
-#          판매량          매출액
-# count   6.000000      6.000000
-# mean  101.666667  11333333.333333
-# std    22.290503   3559026.078362
-# min    75.000000   7500000.000000
-# 25%    86.250000   8625000.000000
-# 50%   100.000000  10500000.000000
-# 75%   117.500000  14250000.000000
-# max   130.000000  16000000.000000
-
-```
-
-### 그룹별 통계
-
-- groupby를 이용한 그룹별 통계 계산
-
-```python
-# 부서별 통계
-dept_stats = stats_df.groupby("부서").agg({
-    "판매량": ["count", "mean", "sum"],
-    "매출액": ["mean", "sum"]
-})
-print("부서별 통계:")
-print(dept_stats)
-# 부서별 통계:
-#         판매량                  매출액
-#       count       mean    sum        mean        sum
+# 기본 crosstab - 부서와 성별의 빈도
+basic_cross = pd.crosstab(cross_df["부서"], cross_df["성별"])
+print("부서별 성별 빈도:")
+print(basic_cross)
+# 부서별 성별 빈도:
+# 성별  남  여
 # 부서
-# 개발       2   87.500000   175   8750000.0  17500000
-# 마케팅      1   75.000000    75   7500000.0   7500000
-# 영업       3  120.000000   360  14333333.3  43000000
+# 개발  2  1
+# 영업  2  1
+# 인사  1  1
 
-# 부서와 직급별 통계
-multi_group = stats_df.groupby(["부서", "직급"]).agg({
-    "판매량": "mean",
-    "매출액": "sum"
-})
-print("\n부서와 직급별 통계:")
-print(multi_group)
-# 부서와 직급별 통계:
-#              판매량      매출액
-# 부서  직급
-# 개발  과장     85.0   8500000
-#     사원     90.0   9000000
-# 마케팅 대리     75.0   7500000
-# 영업  과장    130.0  16000000
-#     대리    120.0  15000000
-#     사원    110.0  12000000
+# 다중 인덱스 crosstab
+multi_cross = pd.crosstab(
+    [cross_df["부서"], cross_df["직급"]],
+    cross_df["성별"]
+)
+print("\n부서 및 직급별 성별 빈도:")
+print(multi_cross)
+# 부서 및 직급별 성별 빈도:
+# 성별       남  여
+# 부서 직급
+# 개발 대리    1  0
+#    사원    1  1
+# 영업 과장    1  0
+#    대리    0  1
+#    사원    1  0
+# 인사 과장    0  1
+#    부장    1  0
+
+# 값을 집계하는 crosstab
+value_cross = pd.crosstab(
+    cross_df["부서"],
+    cross_df["성별"],
+    values=cross_df["실적"],
+    aggfunc="mean"
+)
+print("\n부서별 성별 평균 실적:")
+print(value_cross)
+# 부서별 성별 평균 실적:
+# 성별        남     여
+# 부서
+# 개발   87.000000  92.0
+# 영업   91.500000  88.0
+# 인사   97.000000  95.0
+
+# 합계를 포함한 crosstab
+margins_cross = pd.crosstab(
+    cross_df["부서"],
+    cross_df["성별"],
+    margins=True,
+    margins_name="전체"
+)
+print("\n합계를 포함한 빈도표:")
+print(margins_cross)
+# 합계를 포함한 빈도표:
+# 성별   남  여  전체
+# 부서
+# 개발   2  1    3
+# 영업   2  1    3
+# 인사   1  1    2
+# 전체   5  3    8
 
 ```
 
-### 값 개수 집계
+### pivot_table 함수 활용하기
 
-- value_counts를 이용한 카테고리별 개수 집계
+- `pd.pivot_table()`: 데이터를 재구성하여 요약 테이블 생성
+
+- 주요 옵션:
+
+    - `index`, `columns`: 행과 열로 사용할 변수
+
+    - `values`: 집계할 값
+
+    - `aggfunc`: 집계 함수 (기본값: 'mean')
+
+    - `fill_value`: 결측치 대체값
 
 ```python
-# 값 개수 집계
-print("부서별 직원 수:")
-print(stats_df["부서"].value_counts())
-# 부서별 직원 수:
-# 영업      3
-# 개발      2
-# 마케팅     1
-# Name: 부서, dtype: int64
+# pivot_table 예시 데이터
+pivot_df = pd.DataFrame({
+    "날짜": ["2023-01-01", "2023-01-01", "2023-01-02", "2023-01-02",
+           "2023-01-03", "2023-01-03", "2023-01-04", "2023-01-04"],
+    "지역": ["서울", "부산", "서울", "부산", "서울", "부산", "서울", "부산"],
+    "상품": ["A", "B", "B", "A", "A", "A", "B", "B"],
+    "판매량": [100, 80, 90, 110, 120, 90, 85, 95],
+    "매출": [1000, 2000, 1800, 2200, 2400, 1800, 1700, 2850]
+})
 
-print("\n직급별 직원 수:")
-print(stats_df["직급"].value_counts())
-# 직급별 직원 수:
-# 사원    2
-# 대리    2
-# 과장    2
-# Name: 직급, dtype: int64
+# 기본 pivot_table
+basic_pivot = pd.pivot_table(
+    pivot_df,
+    index="지역",
+    columns="상품",
+    values="판매량"
+)
+print("지역별 상품별 평균 판매량:")
+print(basic_pivot)
+# 지역별 상품별 평균 판매량:
+# 상품      A      B
+# 지역
+# 부산   100.0   87.5
+# 서울   110.0   87.5
 
-# 부서와 직급별 조합 개수
-print("\n부서와 직급 조합별 수:")
-print(pd.crosstab(stats_df["부서"], stats_df["직급"]))
-# 부서와 직급 조합별 수:
-# 직급     과장  대리  사원
+# 다중 인덱스 pivot_table
+multi_pivot = pd.pivot_table(
+    pivot_df,
+    index=["지역", "날짜"],
+    columns="상품",
+    values=["판매량", "매출"]
+)
+print("\n지역 및 날짜별 상품별 판매량/매출:")
+print(multi_pivot)
+# 지역 및 날짜별 상품별 판매량/매출:
+#            판매량          매출
+# 상품           A     B      A     B
+# 지역 날짜
+# 부산 2023-01-01  NaN  80.0    NaN  2000
+#    2023-01-02  110.0  NaN  2200.0   NaN
+#    2023-01-03   90.0  NaN  1800.0   NaN
+#    2023-01-04   NaN  95.0    NaN  2850
+# 서울 2023-01-01  100.0  NaN  1000.0   NaN
+#    2023-01-02   NaN  90.0    NaN  1800
+#    2023-01-03  120.0  NaN  2400.0   NaN
+#    2023-01-04   NaN  85.0    NaN  1700
+
+# 여러 집계 함수를 적용한 pivot_table
+agg_pivot = pd.pivot_table(
+    pivot_df,
+    index="지역",
+    columns="상품",
+    values="판매량",
+    aggfunc=["mean", "sum", "count"]
+)
+print("\n여러 집계 함수 적용:")
+print(agg_pivot)
+# 여러 집계 함수 적용:
+#        mean         sum      count
+# 상품      A     B     A    B     A    B
+# 지역
+# 부산  100.0  87.5  200  175     2    2
+# 서울  110.0  87.5  220  175     2    2
+
+# 결측치 대체
+fill_pivot = pd.pivot_table(
+    pivot_df,
+    index="날짜",
+    columns="지역",
+    values="매출",
+    fill_value=0
+)
+print("\n결측치를 0으로 대체한 pivot_table:")
+print(fill_pivot)
+# 결측치를 0으로 대체한 pivot_table:
+# 지역       부산    서울
+# 날짜
+# 2023-01-01  2000  1000
+# 2023-01-02  2200  1800
+# 2023-01-03  1800  2400
+# 2023-01-04  2850  1700
+
+```
+
+- pivot_table의 `margins=True` 옵션: 행과 열의 합계를 추가
+
+- margins_name 옵션으로 합계 레이블 지정 가능
+
+- 합계 계산은 집계 함수(aggfunc)에 따라 다름
+
+```python
+# margins 예시 데이터
+margins_df = pd.DataFrame({
+    "부서": ["영업", "영업", "개발", "개발", "인사", "인사"],
+    "분기": ["Q1", "Q2", "Q1", "Q2", "Q1", "Q2"],
+    "매출": [150, 170, 120, 140, 90, 110],
+    "비용": [100, 110, 80, 90, 70, 80]
+})
+
+# margins 기본 사용
+basic_margins = pd.pivot_table(
+    margins_df,
+    index="부서",
+    columns="분기",
+    values="매출",
+    margins=True,
+    margins_name="합계"
+)
+print("부서별 분기별 매출 합계:")
+print(basic_margins)
+# 부서별 분기별 매출 합계:
+# 분기     Q1    Q2    합계
 # 부서
-# 개발     1   0   1
-# 마케팅    0   1   0
-# 영업     1   1   1
+# 개발   120.0  140.0  130.0
+# 영업   150.0  170.0  160.0
+# 인사    90.0  110.0  100.0
+# 합계   120.0  140.0  130.0
 
+# 여러 값과 함수에 margins 적용
+multi_margins = pd.pivot_table(
+    margins_df,
+    index="부서",
+    columns="분기",
+    values=["매출", "비용"],
+    aggfunc={"매출": "sum", "비용": "mean"},
+    margins=True
+)
+print("\n여러 값과 함수에 margins 적용:")
+print(multi_margins)
+# 여러 값과 함수에 margins 적용:
+#        매출         비용
+# 분기     Q1   Q2  All   Q1   Q2  All
+# 부서
+# 개발    120  140  260  80.0  90.0  85.0
+# 영업    150  170  320  100.0 110.0 105.0
+# 인사     90  110  200  70.0  80.0  75.0
+# All    360  420  780  83.33  93.33  88.33
+
+# crosstab에서 margins 사용
+cross_margins = pd.crosstab(
+    margins_df["부서"],
+    margins_df["분기"],
+    values=margins_df["매출"],
+    aggfunc="sum",
+    margins=True,
+    margins_name="총합"
+)
+print("\ncrosstab에서 margins 사용:")
+print(cross_margins)
+
+
+# crosstab에서 margins 사용:
+# 분기      Q1    Q2    총합
+# 부서
+# 개발    120.0  140.0  260.0
+# 영업    150.0  170.0  320.0
+# 인사     90.0  110.0  200.0
+# 총합    360.0  420.0  780.0
+
+# 비율 계산을 위한 margins 활용
+def normalize(x):
+    return x / x.sum()
+
+
+norm_margins = pd.pivot_table(
+    margins_df,
+    index="부서",
+    columns="분기",
+    values="매출",
+    aggfunc=normalize,
+    margins=True
+)
+print("\n전체 대비 비율:")
+print(norm_margins)
+# 전체 대비 비율:
+# 분기         Q1        Q2       All
+# 부서
+# 개발    0.333333  0.333333  0.333333
+# 영업    0.416667  0.404762  0.410256
+# 인사    0.250000  0.261905  0.256410
+# All    1.000000  1.000000  1.000000
 ```
 
 <br/>
