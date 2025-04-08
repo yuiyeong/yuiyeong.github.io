@@ -1,17 +1,17 @@
 ---
 title: 🐼 Pandas 켠김에 왕까지
 date: 2025-04-03 10:09:00 +0900
-categories: [ PYTHON, PANDAS ]
-tags: [ '급발진거북이', 'pandas', 'excel', 'csv', 'python', '파이썬', '데이터분석' ]
+categories: [PYTHON, PANDAS]
+tags: ['급발진거북이', 'pandas', 'excel', 'csv', 'python', '파이썬', '데이터분석']
 toc: true
 comments: false
 mermaid: true
 math: true
 ---
 
-> 💡 `import pandas as pd`
-
-위 구문으로 [Pandas](https://pandas.pydata.org/docs/) 를 사용한다고 전제한다.
+> 💡 `import pandas as pd` 
+>
+> 위 구문으로 [Pandas](https://pandas.pydata.org/docs/) 를 사용한다고 전제한다.
 
 ## ⚡TL;DR
 
@@ -35,20 +35,20 @@ math: true
 
 ## 📓 실습 Jupyter Notebook
 
--
+- [https://github.com/yuiyeong/notebooks/blob/main/data_analysis/pandas_marathon.ipynb](https://github.com/yuiyeong/notebooks/blob/main/data_analysis/pandas_marathon.ipynb)
 
 ## 🛠️ 설치 및 환경
 
-- 가상환경은 [pyenv](https://github.com/pyenv/pyenv) 와 `pyenv` 의 [virtualenv](https://github.com/pyenv/pyenv-virtualenv)
-  플러그인을 사용해서 만들었다.
+- 가상환경은 [pyenv](https://github.com/pyenv/pyenv) 와 `pyenv` 의 [virtualenv](https://github.com/pyenv/pyenv-virtualenv) 플러그인을 사용해서 만들었다.
 
-    - `pyenv` 설치 및 사용법은 이 [문서](https://wikidocs.net/10936#pyenv)를 참고하는 것이 좋다.
+	- `pyenv` 설치 및 사용법은 이 [문서](https://wikidocs.net/10936#pyenv)를 참고하는 것이 좋다.
 
 - Python: 3.12.7
 
 - Pandas: 2.2.3
 
 아래의 명령어를 사용해서 panas 를 설치하고 실습을 진행했다.
+
 
 ```shell
 pip install pandas==2.2.3
@@ -58,19 +58,24 @@ pip install pandas==2.2.3
 
 ### 📈 Series: 1차원 데이터의 강력한 표현
 
+
 ```mermaid
 graph LR
     subgraph "Series: 1차원 데이터 구조"
         direction LR
+        
         idx["Index"] --- val["Values"]
+        
         idx1["0"] --> val1["10"]
         idx2["1"] --> val2["20"]
         idx3["2"] --> val3["30"]
         idx4["3"] --> val4["40"]
-        classDef index fill: #f9d5e5, stroke: #333, stroke-width: 1px
-        classDef value fill: #b8e0d2, stroke: #333, stroke-width: 1px
-        class idx, idx1, idx2, idx3, idx4 index
-        class val, val1, val2, val3, val4 value
+        
+        classDef index fill:#f9d5e5,stroke:#333,stroke-width:1px
+        classDef value fill:#b8e0d2,stroke:#333,stroke-width:1px
+        
+        class idx,idx1,idx2,idx3,idx4 index
+        class val,val1,val2,val3,val4 value
     end
 ```
 
@@ -82,18 +87,18 @@ graph LR
 
 - dict 로 만들기
 
+	
 ```python
 import pandas as pd
-
 data = {'a': 1, 'b': 2, 'c': 3}
 series = pd.Series(data)
 ```
 
 - list 로 만들기
 
+	
 ```python
 import pandas as pd
-
 data = [1, 2, 3, 4, 5]
 series = pd.Series(data)
 ```
@@ -104,20 +109,21 @@ series = pd.Series(data)
 
 - 자주 사용하는 속성 값
 
+	
 ```python
 import numpy as np
 import pandas as pd
 
-se = pd.Series(np.arange(10) ** 2, name="Number")
+se = pd.Series(np.arange(10)**2, name="Number")
 
 # 형태 확인
-se.shape  # (10,)
+se.shape # (10,)
 
 # 인데스 확인
-se.index.  # RangeIndex(start=0, stop=10, step=1)d
+se.index. # RangeIndex(start=0, stop=10, step=1)d
 
 # 이름 확인
-se.name  # "Number"
+se.name # "Number"
 
 # 데이터의 타입 확인
 se.dtypes  # dtype('int64')
@@ -136,9 +142,9 @@ se.values  # array([ 0,  1,  4,  9, 16, 25, 36, 49, 64, 81])
 
 - dict 로 만들기
 
+	
 ```python
 import pandas as pd
-
 df = pd.DataFrame({
     "이름": ["홍길동", "김철수", "이영희"],
     "나이": [20, 25, 30],
@@ -148,11 +154,11 @@ df = pd.DataFrame({
 
 - list 로 만들기
 
-    - ❗ 각 행의 데이터 길이가 동일해야 함 (길이가 다르면 에러 발생)
+	- ❗ 각 행의 데이터 길이가 동일해야 함 (길이가 다르면 에러 발생)
 
+	
 ```python
 import pandas as pd
-
 df = pd.DataFrame([
     ["홍길동", 20, "남"],
     ["김철수", 25, "남"],
@@ -162,9 +168,9 @@ df = pd.DataFrame([
 
 - Series 로 만들기
 
+	
 ```python
 import pandas as pd
-
 names = pd.Series(["홍길동", "김철수", "이영희"])
 ages = pd.Series([20, 25, 21])
 gender = pd.Series(["남", "남", "여"])
@@ -175,6 +181,7 @@ df = pd.DataFrame({
 
 - 자주 사용하는 속성 값
 
+	
 ```python
 import pandas as pd
 
@@ -185,7 +192,7 @@ df = pd.DataFrame({
 })
 
 # 형태 확인
-df.shape  # (3,3)
+df.shape # (3,3)
 
 # 인데스 확인
 df.index  # RangeIndex(start=0, stop=3, step=1)
@@ -211,87 +218,92 @@ df.values
 
 - Pandas 는 다양한 형태의 외부 파일을 읽어와서 DataFrame 을 생성하는 함수를 제공
 
-| **File Format** | **Reader**                                                    | **Writer**                                                    | 
- |-----------------|---------------------------------------------------------------|---------------------------------------------------------------| 
-| CSV             | `read_csv("data.csv", sep=",", header=0, encoding="utf-8")`   | `to_csv("output.csv", index=False, encoding="utf-8")`         | 
-| Excel           | `read_excel("data.xlsx", sheet_name="Sheet1", usecols="A:C")` | `to_excel("output.xlsx", sheet_name="Results", index=False)`  | 
-| JSON            | `read_json("data.json", orient="records", lines=True)`        | `to_json("output.json", orient="records", date_format="iso")` | 
-| SQL             | `read_sql("SELECT * FROM table", conn, index_col="id")`       | `to_sql("table_name", conn, if_exists="replace")`             | 
-| HTML            | `read_html("https://example.com/table.html", header=0)`       | `to_html("output.html", index=False, classes="table")`        | 
+ | **File Format** | **Reader** | **Writer** | 
+ | ---- | ---- | ---- | 
+ | CSV | `read_csv("data.csv", sep=",", header=0, encoding="utf-8")` | `to_csv("output.csv", index=False, encoding="utf-8")` | 
+ | Excel | `read_excel("data.xlsx", sheet_name="Sheet1", usecols="A:C")` | `to_excel("output.xlsx", sheet_name="Results", index=False)` | 
+ | JSON | `read_json("data.json", orient="records", lines=True)` | `to_json("output.json", orient="records", date_format="iso")` | 
+ | SQL | `read_sql("SELECT * FROM table", conn, index_col="id")` | `to_sql("table_name", conn, if_exists="replace")` | 
+ | HTML | `read_html("https://example.com/table.html", header=0)` | `to_html("output.html", index=False, classes="table")`  | 
 
 ### CSV 예시
 
+
 ```python
 # 읽기
-df = pd.read_csv('sales.csv',  # 파일 경로
-                 sep=',',  # 구분자(쉼표)
-                 header=0,  # 첫 번째 행을 열 이름으로 사용
-                 encoding='utf-8',  # 파일 인코딩 형식
-                 skiprows=1,  # 첫 번째 행을 건너뜀(헤더 다음부터 데이터 시작)
-                 na_values=['N/A', 'NULL'])  # 'N/A'와 'NULL' 문자열을 NaN으로 처리# 쓰기
-df.to_csv('sales_report.csv',  # 저장할 파일 경로
-          index=False,  # 인덱스 제외하고 저장
-          header=True,  # 열 이름 포함
-          encoding='utf-8')  # 파일 인코딩 형식
+df= pd.read_csv('sales.csv',# 파일 경로
+                 sep=',',# 구분자(쉼표)
+                 header=0,# 첫 번째 행을 열 이름으로 사용
+                 encoding='utf-8',# 파일 인코딩 형식
+                 skiprows=1,# 첫 번째 행을 건너뜀(헤더 다음부터 데이터 시작)
+                 na_values=['N/A', 'NULL'])# 'N/A'와 'NULL' 문자열을 NaN으로 처리# 쓰기
+df.to_csv('sales_report.csv',# 저장할 파일 경로
+          index=False,# 인덱스 제외하고 저장
+          header=True,# 열 이름 포함
+          encoding='utf-8')# 파일 인코딩 형식
 ```
 
 ### Excel 예시
 
+
 ```python
 # 읽기
-df = pd.read_excel('report.xlsx',  # 파일 경로
-                   sheet_name='2023',  # '2023'이라는 이름의 시트에서 데이터 읽기
-                   header=0,  # 첫 번째 행을 열 이름으로 사용
-                   usecols='A:E',  # A열부터 E열까지만 읽기
-                   skiprows=2)  # 처음 2개 행을 건너뜀# 쓰기
-df.to_excel('summary.xlsx',  # 저장할 파일 경로
-            sheet_name='Q1_Results',  # 시트 이름 지정
-            index=False,  # 인덱스 제외하고 저장
-            startrow=1,  # 1행부터 데이터 쓰기 시작(0-based, 즉 두 번째 행)
-            startcol=0)  # 0열부터 데이터 쓰기 시작(첫 번째 열)
+df= pd.read_excel('report.xlsx',# 파일 경로
+                   sheet_name='2023',# '2023'이라는 이름의 시트에서 데이터 읽기
+                   header=0,# 첫 번째 행을 열 이름으로 사용
+                   usecols='A:E',# A열부터 E열까지만 읽기
+                   skiprows=2)# 처음 2개 행을 건너뜀# 쓰기
+df.to_excel('summary.xlsx',# 저장할 파일 경로
+            sheet_name='Q1_Results',# 시트 이름 지정
+            index=False,# 인덱스 제외하고 저장
+            startrow=1,# 1행부터 데이터 쓰기 시작(0-based, 즉 두 번째 행)
+            startcol=0)# 0열부터 데이터 쓰기 시작(첫 번째 열)
 ```
 
 ### JSON 예시
 
+
 ```python
 # 읽기
-df = pd.read_json('users.json',  # 파일 경로
-                  orient='records',  # 레코드 형식의 JSON 구조({'field': value})
-                  lines=False,  # 한 줄에 하나의 JSON 객체가 아님
-                  encoding='utf-8')  # 파일 인코딩 형식# 쓰기
-df.to_json('users_export.json',  # 저장할 파일 경로
-           orient='records',  # 각 행을 레코드 형식으로 저장
-           date_format='iso')  # 날짜를 ISO 형식으로 저장(YYYY-MM-DD)
+df= pd.read_json('users.json',# 파일 경로
+                  orient='records',# 레코드 형식의 JSON 구조({'field': value})
+                  lines=False,# 한 줄에 하나의 JSON 객체가 아님
+                  encoding='utf-8')# 파일 인코딩 형식# 쓰기
+df.to_json('users_export.json',# 저장할 파일 경로
+           orient='records',# 각 행을 레코드 형식으로 저장
+           date_format='iso')# 날짜를 ISO 형식으로 저장(YYYY-MM-DD)
 ```
 
 ### SQL 예시
 
+
 ```python
 # DB 연결 설정from sqlalchemyimport create_engine
-engine = create_engine('sqlite:///mydatabase.db')  # SQLite DB 연결 문자열# 읽기
-df = pd.read_sql('SELECT * FROM customers WHERE region="East"',  # SQL 쿼리문
-                 con=engine,  # 데이터베이스 연결 객체
-                 index_col='customer_id')  # 'customer_id' 열을 DataFrame의 인덱스로 사용# 쓰기
-df.to_sql('customers_summary',  # 저장할 테이블 이름
-          con=engine,  # 데이터베이스 연결 객체
-          if_exists='replace',  # 테이블이 있으면 덮어쓰기
-          index=False)  # 인덱스 제외하고 저장
+engine= create_engine('sqlite:///mydatabase.db')# SQLite DB 연결 문자열# 읽기
+df= pd.read_sql('SELECT * FROM customers WHERE region="East"',# SQL 쿼리문
+                 con=engine,# 데이터베이스 연결 객체
+                 index_col='customer_id')# 'customer_id' 열을 DataFrame의 인덱스로 사용# 쓰기
+df.to_sql('customers_summary',# 저장할 테이블 이름
+          con=engine,# 데이터베이스 연결 객체
+          if_exists='replace',# 테이블이 있으면 덮어쓰기
+          index=False)# 인덱스 제외하고 저장
 ```
 
 ### HTML 예시
 
 - 한글이 깨져서 나올경우 encoding 을 `utf-8/cp949`로 설정하면 해결됨
 
+
 ```python
 # 읽기
-tables = pd.read_html('https://en.wikipedia.org/wiki/List_of_countries',  # 웹 페이지 URL
-                      match='GDP',  # 'GDP'가 포함된 테이블만 가져오기
-                      header=0)  # 첫 번째 행을 열 이름으로 사용
-df = tables[0]  # 첫 번째 일치하는 테이블# 쓰기
-df.to_html('countries.html',  # 저장할 파일 경로
-           index=False,  # 인덱스 제외하고 저장
-           classes='table table-striped',  # CSS 클래스 적용(부트스트랩 스타일)
-           escape=False)  # HTML 태그를 이스케이프하지 않음(HTML 태그 허용)
+tables= pd.read_html('https://en.wikipedia.org/wiki/List_of_countries',# 웹 페이지 URL
+                      match='GDP',# 'GDP'가 포함된 테이블만 가져오기
+                      header=0)# 첫 번째 행을 열 이름으로 사용
+df= tables[0]# 첫 번째 일치하는 테이블# 쓰기
+df.to_html('countries.html',# 저장할 파일 경로
+           index=False,# 인덱스 제외하고 저장
+           classes='table table-striped',# CSS 클래스 적용(부트스트랩 스타일)
+           escape=False)# HTML 태그를 이스케이프하지 않음(HTML 태그 허용)
 ```
 
 ## 🔍 데이터 탐색하기
@@ -301,6 +313,7 @@ df.to_html('countries.html',  # 저장할 파일 경로
 - 데이터의 상단 (행의 갯수)개 행 출력
 
 - 행의 갯수를 적지 않으면, default 로 5개 행을 보여줌
+
 
 ```python
 # 예시 DataFrame 생성
@@ -347,6 +360,7 @@ print(df.head(3))
 
 - 행의 갯수를 적지 않으면, default 로 5개 행을 보여줌
 
+
 ```python
 # 위에서 만든 DataFrame 사용
 
@@ -376,6 +390,7 @@ print(df.tail(2))
 ### info()
 
 - 전체 행의 갯수, 컬럼 정보, 결측치, 데이터 타입과 같이 데이터에 대한 전반적인 정보 제공
+
 
 ```python
 # 결측치가 있는 DataFrame 생성
@@ -410,6 +425,7 @@ df_with_na.info()
 ### describe()
 
 - 컬럼별 값의 갯수, 평균, 표준편차, 최솟값, 최댓값, 사분위수를 보여줍니다.
+
 
 ```python
 # 위에서 만든 DataFrame 사용
@@ -455,14 +471,14 @@ print(df.describe(include='all'))
 
 - column 을 1개 선택 → Series 객체 반환
 
-    - 대괄호(`[]`) 안에 column 이름을 따옴표(`""`)와 함께 입력(`데이터프레임[컬럼명]`)
+	- 대괄호(`[]`) 안에 column 이름을 따옴표(`""`)와 함께 입력(`데이터프레임[컬럼명]`)
 
-    - 도트(`.`) 다음에 column 이름을 입력(`데이터프레임.컬럼명`)
+	- 도트(`.`) 다음에 column 이름을 입력(`데이터프레임.컬럼명`)
+
 
 ```python
 # DataFrame 생성
 import pandas as pd
-
 df = pd.DataFrame({
     "이름": ["홍길동", "김철수", "이영희"],
     "나이": [20, 25, 30],
@@ -493,9 +509,10 @@ print(age_series2)
 
 - column 여러 개 선택 → DataFrame 객체 반환
 
-    - 2중 대괄호(`[[]]`) 안에 column 이름을 입력(`데이터프레임[[컬럼명1, 컬럼명2, ...]]`)
+	- 2중 대괄호(`[[]]`) 안에 column 이름을 입력(`데이터프레임[[컬럼명1, 컬럼명2, ...]]`)
 
-    - 만약, column 1개를 DataFrame 객체로 추출하려면 2중 대괄호안에 그 column 이름을 str 로 입력
+	- 만약, column 1개를  DataFrame 객체로 추출하려면 2중 대괄호안에 그 column 이름을 str 로 입력
+
 
 ```python
 # 여러 열 선택
@@ -526,6 +543,7 @@ print(age_df)
 
 - 여러 개: `데이터프레임명[시작인덱스:끝인덱스+1]`
 
+
 ```python
 # 행 한 개 선택
 row_one = df[1:2]
@@ -550,13 +568,14 @@ print(multiple_rows)
 
 - loc: 레이블을 사용하여 조회(이름을 사용해서 조회)
 
-    - `데이터프레임명.loc[행조건,열조건]`
+	- `데이터프레임명.loc[행조건,열조건]`
 
-    - 열만 조회할 때는 행조건에 `:`를 입력
+	- 열만 조회할 때는 행조건에 `:`를 입력
 
 - iloc: 위치 인덱스를 사용하여 조회
 
-    - `데이터프레임명.iloc[행인덱스조건,열인덱스조건]`
+	- `데이터프레임명.iloc[행인덱스조건,열인덱스조건]`
+
 
 ```python
 # loc 사용
@@ -597,6 +616,7 @@ print(df.iloc[0:2, 1:3])
 
 - 내림차순으로 정렬: `ascending=False` 조건 사용
 
+
 ```python
 # 나이 기준 오름차순 정렬
 sorted_df = df.sort_values("나이")
@@ -626,6 +646,7 @@ print(sorted_df_desc)
 
 - `데이터프레임명.query('조건식')`
 
+
 ```python
 # 나이가 25세 이상인 데이터 추출
 filtered_df = df[df["나이"] >= 25]
@@ -651,11 +672,12 @@ print(query_df)
 
 - 불리언(Boolean) 인덱싱: bool 데이터 타입을 가진 Series 를 사용해서 인덱싱하는 기법
 
-    - ❗ 이 Boolean Series 의 인덱스는 인덱싱하려는 DataFrame 의 인덱스와 반드시 일치해야 함
+	- ❗ 이 Boolean Series 의 인덱스는 인덱싱하려는 DataFrame 의 인덱스와 반드시 일치해야 함
 
 - `.isin()`: 각각의 요소가 DataFrame 또는 Series 에 존재하는지 파악하여 Boolean Series 반환
 
 - `불리언 인덱싱 + .isin()`: 데이터의 특정 범위만 추출
+
 
 ```python
 # 불리언 인덱싱 활용
@@ -685,6 +707,7 @@ print(selected_names_df)
 - `isna()`: 결측 값은 True 반환, 그 외에는 False 반환
 
 - `notna()`: 결측 값은 False 반환, 그 외에는 True 반환
+
 
 ```python
 # 결측치가 있는 DataFrame 생성
@@ -724,11 +747,12 @@ print(df_with_na.isna().sum())
 
 - `데이터명.dropna(axis=0, how='any', subset=None)`
 
-    - axis: {0: index / 1: columns}
+	- axis: {0: index / 1: columns}
 
-    - how: {'any': 존재하면 제거 / 'all': 모두 결측치면 제거}
+	- how: {'any': 존재하면 제거 / 'all': 모두 결측치면 제거}
 
-    - subset: 행/열의 이름을 지정
+	- subset: 행/열의 이름을 지정
+
 
 ```python
 # 결측값이 있는 행 제거
@@ -766,13 +790,14 @@ print(df_drop_subset)
 
 - 특정 컬럼의 결측값을 특정 값으로 변경: `데이터명[컬럼명].fillna(대치할값)`
 
-- 결측값을 바로 위의 값과 동일하게 변경: `데이터명.fillna(method='ffill')`
+- 결측값을 바로 위의 값과 동일하게 변경: `데이터명.fillna(method='ffill')` 
 
-    - 위 함수가 곧 deprecated 될 것이기 때문에, `ffill()` 함수를 권장
+	- 위 함수가 곧 deprecated 될 것이기 때문에, `ffill()` 함수를 권장
 
 - 결측값을 바로 아래의 값과 동일하게 변경: `데이터명.fillna(method='bfill')`
 
-    - 위 함수가 곧 deprecated 될 것이기 때문에, `bfill()` 함수를 권장
+	- 위 함수가 곧 deprecated 될 것이기 때문에, `bfill()` 함수를 권장
+
 
 ```python
 # 모든 결측값 0으로 대치
@@ -823,6 +848,7 @@ print(df_ffill)
 
 - 특정 타입을 가진 컬럼만 추출: `데이터명.select_dtypes(타입)`
 
+
 ```python
 # 타입 확인
 print("각 열의 데이터 타입:")
@@ -848,6 +874,7 @@ print(numeric_columns)
 ### 타입 변환하기
 
 - `데이터명[컬럼명].astype(타입)`
+
 
 ```python
 # 나이를 문자열로 변환
@@ -887,6 +914,7 @@ print(df["나이_문자열"].dtype)
 - `.quantile()`: 사분위수
 
 - `.corr()`: 상관계수
+
 
 ```python
 # 기본 통계 함수 예시 데이터
@@ -980,6 +1008,7 @@ print(stats_df.corr())
 
 - `.groupby()` 한 뒤에 통계관련 함수를 적용할 수 있다.
 
+
 ```python
 # 그룹별 통계 예시 데이터
 group_df = pd.DataFrame({
@@ -1034,6 +1063,7 @@ print(high_salary_dept)
 ### 값 개수 집계
 
 - `.value_counts()`를 이용하여, column 별 개수 집계
+
 
 ```python
 # 값 개수 집계 예시 데이터
@@ -1101,6 +1131,7 @@ print(na_counts)
 
 - 사용자 정의 함수와 내장 함수 혼합 사용 가능
 
+
 ```python
 # agg 함수 예시 데이터
 agg_df = pd.DataFrame({
@@ -1128,8 +1159,6 @@ aggregated = agg_df.agg({
 })
 print("\n여러 컬럼에 다양한 함수 적용:")
 print(aggregated)
-
-
 # 여러 컬럼에 다양한 함수 적용:
 #              나이          급여      근무일수
 #             min max      mean       std  sum mean
@@ -1139,10 +1168,8 @@ print(aggregated)
 def range_diff(x):
     return x.max() - x.min()
 
-
 def top_n_mean(x, n=2):
     return x.nlargest(n).mean()
-
 
 mixed_agg = agg_df.agg({
     "나이": ["mean", range_diff],
@@ -1160,6 +1187,7 @@ print(mixed_agg)
 ### datetime 다루기
 
 - 문자형을 날짜형으로 변경: `pd.to_datetime(컬럼, format='날짜 형식')`
+
 
 ```python
 # 날짜 데이터 예시
@@ -1197,6 +1225,7 @@ print(custom_dates)
 
 - dt 연산자 활용: year, month, day, dayofweek, day_name()
 
+
 ```python
 # 날짜 형식 변경
 date_df["년월일"] = date_df["날짜_datetime"].dt.strftime("%Y년 %m월 %d일")
@@ -1225,11 +1254,12 @@ print(date_df[["날짜_datetime", "연도", "월", "요일"]])
 
 - 날짜 계산
 
-    - day 연산: `pd.Timedelta(days=숫자)`
+	- day 연산: `pd.Timedelta(days=숫자)`
 
-    - month 연산: `pd.DateOffset(months=숫자)`
+	- month 연산: `pd.DateOffset(months=숫자)`
 
-    - year 연산: `pd.DateOffset(years=숫자)`
+	- year 연산: `pd.DateOffset(years=숫자)`
+
 
 ```python
 # 날짜 계산
@@ -1258,6 +1288,7 @@ print(date_df[["날짜_datetime", "7일_후", "1개월_후", "1년_전"]])
 - `.str.lower()`: 소문자로 바꾸기
 
 - `.str.upper()`: 대문자로 바꾸기
+
 
 ```python
 # 문자열 예시 데이터
@@ -1330,16 +1361,16 @@ print(upper_text)
 
 - 주요 옵션
 
-    - `window`: 윈도우 크기 지정
+	- `window`: 윈도우 크기 지정
 
-    - `min_periods`: 연산에 필요한 최소 데이터 수
+	- `min_periods`: 연산에 필요한 최소 데이터 수
 
-    - `center`: 결과를 윈도우 중앙에 위치시킬지 여부
+	- `center`: 결과를 윈도우 중앙에 위치시킬지 여부
+
 
 ```python
 # 롤링 함수 예시 데이터
 import numpy as np
-
 rolling_df = pd.DataFrame({
     "날짜": pd.date_range(start="2023-01-01", periods=10, freq="D"),
     "매출": [120, 135, 140, 155, 165, 150, 145, 160, 175, 190]
@@ -1409,6 +1440,7 @@ print(centered_rolling)
 
 - 날짜 또는 시간 인덱스가 있는 경우 `freq` 매개변수로 시간 단위 지정 가능
 
+
 ```python
 # 시프트 함수 예시 데이터
 shift_df = pd.DataFrame({
@@ -1474,11 +1506,12 @@ print(shift_df[["매출", "성장률"]])
 
 - 주요 옵션:
 
-    - `axis`: 연결 방향 (0: 행 방향, 1: 열 방향)
+	- `axis`: 연결 방향 (0: 행 방향, 1: 열 방향)
 
-    - `join`: 조인 방식 ('inner', 'outer')
+	- `join`: 조인 방식 ('inner', 'outer')
 
-    - `ignore_index`: 기존 인덱스 무시 여부
+	- `ignore_index`: 기존 인덱스 무시 여부
+
 
 ```python
 # concat 함수 예시 데이터
@@ -1552,6 +1585,7 @@ print(inner_concat)
 
 - 두 데이터의 기준 컬럼명이 다를 경우: `pd.merge(데이터1, 데이터2, left_on=데이터1의 기준컬럼, right_on=데이터2의 기준컬럼, how=결합방법)`
 
+
 ```python
 # 예시 데이터 생성
 employees = pd.DataFrame({
@@ -1615,13 +1649,14 @@ print(merge_diff_cols)
 
 - 주요 옵션:
 
-    - `index`, `columns`: 행과 열에 사용할 변수
+	- `index`, `columns`: 행과 열에 사용할 변수
 
-    - `values`: 집계할 값
+	- `values`: 집계할 값
 
-    - `aggfunc`: 집계 함수
+	- `aggfunc`: 집계 함수
 
-    - `margins`: 합계 표시 여
+	- `margins`: 합계 표시 여
+
 
 ```python
 # crosstab 예시 데이터
@@ -1702,19 +1737,20 @@ print(margins_cross)
 
 - 주요 옵션:
 
-    - `index`, `columns`: 행과 열로 사용할 변수
+	- `index`, `columns`: 행과 열로 사용할 변수
 
-    - `values`: 집계할 값
+	- `values`: 집계할 값
 
-    - `aggfunc`: 집계 함수 (기본값: 'mean')
+	- `aggfunc`: 집계 함수 (기본값: 'mean')
 
-    - `fill_value`: 결측치 대체값
+	- `fill_value`: 결측치 대체값
+
 
 ```python
 # pivot_table 예시 데이터
 pivot_df = pd.DataFrame({
     "날짜": ["2023-01-01", "2023-01-01", "2023-01-02", "2023-01-02",
-           "2023-01-03", "2023-01-03", "2023-01-04", "2023-01-04"],
+             "2023-01-03", "2023-01-03", "2023-01-04", "2023-01-04"],
     "지역": ["서울", "부산", "서울", "부산", "서울", "부산", "서울", "부산"],
     "상품": ["A", "B", "B", "A", "A", "A", "B", "B"],
     "판매량": [100, 80, 90, 110, 120, 90, 85, 95],
@@ -1801,6 +1837,7 @@ print(fill_pivot)
 
 - 합계 계산은 집계 함수(aggfunc)에 따라 다름
 
+
 ```python
 # margins 예시 데이터
 margins_df = pd.DataFrame({
@@ -1860,8 +1897,6 @@ cross_margins = pd.crosstab(
 )
 print("\ncrosstab에서 margins 사용:")
 print(cross_margins)
-
-
 # crosstab에서 margins 사용:
 # 분기      Q1    Q2    총합
 # 부서
@@ -1873,7 +1908,6 @@ print(cross_margins)
 # 비율 계산을 위한 margins 활용
 def normalize(x):
     return x / x.sum()
-
 
 norm_margins = pd.pivot_table(
     margins_df,
