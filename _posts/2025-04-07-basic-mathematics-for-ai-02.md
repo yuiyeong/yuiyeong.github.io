@@ -12,13 +12,9 @@ math: true
 ## 📦 사용하는 python package
 
 - numpy==1.26.4
-
 - pandas==2.2.3
-
 - matplotlib==3.10.1
-
 - seaborn==0.13.2
-
 - scipy==1.15.2
 
 ## 🚀 TL;DR
@@ -37,7 +33,7 @@ math: true
 
 - [https://github.com/yuiyeong/notebooks/blob/main/math/statistics.ipynb](https://github.com/yuiyeong/notebooks/blob/main/math/statistics.ipynb)
 
-## 📦 변수(Variable)
+## 📦 변수(Variable)
 
 - 변화하는 모든 수를 의미
 
@@ -113,7 +109,7 @@ math: true
 
 - 예시) IQ 점수, 만 나이, 자녀 수, 방문 횟수, 고객 수, 제품 개수 등
 
-## 💽 데이터(Data)
+## 💽 데이터(Data)
 
 - 데이터는 연구나 조사의 목적에 맞는 변수를 토대로, 표본으로부터 수집한 자료
 
@@ -121,7 +117,7 @@ math: true
 
 > 💡 데이터의 질과 양이 모델의 성능을 좌우!!
 
-## 📏 척도(Scale)
+## 📏 척도(Scale)
 
 - 척도는 변수를 측정하는 방법이나 단위를 의미
 
@@ -636,7 +632,7 @@ freq_dist.value_counts()
 
 ![freq_dist_table.png](/assets/img/freq_dist_table.png)
 
-## 📊 히스토그램 그래프(Histogram)
+## 📊 히스토그램 그래프(Histogram)
 
 - 히스토그램은 도수분포표를 시각화한 그래프
 
@@ -670,7 +666,7 @@ plt.show()
 
     - 텍스트 데이터에서 단어 빈도수 분석 (TF-IDF의 기초)
 
-## 사분위수
+## 🪓 사분위수
 
 - 데이터를 4등분하는 값들이며, Q1(25%), Q2(50%, 중앙값), Q3(75%)로 표현
 
@@ -760,7 +756,7 @@ plt.show()
 
 - 시계열 데이터에서 계절별/월별 분포 비교
 
-## 📦 상자수염그림 (Box Plot)
+##  📦 상자수염그림 (Box Plot)
 
 ![understanding_boxplots.jpg](/assets/img/understanding_boxplots.jpg)
 
@@ -797,7 +793,7 @@ plt.show()
 
 ![box_plot.png](/assets/img/box_plot.png)
 
-## 📈 변동 계수(Coefficient of Variation)
+## 📈 변동 계수(Coefficient of Variation)
 
 - 평균에 대한 표준편차의 비율로, 서로 다른 단위나 규모를 가진 데이터의 변동성을 비교할 때 유용함
 
