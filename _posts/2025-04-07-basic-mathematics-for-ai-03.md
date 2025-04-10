@@ -17,7 +17,43 @@ math: true
 
 ## 🚀 TL;DR
 
--
+> 💡 머신러닝에서 다음의 선형대수 개념들은 데이터 표현, 특성 변환, 모델 구축, 성능 평가 등 거의 모든 영역에서 기초가 된다!
+
+### 🔢 스칼라, 벡터, 행렬의 기본 개념
+
+- **스칼라**: 단일 값을 갖는 양 (예: 온도, 학습률)
+
+- **벡터**: 크기와 방향을 갖는 양, 여러 스칼라의 순서있는 집합 (예: 특성 벡터, 워드 임베딩)
+
+- **행렬**: 2차원으로 배열된 숫자들의 집합 (예: 데이터셋, 가중치 행렬, 이미지 데이터)
+
+### 📏 벡터 노름(Norm)과 거리 측정
+
+- **L1 노름(맨하탄 거리)**: 벡터 요소의 절대값 합, 희소성 촉진에 유용
+
+- **L2 노름(유클리드 거리)**: 벡터 요소 제곱합의 제곱근, 일반적인 "직선" 거리
+
+- **L∞ 노름**: 벡터 요소 절대값의 최대값, 최악의 경우 오류 평가에 사용
+
+### 🔄 유사도 측정 방법
+
+- **맨하탄 유사도**: L1 노름 기반, 희소 데이터에 유용
+
+- **유클리드 유사도**: L2 노름 기반, KNN, 클러스터링에 활용
+
+- **코사인 유사도**: 벡터 간 각도 측정, 방향만 고려하고 크기는 무시, NLP와 추천 시스템에 유용
+
+### ✖️ 행렬 연산의 기초
+
+- **행렬 곱셈**: 신경망, 특성 변환, 차원 축소 등 ML의 핵심 연산
+
+- **평균 벡터**: 데이터셋의 각 특성에 대한 평균값
+
+- **공분산 행렬**: 특성 간 관계를 나타내는 행렬, PCA와 다변량 분석에 필수
+
+## 📓 실습 Jupyter Notebook
+
+- [https://github.com/yuiyeong/notebooks/blob/main/math/vector.ipynb](https://github.com/yuiyeong/notebooks/blob/main/math/vector.ipynb)
 
 ## 🔢 스칼라 (Scalar)
 
@@ -176,7 +212,7 @@ a_{21} & a_{22} & \cdots & a_{2n} \
 a_{m1} & a_{m2} & \cdots & a_{mn}
 \end{pmatrix} \in \mathbb{R}^{m \times n} $$
 
-여기서 
+여기서
 $$ \mathbb{R}^{m \times n} $$
 은 m행 n열의 실수 행렬 집합을 의미한다.
 
@@ -546,3 +582,242 @@ output = cos(x, y)
 print(f"Cosine Similarity (nn 모듈): {output.item()}")
 # Cosine Similarity (nn 모듈): 0.7999999523162842
 ```
+
+<br/>
+
+## ✖️ 행렬의 곱셈 (Matrix Multiplication)
+
+- 행렬 곱셈은 두 행렬의 요소를 특정 규칙에 따라 곱하고 더하는 연산이다.
+
+- m×n 행렬 A 와 n×p 행렬 B 를 곱하면 m×p 행렬 C 가 나온다.
+
+$$ C_{ij} = \sum_{k=1}^{n} A_{ik} B_{kj},\ 여기서\ A \in \mathbb{R}^{m \times n},\ B \in \mathbb{R}^{n \times p},\ C \in \mathbb{R}^{m \times p} $$
+
+### 행렬의 곱 예시 1
+
+$$ A \in \mathbb{R}^{1 \times 3}\ 와 \ B \in \mathbb{R}^{3 \times 2} $$
+
+$$ A = \begin{bmatrix} a_{11} & a_{12} & a_{13} \end{bmatrix},\ B = \begin{bmatrix} b_{11} & b_{12} \\ b_{21} & b_{22} \\ b_{31} & b_{32} \end{bmatrix} $$
+
+$$ C = A \times B,\ 여기서\ C \in \mathbb{R}^{1 \times 2}\ 즉,\ C = \begin{bmatrix} c_{11} & c_{12} \end{bmatrix} $$
+
+$$ c_{11} = a_{11} \cdot b_{11} + a_{12} \cdot b_{21} + a_{13} \cdot b_{31} $$
+
+$$ c_{12} = a_{11} \cdot b_{12} + a_{12} \cdot b_{22} + a_{13} \cdot b_{32} $$
+
+- 일반화된 수식으로는 다음과 같이 표현할 수 있다.
+
+$$ c_{1j} = \sum_{k=1}^{3} a_{1k} \cdot b_{kj},\ 여기서\ j = 1, 2 $$
+
+![visualize_matrix_mul01.png](/assets/img/visualize_matrix_mul01.png)
+
+### 행렬의 곱 예시 2
+
+$$ P \in \mathbb{R}^{3 \times 3}\ 와\ Q \in \mathbb{R}^{3 \times 3} $$
+
+$$ P = \begin{bmatrix}
+p_{11} & p_{12} & p_{13} \\
+p_{21} & p_{22} & p_{23} \\
+p_{31} & p_{32} & p_{33}
+\end{bmatrix},\ Q = \begin{bmatrix}
+q_{11} & q_{12} & q_{13} \\
+q_{21} & q_{22} & q_{23} \\
+q_{31} & q_{32} & q_{33}
+\end{bmatrix} $$
+
+$$ R = P \times Q,\ 여기서\ R \in \mathbb{R}^{3 \times 3}\ 즉,\ R = \begin{bmatrix}
+r_{11} & r_{12} & r_{13} \\
+r_{21} & r_{22} & r_{23} \\
+r_{31} & r_{32} & r_{33}
+\end{bmatrix} $$
+
+$$ r_{11} = p_{11} \cdot q_{11} + p_{12} \cdot q_{21} + p_{13} \cdot q_{31} $$
+
+$$ r_{12} = p_{11} \cdot q_{12} + p_{12} \cdot q_{22} + p_{13} \cdot q_{32} $$
+
+$$ r_{13} = p_{11} \cdot q_{13} + p_{12} \cdot q_{23} + p_{13} \cdot q_{33} $$
+
+$$ r_{21} = p_{21} \cdot q_{11} + p_{22} \cdot q_{21} + p_{23} \cdot q_{31} $$
+
+$$ r_{22} = p_{21} \cdot q_{12} + p_{22} \cdot q_{22} + p_{23} \cdot q_{32} $$
+
+$$ r_{23} = p_{21} \cdot q_{13} + p_{22} \cdot q_{23} + p_{23} \cdot q_{33} $$
+
+$$ r_{31} = p_{31} \cdot q_{11} + p_{32} \cdot q_{21} + p_{33} \cdot q_{31} $$
+
+$$ r_{32} = p_{31} \cdot q_{12} + p_{32} \cdot q_{22} + p_{33} \cdot q_{32} $$
+
+$$ r_{33} = p_{31} \cdot q_{13} + p_{32} \cdot q_{23} + p_{33} \cdot q_{33} $$
+
+- 일반화된 수식으로는 다음과 같이 표현할 수 있다.
+
+$$ r_{ij} = \sum_{k=1}^{3} p_{ik} \cdot q_{kj},\ 여기서\ i, j = 1, 2, 3 $$
+
+![visualize_matrix_mul02.png](/assets/img/visualize_matrix_mul02.png)
+
+### Python Code 로 행렬 곱셈해보기
+
+```python
+import numpy as np
+import torch
+
+# 1차원 행렬(1x3)과 (3x2) 행렬의 곱셈
+A = np.array([[1, 2, 3]])  # 1x3 행렬
+B = np.array([[4, 5],
+              [6, 7],
+              [8, 9]])  # 3x2 행렬
+
+C = A @ B  # 또는 np.matmul(A, B)
+print("1차원 행렬 곱셈 결과:")
+print(C)
+print("C의 shape:", C.shape)  # (1, 2)
+# 1차원 행렬 곱셈 결과:
+# [[40 46]]
+# C의 shape: (1, 2)
+
+
+# 2차원 행렬(3x3)과 (3x3) 행렬의 곱셈
+P = np.array([[1, 2, 3],
+              [4, 5, 6],
+              [7, 8, 9]])  # 3x3 행렬
+Q = np.array([[9, 8, 7],
+              [6, 5, 4],
+              [3, 2, 1]])  # 3x3 행렬
+
+R = P @ Q  # 또는 np.matmul(P, Q)
+print("2차원 행렬 곱셈 결과:")
+print(R)
+print("R의 shape:", R.shape)  # (3, 3)
+
+# 2차원 행렬 곱셈 결과:
+# [[ 30  24  18]
+#  [ 84  69  54]
+#  [138 114  90]]
+# R의 shape: (3, 3)
+
+
+# tensor 를 이용한 1차원 행렬(1x3)과 (3x2) 행렬의 곱셈
+A = torch.tensor([[1, 2, 3]])
+B = torch.tensor([[4, 5],
+                  [6, 7],
+                  [8, 9]])
+C = A @ B
+print("tensor 를 이용한 1차원 행렬 곱셈 결과:")
+print(C.shape)
+print(C)
+# 결과는 위와 같음
+
+
+# tensor 를 이용한 2차원 행렬(3x3)과 (3x3) 행렬의 곱셈
+P = torch.tensor([[1, 2, 3],
+                  [4, 5, 6],
+                  [7, 8, 9]])  # 3x3 행렬
+Q = torch.tensor([[9, 8, 7],
+                  [6, 5, 4],
+                  [3, 2, 1]])  # 3x3 행렬
+R = P @ Q
+print("tensor 를 이용한 2차원 행렬 곱셈 결과:")
+print(R.shape)
+print(R)
+# 결과는 위와 같음
+```
+
+### 머신러닝에서 행렬 곱셈은,
+
+- 거의 모든 핵심 연산의 기초를 이루고 있으며, 효율적인 계산과 수학적 표현의 핵심이다.
+
+- 행렬 곱셈은 다음과 같은 다양한 영역에서 필수적으로 활용된다.
+
+    - 신경망의 레이어 간 변환
+
+        - 각 레이어에서 입력값과 가중치 행렬의 곱으로 출력 계산
+
+    - 특성 공간 변환
+
+        - 데이터를 다른 특성 공간으로 투영할 때
+
+    - 선형 회귀와 분류 모델
+
+        - 선형 회귀에서 예측값 계산
+
+        - 로지스틱 회귀에서 확률 계산
+
+        - 모델 학습 시 경사 하강법에서 행렬 미분 연산
+
+    - 차원 축소 및 데이터 압축
+
+        - PCA(주성분 분석)에서 공분산 행렬의 계산과 고유값 분해
+
+        - SVD(특이값 분해)를 통한 행렬 분해와 저차원 표현
+
+        - t-SNE, UMAP 등의 차원 축소 알고리즘의 내부 연산
+
+    - 어텐션 메커니즘과 트랜스포머
+
+        - 자기 어텐션(self-attention)
+
+        - 멀티헤드 어텐션에서 여러 행렬 곱셈 연산
+
+        - BERT, GPT 등 최신 언어 모델의 핵심 연산
+
+    - 컨볼루션 신경망(CNN)
+
+        - 컨볼루션 연산을 행렬 곱셈으로 변환(im2col 방식)하여 계산 효율성 증가
+
+        - 다양한 필터를 통한 특성 추출 과정
+
+    - 그래프 신경망(GNN)
+
+        - 인접 행렬을 통한 노드 간 메시지 전달
+
+        - 그래프 표현 학습과 노드 분류
+
+    - 강화학습
+
+        - 상태-행동 가치 함수의 근사
+
+        - 정책 네트워크에서의 행동 확률 계산
+
+> 💡 tensor 는 벡터와 행렬을 일반화한 다차원 배열로, 스칼라(0차원), 벡터(1차원), 행렬(2차원), 그리고 더 높은 차원의 데이터를 통합적으로 표현하고 연산할 수 있게 해준다. PyTorch는
+> tensor 연산에 최적화되어 있으며, GPU 가속을 통해 대규모 행렬 곱셈을 효율적으로 처리한다!
+
+## 📊 평균 벡터 (Mean Vector)
+
+- 평균 벡터는 데이터셋의 각 특성(열)에 대한 평균값으로 구성된 vector 이다.
+
+$$ \mu = \frac{1}{n} \sum_{i=1}^{n} x_i,\ 여기서\ x_i \in \mathbb{R}^n $$
+
+- 머신러닝에서 평균 벡터는 다음과 같은 분야에서 활용된다.
+
+    - 데이터 중심화(centering)
+
+    - 특성 표준화(standardization)
+
+    - 주성분 분석(PCA)
+
+    - 이상치 탐지(outlier detection)
+
+    - 클러스터 중심(centroid)
+
+## 📈 공분산 행렬 (Covariance Matrix)
+
+- 공분산 행렬은 데이터셋의 각 특성 쌍 사이의 공분산을 나타내는 정방행렬이다.
+
+- 대각선 요소는 각 특성의 분산을, 비대각선 요소는 두 특성 간의 공분산을 나타낸다.
+
+$$ S^2 = \frac{1}{n-1} \sum_{i=1}^{n} (x_i - \mu)^2 $$
+
+$$ \Sigma = \frac{1}{n-1} \sum_{i=1}^{n} (x_i - \mu)(x_i - \mu)^T \\
+x_i, \mu \in \mathbb{R}^n,\ \Sigma \in \mathbb{R}^{n \times n} $$
+
+머신러닝에서 공분산 행렬은 다음과 같은 분야에서 활용된다.
+
+- 주성분 분석(PCA)
+
+- 다변량 가우시안 분포
+
+- 선형 판별 분석(LDA)
+
+- 마할라노비스 거리(Mahalanobis distance)
+
+- 얼굴 인식과 같은 패턴 인식 문제
