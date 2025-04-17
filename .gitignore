@@ -52,3 +52,4 @@ venv.bak/
 # Mac os
 .DS_Store
 .obsidian
+_templates
