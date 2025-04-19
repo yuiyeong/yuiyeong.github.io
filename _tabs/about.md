@@ -3,13 +3,13 @@
 icon: fas fa-info-circle
 order: 4
 ---
-
 # About Me
 
 안녕하세요! 저는 다양한 개발 경험을 가진 백엔드 개발자로, 현재는 AI와 데이터 분석에 깊이 빠져있습니다.
+코드 한 줄이 실제 사용자의 삶을 개선할 수 있다는 믿음으로 개발에 임하고 있으며, 이 블로그가 저와 비슷한 여정을 걷는 분들에게 도움이 되길 바랍니다!
 
 ## 🧠 관심 분야
-Clean Architecture를 적용한 지속 가능한 소프트웨어 아키텍처 설계, Python을 활용한 데이터 분석 및 AI 엔지니어링에 큰 관심을 가지고 있습니다. 특히 AI 엔지니어링이 현대 백엔드 개발자의 핵심 역량이라고 생각하며, 이 분야에서 전문성을 키워가고 있습니다.
+Clean Architecture 를 적용한 지속 가능한 소프트웨어 아키텍처 설계, Python 을 활용한 데이터 분석 및 AI 엔지니어링에 큰 관심을 가지고 있습니다. 특히 AI 엔지니어링이 현대 백엔드 개발자의 핵심 역량이라고 생각하며, 이 분야에서 전문성을 키워가고 있습니다.
 
 ## 🎯 블로그 목적
 이 블로그는 제가 딥러닝과 AI를 공부하는 과정에서 얻은 지식과 개발 경험을 체계적으로 정리하고 공유하는 공간입니다. Python, 데이터 분석, 머신러닝 기초, 실용적인 코딩 팁 등 다양한 주제를 다루고 있습니다.
@@ -18,14 +18,13 @@ Clean Architecture를 적용한 지속 가능한 소프트웨어 아키텍처 �
 다양한 환경에서 모바일 앱, 웹 프론트엔드, 백엔드 개발을 해왔으며, AI 서비스 통합 및 API 개발 경험을 갖추고 있습니다. 대규모 트래픽 처리를 위한 시스템 설계와 성능 최적화에 대한 경험도 있습니다.
 
 ## 🛠 기술 스택
-Python, Java, Kotlin, TypeScript를 주로 사용하며, Flask, Spring Boot, Node.js 등의 프레임워크에 익숙합니다. 데이터 분석을 위해 NumPy, Pandas를 활용하고 있습니다.
-
-## 📚 현재 학습 중
-현재는 데이터 분석, 머신러닝, 딥러닝의 기초를 독학하고 있습니다. 특히 AI를 위한 수학적 기초와 Python 라이브러리 활용에 집중하고 있으며, 이론과 실습을 병행하며 학습 내용을 이 블로그에 기록하고 있습니다.
+Python, Kotlin, TypeScript 를 주로 사용하며, FastAPI, Flask, Spring Boot, Node.js 등의 프레임워크에 익숙합니다. 데이터 분석을 위해 NumPy, Pandas 를 활용하고 있습니다.
 
 ## 📬 연락처
 궁금한 점이나 협업 제안이 있으시면 언제든지 joyuiyeong@gmail.com으로 연락주세요.
-GitHub: https://github.com/yuiyeong
-LinkedIn: https://www.linkedin.com/in/yuiyeong-jo-1893b399/
 
-코드 한 줄이 실제 사용자의 삶을 개선할 수 있다는 믿음으로 개발에 임하고 있으며, 이 블로그가 저와 비슷한 여정을 걷는 분들에게 도움이 되길 바랍니다!
+### GitHub
+[https://github.com/yuiyeong](https://github.com/yuiyeong)
+
+### LinkedIn
+[https://www.linkedin.com/in/yuiyeong-jo-1893b399/](https://www.linkedin.com/in/yuiyeong-jo-1893b399/)
