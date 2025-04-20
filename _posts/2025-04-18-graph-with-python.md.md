@@ -19,11 +19,10 @@ mermaid: true
 math: true
 ---
 ## 🚀 TL;DR
-
-## 📦 사용하는 python package
+- w.i.p
 
 ## 📓 실습 Jupyter Notebook
-
+- [notebook](https://github.com/yuiyeong/notebooks/blob/main/graph/basic_graph.ipynb)
 
 ## 🌐 그래프 (Graph) 란?
 - 여러 개의 **점(정점 Vertex 또는 노드 Node)** 들이 서로 **선(간선 Edge 또는 링크 Link)** 으로 연결된 관계를 표현하는 자료구조
@@ -198,105 +197,94 @@ def create_weighted_graph():
 ### BFS (너비 우선 탐색, Breadth-First Search)
 
 - **핵심 컨셉**: "가까운 곳부터 차근차근, 옆으로 넓게!"
-- **동작 방식**:
+- **동작 방식**
     - 시작점에서 가까운 순서(레벨 1 -> 레벨 2 -> ...)대로 탐색
     - 마치 물결이 퍼져나가는 모습과 같음
 - **구현**: 큐(Queue) 자료구조 사용
 - **주요 용도**: **최단 거리** 찾기에 유리
-
-```python
-from collections import deque
-
-def bfs(graph, start):
-    visited = set()  # 방문한 정점 기록
-    queue = deque([start])  # 큐에 시작 정점 추가
-    visited.add(start)
-
-    while queue:  # 큐가 빌 때까지 반복
-        vertex = queue.popleft()  # 큐에서 정점을 꺼냄
-        print(vertex, end=' ')  # 정점 처리 (여기서는 출력)
-
-        # 현재 정점의 이웃들을 확인
-        for neighbor in graph[vertex]:
-            if neighbor not in visited:  # 방문하지 않은 이웃만
-                visited.add(neighbor)  # 방문 표시
-                queue.append(neighbor)  # 큐에 추가
-
-# 사용 예:
-# bfs(graph, 'A')  # 'A'에서 시작하는 BFS 탐색
-
-```
-
 ### DFS (깊이 우선 탐색, Depth-First Search)
 
 - **핵심 컨셉**: "한 길로 끝까지 파고들어 보자!"
-- **동작 방식**:
+- **동작 방식**
     - 한 방향으로 갈 수 있는 데까지 깊숙이 들어갔다가, 막히면 돌아나와 다른 길로 탐색
     - 마치 미로 찾기 할 때 한쪽 벽만 따라가는 느낌
 - **구현**: 스택(Stack) 또는 재귀 함수 사용
 - **주요 용도**: **경로의 존재 여부** 확인 등에 활용
-
-```python
-def dfs_recursive(graph, vertex, visited=None):
-    if visited is None:
-        visited = set()
-
-    visited.add(vertex)  # 현재 정점 방문 표시
-    print(vertex, end=' ')  # 정점 처리 (여기서는 출력)
-
-    # 이웃 정점들을 재귀적으로 방문
-    for neighbor in graph[vertex]:
-        if neighbor not in visited:
-            dfs_recursive(graph, neighbor, visited)
-
-# 사용 예:
-# dfs_recursive(graph, 'A')  # 'A'에서 시작하는 DFS 탐색
-
-```
-
 ## 🌊 너비 우선 탐색 (BFS) 란?
 
 너비 우선 탐색(Breadth-First Search, BFS)은 그래프 탐색 알고리즘 중 하나로, 시작 정점(노드)에서 **가까운 정점부터** 순서대로, 즉 **넓게(너비 우선)** 탐색하는 방법입니다.
 
 ### 핵심 아이디어
-
 BFS는 시작 노드에서 출발하여 **거리가 1인 이웃**들을 모두 방문하고, 그 다음 **거리가 2인 이웃**들을 모두 방문하는 방식으로, 마치 물결이 퍼져나가듯 탐색을 진행합니다.
 
 ![bfs concept](/assets/img/2025-04-18/graph_bfs_concept.png)
 
 ### 주요 특징
-
 - **큐(Queue)** 자료구조를 사용하여 구현 (FIFO: First-In, First-Out)
-- **최단 경로 보장** (가중치 없는 그래프): 시작 노드에서 특정 노드까지의 가장 적은 간선 수를 거치는 경로를 찾을 수 있음
-- 재귀적으로 동작하지 않음 (반복문과 큐 사용)
+- **최단 경로 보장** (가중치 없는 그래프): 시작 노드에서 특정 노드까지의 가장 적은 간선 수를 거치는 경로를 찾을 수 있다.
+- 재귀적으로 동작하지 않음 (반복문과 queue 사용)
 
-> 💡 BFS는 마치 연못에 돌을 던졌을 때 물결이 동심원으로 퍼져나가는 것처럼, 시작점으로부터 거리가 가까운 순서대로 노드들을 방문합니다.
+> 💡 BFS 는 마치 연못에 돌을 던졌을 때 물결이 동심원으로 퍼져나가는 것처럼, 시작점으로부터 거리가 가까운 순서대로 노드들을 방문합니다.
 
 ## ⚙️ BFS 동작 원리: 큐(Queue)가 핵심!
-
-BFS가 레벨별 탐색을 할 수 있는 비결은 바로 **큐(Queue)** 자료구조를 사용하기 때문입니다. 큐는 **먼저 들어온 것이 먼저 나가는(FIFO)** 특징이 있습니다.
-
+- BFS가 레벨 별 탐색을 할 수 있는 비결은 바로 **큐(Queue)** 자료구조를 사용하기 때문이다. 
+- 바로, Queue 의 **먼저 들어온 것이 먼저 나가는(FIFO)** 특징이 그 핵심이다.
 ### 알고리즘 단계
-
-1. **시작**:
-    - 탐색 **시작 노드**를 **큐**에 넣습니다.
-    - "이미 방문했다"는 표시를 남깁니다 (`visited` 세트).
-2. **탐색 (큐가 빌 때까지 반복)**:
-    - 큐에서 **가장 먼저 들어왔던 노드**를 꺼냅니다 (`popleft`).
-    - 꺼낸 노드를 **처리**합니다 (예: 화면에 출력).
-    - 꺼낸 노드에 **연결된 이웃 노드**들을 살펴봅니다.
-    - 이웃 노드 중 **아직 방문 안 한 노드**가 있다면:
+1. **시작**
+    - 탐색 **시작 node**를 **Queue** 에 넣는다.
+    - "이미 방문했다"는 표시를 남긴다. (`visited` 데이터) => 재방문을 하지 않기위해
+2. **탐색 (Queue 가 빌 때까지 반복)**:
+    - Queue 에서 **가장 먼저 들어왔던 노드**를 꺼낸다. (`popleft`)
+    - 꺼낸 노드를 **처리**한다 (예: 화면에 출력)
+    - 꺼낸 노드의 **연결된 이웃 노드**들을 살펴본다.
+    - 이웃 노드 중 **아직 방문 안 한 노드**가 있다면,
         - "방문했다"고 **표시**하고,
-        - **큐에 넣습니다**. (다음 레벨 탐색 대상)
-3. **종료**: 큐가 비면, 시작 노드에서 갈 수 있는 모든 노드를 방문한 것입니다.
+        - **Queue 에 넣는다.** (다음 레벨 탐색 대상)
+3. **종료**: Queue 가 비면, 시작 node 에서 갈 수 있는 모든 node 를 방문한 것이다!
 
-![](/assets/img/2025-04-18/bfs_process.png)
+```mermaid
+flowchart TD
+    A([시작]) --> B["시작 node 를 Queue 에 넣음"]
+    B --> C["시작 node 를 '방문했음'으로 표시(visited[시작노드] = True)"]
+    C --> D{"Queue 가 비어있는가?"}
+    
+    D -->|"Yes"| E([종료: 모든 도달 가능한 노드를 방문함])
+    
+    D -->|"No"| F["Queue 에서 가장 먼저 들어온 node 꺼내기(current = queue.popleft())"]
+    F --> G["꺼낸 node 처리(예: 출력, 결과 저장 등)"]
+    
+    G --> H["꺼낸 node(current)의 이웃 node 들 확인"]
+    H --> I{"모든 이웃 node 를 확인했는가?"}
+    
+    I -->|"Yes"| D
+    
+    I -->|"No"| J{"이웃 node 가 방문한 적 없는가?(visited[이웃] == False)"}
+    J -->|"No"| K["다음 이웃 node 로"]
+    K --> I
+    
+    J -->|"Yes"| L["이웃 node 를 '방문했음'으로 표시(visited[이웃] = True)"]
+    L --> M["이웃 node 를 Queue에 넣음(queue.append(이웃))"]
+    M --> K
+    
+    classDef start fill:#ff7043,stroke:#e64a19,stroke-width:2px,color:white,font-weight:bold
+    classDef queue fill:#42a5f5,stroke:#1976d2,stroke-width:2px,color:white
+    classDef process fill:#66bb6a,stroke:#388e3c,stroke-width:2px,color:white
+    classDef decision fill:#ab47bc,stroke:#7b1fa2,stroke-width:2px,color:white
+    
+    class A,E start
+    class B,C,F,L,M queue
+    class G,H,K process
+    class D,I,J decision
+```
 
-> 💡 핵심: 큐에 먼저 들어간 노드(가까운 노드)가 먼저 나오고, 그 이웃들이 큐의 뒤쪽에 추가됩니다. 따라서 자연스럽게 가까운 레벨부터 탐색하게 됩니다.
+> 💡 핵심: queue 에 먼저 들어간 node (가까운 node )가 먼저 나오고, 그 이웃들이 queue 의 뒤쪽에 추가된다. 따라서 자연스럽게 같은 레벨부터 탐색하게 되는 것이다!
 
 ## 💻 BFS 파이썬 구현 (기본)
 
-아래는 BFS 알고리즘의 기본적인 파이썬 구현입니다. 인접 리스트로 표현된 그래프를 사용합니다.
+- 그래프를 인접 리스트로 만든다.
+- `collections.deque` 를 사용하는 이유 
+	- **양쪽에서 효율적인 삽입과 삭제**를 지원하기 때문이다. 
+	- 일반 list 로 queue 를 구현하면 pop(0) 가 O(n) 시간 복잡도를 가져 비효율적
 
 ```python
 from collections import deque
@@ -357,9 +345,6 @@ if __name__ == "__main__":
     # 출력: BFS 방문 순서: ['A', 'B', 'C', 'D', 'E', 'F']
 
 ```
-
-> 💡 collections.deque를 사용하는 이유는 양쪽에서 효율적인 삽입과 삭제를 지원하기 때문입니다. 일반 리스트로 큐를 구현하면 pop(0)가 O(n) 시간 복잡도를 가져 비효율적입니다.
-
 ## 📍 최단 경로 찾기 (BFS 응용)
 
 BFS의 가장 유용한 특징 중 하나는 **가중치 없는 그래프**에서 두 노드 사이의 **최단 경로**를 찾을 수 있다는 것입니다.
