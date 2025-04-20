@@ -18,6 +18,4 @@ if (publish !== "yes") {
 // _posts 폴더로 이동
 const fileName = currentPath.split('/').pop();
 await tp.file.move("_posts/" + fileName);
-
-tR = "포스트가 발행되었습니다!";
 -%>
