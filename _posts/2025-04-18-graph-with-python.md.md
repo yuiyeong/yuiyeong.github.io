@@ -1,5 +1,5 @@
 ---
-title: 그래프 데이터 구조와 탐색 알고리즘(w. Python)
+title: 🐍 그래프 데이터 구조와 탐색 알고리즘(w. Python)
 date: 2025-04-18 13:49:00 +0900
 categories:
   - PYTHON
