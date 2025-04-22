@@ -44,7 +44,7 @@ math: true
 - **웹**: 인터넷 웹페이지 간의 하이퍼링크 연결
 - **추천 시스템**: 사용자-상품 관계 분석을 통한 추천 알고리즘
 
-> 💡 그래프는 관계를 중심으로 데이터를 표현하기 때문에, 연결 패턴을 분석하거나 최단 경로를 찾는 등의 작업에 최적화된 자료구조이다.
+> 그래프는 관계를 중심으로 데이터를 표현하기 때문에, 연결 패턴을 분석하거나 최단 경로를 찾는 등의 작업에 최적화된 자료구조이다.
 {: .prompt-tip}
 
 ## 🔍 그래프의 종류
@@ -108,7 +108,7 @@ graph = {
 - **이웃 찾기 빠름**: 특정 정점의 이웃들을 바로 리스트에서 꺼내볼 수 있음
 - **구현 간단**: 파이썬 딕셔너리를 사용하면 직관적으로 구현 가능
 
-> ❗ 인접 행렬(Adjacency Matrix)이라는 표(2차원 배열)를 이용하는 방법도 있지만, 연결이 적은 그래프에서는 메모리 낭비가 심해서 인접 리스트를 더 많이 사용한다.
+> 인접 행렬(Adjacency Matrix)이라는 표(2차원 배열)를 이용하는 방법도 있지만, 연결이 적은 그래프에서는 메모리 낭비가 심해서 인접 리스트를 더 많이 사용한다.
 > ![adjacency matrix](assets/img/2025-04-18/graph_adjacency_matrix.png){: .w-75 .center}
 {: .prompt-tip}
 
@@ -225,7 +225,7 @@ BFS는 시작 노드에서 출발하여 **거리가 1인 이웃**들을 모두 �
 - **최단 경로 보장** (가중치 없는 그래프): 시작 노드에서 특정 노드까지의 가장 적은 간선 수를 거치는 경로를 찾을 수 있다.
 - 재귀적으로 동작하지 않음 (반복문과 queue 사용)
 
-> 💡 BFS 는 마치 연못에 돌을 던졌을 때 물결이 동심원으로 퍼져나가는 것처럼, 시작점으로부터 거리가 가까운 순서대로 노드들을 방문한다.
+> BFS 는 마치 연못에 돌을 던졌을 때 물결이 동심원으로 퍼져나가는 것처럼, 시작점으로부터 거리가 가까운 순서대로 노드들을 방문한다.
 {: .prompt-tip}
 
 ## ⚙️ BFS 동작 원리: 큐(Queue)가 핵심!
@@ -279,168 +279,7 @@ flowchart TD
     class D,I,J decision
 ```
 
-> 💡 핵심: queue 에 먼저 들어간 node (가까운 node )가 먼저 나오고, 그 이웃들이 queue 의 뒤쪽에 추가된다. 따라서 자연스럽게 같은 레벨부터 탐색하게 되는 것이다!
-{: .prompt-tip}
-
-## 💻 BFS 파이썬 구현 (기본)
-
-- 그래프를 인접 리스트로 만든다.
-- `collections.deque` 를 사용하는 이유 
-	- **양쪽에서 효율적인 삽입과 삭제**를 지원하기 때문이다. 
-	- 일반 list 로 queue 를 구현하면 pop(0) 가 O(n) 시간 복잡도를 가져 비효율적
-
-```python
-from collections import deque
-
-def bfs(graph, start_node):
-    """
-    그래프에서 시작 노드부터 BFS 탐색을 수행하는 함수
-
-    Parameters:
-        graph: 인접 리스트로 표현된 그래프 (딕셔너리)
-        start_node: 탐색을 시작할 노드
-
-    Returns:
-        방문한 노드들의 리스트 (방문 순서대로)
-    """
-    # 방문 기록용 세트
-    visited = set()
-    # 방문 순서 저장용 리스트
-    traversal_order = []
-    # 큐 생성 및 시작 노드 추가
-    queue = deque([start_node])
-    # 시작 노드 방문 표시
-    visited.add(start_node)
-
-    # 큐가 빌 때까지 반복
-    while queue:
-        # 큐에서 노드 하나를 꺼냄
-        current_node = queue.popleft()
-        # 방문 순서에 추가
-        traversal_order.append(current_node)
-
-        # 현재 노드의 이웃들을 확인
-        for neighbor in graph.get(current_node, []):
-            # 아직 방문하지 않은 이웃만 처리
-            if neighbor not in visited:
-                # 방문 표시
-                visited.add(neighbor)
-                # 큐에 추가
-                queue.append(neighbor)
-
-    return traversal_order
-
-# 사용 예시
-if __name__ == "__main__":
-    # 무방향 그래프 예시
-    graph = {
-        'A': ['B', 'C'],
-        'B': ['A', 'D', 'E'],
-        'C': ['A', 'F'],
-        'D': ['B'],
-        'E': ['B', 'F'],
-        'F': ['C', 'E']
-    }
-
-    # A에서 시작하는 BFS 수행
-    traversal = bfs(graph, 'A')
-    print("BFS 방문 순서:", traversal)
-    # 출력: BFS 방문 순서: ['A', 'B', 'C', 'D', 'E', 'F']
-
-```
-## 📍 최단 경로 찾기 (BFS 응용)
-
-BFS의 가장 유용한 특징 중 하나는 **가중치 없는 그래프**에서 두 노드 사이의 **최단 경로**를 찾을 수 있다는 것이다.
-
-```python
-def find_shortest_path(graph, start_node, end_node):
-    """
-    시작 노드에서 목표 노드까지의 최단 경로를 찾는 BFS 함수
-
-    Parameters:
-        graph: 인접 리스트로 표현된 그래프
-        start_node: 시작 노드
-        end_node: 목표 노드
-
-    Returns:
-        최단 경로 리스트 (경로가 없으면 빈 리스트)
-    """
-    # 특수 케이스: 시작과 목표가 같은 경우
-    if start_node == end_node:
-        return [start_node]
-
-    # 방문 기록 및 부모 노드 저장 (경로 재구성용)
-    visited = {start_node}
-    queue = deque([(start_node, [start_node])])  # (노드, 경로) 튜플
-
-    while queue:
-        current, path = queue.popleft()
-
-        # 현재 노드의 모든 이웃 확인
-        for neighbor in graph.get(current, []):
-            if neighbor == end_node:
-                # 목표 도달! 경로 반환
-                return path + [neighbor]
-
-            if neighbor not in visited:
-                visited.add(neighbor)
-                # 현재까지의 경로에 이웃을 추가하여 큐에 저장
-                queue.append((neighbor, path + [neighbor]))
-
-    # 목표에 도달하지 못함
-    return []
-
-# 사용 예시
-shortest_path = find_shortest_path(graph, 'A', 'F')
-print("A에서 F까지의 최단 경로:", shortest_path)
-# 출력: A에서 F까지의 최단 경로: ['A', 'C', 'F']
-
-```
-> 💡 이 구현에서는 각 노드에 도달하는 경로를 queue 에 함께 저장하여, 목표 노드에 도달했을 때 바로 경로를 반환할 수 있도록 했다.
-{: .prompt-tip}
-
-## 🔢 노드 간 최단 거리 계산
-
-노드 간의 최단 거리(간선 수)만 필요한 경우, 다음과 같이 구현할 수 있다
-```python
-def find_shortest_distance(graph, start_node, end_node):
-    """
-    시작 노드에서 목표 노드까지의 최단 거리(간선 수)를 찾는 함수
-
-    Returns:
-        최단 거리 (경로가 없으면 -1)
-    """
-    if start_node == end_node:
-        return 0
-
-    # 방문 노드와 각 노드까지의 거리를 저장
-    distances = {start_node: 0}
-    queue = deque([start_node])
-
-    while queue:
-        current = queue.popleft()
-        current_distance = distances[current]
-
-        for neighbor in graph.get(current, []):
-            if neighbor == end_node:
-                # 목표 도달!
-                return current_distance + 1
-
-            if neighbor not in distances:
-                distances[neighbor] = current_distance + 1
-                queue.append(neighbor)
-
-    # 목표에 도달하지 못함
-    return -1
-
-# 사용 예시
-distance = find_shortest_distance(graph, 'A', 'F')
-print("A에서 F까지의 최단 거리:", distance)
-# 출력: A에서 F까지의 최단 거리: 2
-
-```
-
-> 💡 이 구현에서는 distances 딕셔너리가 방문 여부 체크와 거리 저장의 두 가지 역할을 동시에 수행한다.
+> 핵심: queue 에 먼저 들어간 node (가까운 node )가 먼저 나오고, 그 이웃들이 queue 의 뒤쪽에 추가된다. 따라서 자연스럽게 같은 레벨부터 탐색하게 되는 것이다!
 {: .prompt-tip}
 
 ## ⏱️ BFS 시간 및 공간 복잡도
@@ -448,7 +287,7 @@ print("A에서 F까지의 최단 거리:", distance)
 
 - V: 노드(정점) 개수, E: 간선 개수
 - 모든 노드를 정확히 한 번씩 방문: O(V)
-- 모든 간선을 한 번씩 검사: O(E)
+- 모든 간선을 한 번씩 검사: O(E)라
 - 인접 리스트 사용 시 위 두 작업이 주요 비용이므로 총 O(V + E)
 
 ### 공간 복잡도: O(V)
@@ -459,110 +298,533 @@ print("A에서 F까지의 최단 거리:", distance)
 > 💡 BFS는 그래프의 크기에 비례하는 매우 효율적인 알고리즘이다. 특히 간선보다 노드가 훨씬 많은 희소 그래프에서도 좋은 성능을 보인다.
 {: .prompt-tip}
 
-## 🗺️ BFS 활용 사례
+## 🗺️ BFS Python Code 예시
 
-BFS는 다양한 문제 해결에 활용된다.
-
-### 1. 최단 경로 찾기 (가중치 없는 그래프)
-
-- 미로 찾기, 퍼즐 게임의 최소 이동 횟수
-- 소셜 네트워크에서 "몇 다리 건너" 관계 찾기
+### BFS 기본 구현
+![그래프](/assets/img/2025-04-18/graph_example00.png)
+- 그래프를 인접 리스트로 만든다.
+```python
+graph = {
+    "A": ["B", "C"],
+    "B": ["A", "D", "E"],
+    "C": ["A", "F"],
+    "D": ["B"],
+    "E": ["B", "F"],
+    "F": ["C", "E"],
+}
+```
+- `collections.deque` 를 사용하는 이유 
+	- **양쪽에서 효율적인 삽입과 삭제**를 지원하기 때문이다. 
+	- 일반 list 로 queue 를 구현하면 pop(0) 가 O(n) 시간 복잡도를 가져 비효율적
 
 ```python
-# 미로에서 출발점에서 도착점까지의 최단 경로 찾기
-def solve_maze(maze, start, end):
-    rows, cols = len(maze), len(maze[0])
-    # 상하좌우 이동
-    directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+from collections import deque
 
-    visited = set([start])
-    queue = deque([(start, [start])])
+def bfs(graph: dict, start: str) -> list[str]:  
+    visited = set()  # 방문 기록용 set  
+    visited.add(start)  # 시작 node 에 방문 표시  
+    queue = deque([start])  # queue 생성 및 시작 node 추가  
+  
+    traversal_order = []  # 탐색 순서 리스트  
+  
+    while queue:  
+        # node 꺼냄  
+        node = queue.popleft()  
+  
+        # node 처리  
+        traversal_order.append(node)  
+  
+        # node 의 이웃 처리  
+        for neighbor in graph[node]:  
+            # 방문하지 않은 이웃일 때만!  
+            if neighbor not in visited:  
+                # 방문 처리 및 queue 에 추가  
+                visited.add(neighbor)  
+                queue.append(neighbor)  
+    return traversal_order
 
-    while queue:
-        (r, c), path = queue.popleft()
+print("traversal order:", bfs(ex_graph, "A"))
+traversal order: ['A', 'B', 'C', 'D', 'E', 'F']
+```
+### 최단 경로 찾기
 
-        if (r, c) == end:
-            return path
+> BFS 가 최단 경로를 찾을 수 있는 경우는, 모든 간선의 가중치가 동일한 경우(보통 가중치가 모두 1인 경우)에 한정된다. 이것은 BFS 가 node 를 "레벨" 별로 탐색하기 때문이다. 즉, 시작 node 로부터 거리가 1인 모든 node, 그 다음 거리가 2인 모든 node... 이런 식으로 진행된다.
+>
+> 가중치가 다양한 그래프에서 최단 경로를 찾으려면 다음과 같은 알고리즘을 사용해야 한다.
+> 
+>`다익스트라(Dijkstra) 알고리즘`
+> 	- 음이 아닌 가중치가 있는 그래프에서 최단 경로를 찾는 알고리즘
+> 	- 우선순위 큐를 사용하여 현재까지 알려진 가장 짧은 경로를 가진 노드부터 처리
+> 
+>`벨만-포드(Bellman-Ford) 알고리즘`
+> 	- 음의 가중치가 있는 그래프에서도 최단 경로를 찾을 수 있음
+> 	- 다익스트라보다 느리지만 음의 가중치와 음의 사이클을 처리할 수 있음
+>
+>`A* 알고리즘`
+> 	- 휴리스틱을 사용하여 다익스트라 알고리즘을 개선한 것
+> 	- 목표 노드까지의 예상 거리를 고려하여 탐색 방향을 유도
+> 
+> 예를 들어, 도시 간 거리가 다른 도로 네트워크에서 최단 거리를 찾을 때는 BFS 대신 다익스트라 알고리즘을 사용해야 한다. BFS는 단순히 "거쳐가는 도시 수"만 최소화할 수 있으며, 실제 거리(km)를 최소화하지는 못한다.
+{: .prompt-tip}
 
-        for dr, dc in directions:
-            nr, nc = r + dr, c + dc
+- 앞선 기본 구현의 bfs 를 응용
+- 이것은 오직 **가중치 없는 그래프**에서만 가능!
 
-            # 유효한 이동인지 확인
-            if (0 <= nr < rows and 0 <= nc < cols and
-                maze[nr][nc] == 0 and (nr, nc) not in visited):
-                visited.add((nr, nc))
-                queue.append(((nr, nc), path + [(nr, nc)]))
+```python
+from collections import deque
 
-    return []  # 경로 없음
+def find_shortest_path(graph: dict, start: str, end: str) -> list[str]:  
+    if start not in graph or end not in graph:  
+        return []  
+  
+    if start == end:  
+        return [start]  
+  
+    visited = {start}  
+    # queue 에 node 와 이 node 까지 온 경로를 저장  
+    queue = deque([(start, [start])])  # (node, 경로)  
+  
+    while queue:  
+        node, path = queue.popleft()  
+  
+        for neighbor in graph.get(node, []):  
+            if neighbor == end:  # 목표 도달!  
+                return path + [neighbor]  
+  
+            if neighbor not in visited:  
+                visited.add(neighbor)  
+                # 현재까지의 경로에 이웃을 추가  
+                queue.append((neighbor, path + [neighbor]))  
+    # 경로를 찾을 수 없음  
+    return []  
 
+print("A 에서 F 까지 최단 경로:", find_shortest_path(ex_graph, "A", "F"))
+# A 에서 F 까지 최단 경로: ['A', 'C', 'F']
+```
+> 이 구현에서는 각 node 에 도달하는 경로를 queue 에 함께 저장하여, 목표 node 에 도달했을 때 바로 경로를 반환할 수 있도록 했다.
+{: .prompt-tip}
+
+### 노드 간 최단 거리 계산
+- 앞선 최단 경로 찾기를 응용
+- 노드 간의 최단 거리(간선 수)만 필요한 경우, 다음과 같이 구현할 수 있다.
+
+```python
+def find_shortest_distance(graph: dict, start: str, end: str) -> int:  
+    if start not in graph or end not in graph:  
+        return 0  
+  
+    if start == end:  
+        return 0  
+  
+    distances = {start: 0}  # 방문 node 와 그 node 까지의 거리를 저장  
+    queue = deque([start])  
+  
+    while queue:  
+        node = queue.popleft()  
+        current_distance = distances.get(node, 0)  
+  
+        for neighbor in graph.get(node, []):  
+            if neighbor == end:  # 목표 도달!  
+                return current_distance + 1  
+  
+            if neighbor not in distances:  
+                distances[neighbor] = current_distance + 1  
+                queue.append(neighbor)  
+    return -1
+
+print("A 에서 F 까지의 최단거리:", find_shortest_distance(ex_graph, "A", "F"))
+# A 에서 F 까지의 최단거리: 2
 ```
 
-### 2. 연결 요소 (Connected Components) 찾기
+> 이 구현에서는 distances dict 가 방문 여부 체크와 거리 저장의 두 가지 역할을 동시에 수행한다.
+{: .prompt-tip}
 
-- 무방향 그래프에서 서로 연결된 노드 집합들을 식별
+### 최단 경로 찾기 예시 +
+> 미로 찾기, 퍼즐 게임의 최소 이동 횟수, 소셜 네트워크에서 "몇 다리 건너" 관계 찾기 등의 코딩 테스트 문제로 나온다.
+{: .prompt-tip}
 
-```python
-def find_connected_components(graph):
-    components = []
-    visited = set()
+![maze](/assets/img/2025-04-18/graph_maze.png){: .w-50 .center}
 
-    for node in graph:
-        if node not in visited:
-            # 새로운 연결 요소 발견
-            component = []
-            queue = deque([node])
-            visited.add(node)
-
-            while queue:
-                current = queue.popleft()
-                component.append(current)
-
-                for neighbor in graph.get(current, []):
-                    if neighbor not in visited:
-                        visited.add(neighbor)
-                        queue.append(neighbor)
-
-            components.append(component)
-
-    return components
-
+- 미로에서 S(0, 0) 부터 E(4, 4) 까지의 최단 경로 찾기
+- 여기서 0 은 이동 가능한 경로, 1 은 벽이다.
+- 텍스트로 표현하면 아래와 같다(보통 이런 문제들은 input 도 2D array 로 넘겨준다.)
+```
+0 1 0 0 0
+0 1 0 1 0
+0 0 0 1 0
+1 1 0 1 0
+0 0 0 0 0
 ```
 
-### 3. 이분 그래프 (Bipartite Graph) 검사
+- 이 미로를 그래프 구조로 생각해본다면, 
+	- 노드(vertex): 미로의 각 칸 (row, column)
+	- 간선(edge): *상하좌우*로 인접한 칸 사이의 연결 (이동 가능한 경우에만)
+	- 가중치(weight): 모든 간선의 가중치는 1 (한 칸 이동은 거리 1)
 
-- 그래프의 노드를 두 집합으로 나눠서, 같은 집합 내 노드들 사이에는 간선이 없는지 확인
+![maze](/assets/img/2025-04-18/graph_maze_looks_like_graph.png){: .w-75 .center}
+
+우선, input 으로 들어온 2D array 로 부터 인접 리스트를 만든다.
 
 ```python
-def is_bipartite(graph):
+from collections import deque, defaultdict  
+  
+graph = defaultdict(list)  
+for i, row in enumerate(maze):  
+    for j, _ in enumerate(row):  
+        node = (i, j)  
+        neighbors = []  
+        for direction in [(0, 1), (0, -1), (1, 0), (-1, 0)]: # 이웃 찾기  
+            # 이웃 노드  
+            neighbor = (i + direction[0], j + direction[1])  
+            if neighbor[0] < 0 or neighbor[0] >= len(maze): # 좌표 밖이라서 무시  
+                continue  
+  
+            if neighbor[1] < 0 or neighbor[1] >= len(maze[0]): # 좌표 밖이라서 무시  
+                continue  
+  
+            value = maze[neighbor[0]][neighbor[1]]  
+            if value == 0: # value 가 0 이면 진짜 이웃, 1 이면 이웃이 아님  
+                neighbors.append(neighbor)  
+        graph[node] = neighbors
+```
+
+위 코드 진행 후 graph 를 출력해보면 아래와 같다.
+
+```
+(0, 0) => [(1, 0)]
+(0, 1) => [(0, 2), (0, 0)]
+(0, 2) => [(0, 3), (1, 2)]
+(0, 3) => [(0, 4), (0, 2)]
+(0, 4) => [(0, 3), (1, 4)]
+(1, 0) => [(2, 0), (0, 0)]
+(1, 1) => [(1, 2), (1, 0), (2, 1)]
+(1, 2) => [(2, 2), (0, 2)]
+(1, 3) => [(1, 4), (1, 2), (0, 3)]
+(1, 4) => [(2, 4), (0, 4)]
+(2, 0) => [(2, 1), (1, 0)]
+(2, 1) => [(2, 2), (2, 0)]
+(2, 2) => [(2, 1), (3, 2), (1, 2)]
+(2, 3) => [(2, 4), (2, 2)]
+(2, 4) => [(3, 4), (1, 4)]
+(3, 0) => [(4, 0), (2, 0)]
+(3, 1) => [(3, 2), (4, 1), (2, 1)]
+(3, 2) => [(4, 2), (2, 2)]
+(3, 3) => [(3, 4), (3, 2), (4, 3)]
+(3, 4) => [(4, 4), (2, 4)]
+(4, 0) => [(4, 1)]
+(4, 1) => [(4, 2), (4, 0)]
+(4, 2) => [(4, 3), (4, 1), (3, 2)]
+(4, 3) => [(4, 4), (4, 2)]
+(4, 4) => [(4, 3), (3, 4)]
+```
+
+이렇게 인접 리스트를 만들었으므로, 이전의 최단 경로 알고리즘과 같이 진행하면 된다.
+
+```python
+def find_shortest_path_in_maze(maze_graph: defaultdict, start: tuple[int, int], end: tuple[int, int]) -> list:
+    # 앞에서 작성했었던, 최단 경로 코드와 같다.
+    visited = set(start)  
+    queue = deque([(start, [start])])  
+  
+    while queue:  
+        node, path = queue.popleft()  
+  
+        for neighbor in maze_graph.get(node, []):  
+            if neighbor == end:  
+                return path + [neighbor]  
+  
+            if neighbor not in visited:  
+                visited.add(neighbor)  
+                queue.append((neighbor, path + [neighbor]))  
+    return []
+
+print("(0, 0) -> (4, 4) 까지의 경로:", find_shortest_path_in_maze(graph, (0, 0), (4, 4)))
+# (0, 0) -> (4, 4) 까지의 경로: [(0, 0), (1, 0), (2, 0), (2, 1), (2, 2), (3, 2), (4, 2), (4, 3), (4, 4)]
+```
+
+위와 같이 input 으로 들어온 2D array 를 인접 리스트로 변경한 뒤에, bfs 를 진행할 수도 있지만 이 두 과정을 하나의 프로세스로 진행하는 것이 보통이다.
+
+```python
+def solve_maze(  
+        maze: list[list[int]], start: tuple[int, int], end: tuple[int, int]  
+) -> list:  
+    len_row, len_col = len(maze), len(maze[0])  
+    directions = [(0, -1), (0, 1), (-1, 0), (1, 0)]  # 상, 하, 좌, 우  
+  
+    visited = set(start)  
+    queue = deque([(start, [start])])  # node 와, node 까지의 경로  
+    while queue:  
+        (row, col), path = queue.popleft()  
+        if (row, col) == end:  
+            return path  
+  
+        for direction in directions:  # 내 이웃을 순회하는 것!  
+            neighbor = (row + direction[0], col + direction[1])  
+            if neighbor[0] < 0 or len_row <= neighbor[0]:  
+                continue  # 좌표 밖은 무시  
+  
+            if neighbor[1] < 0 or len_col <= neighbor[1]:  
+                continue  # 좌표 밖은 무시  
+  
+            if maze[neighbor[0]][neighbor[1]] == 0:  # 0 일 때만 진짜 이웃  
+                if neighbor not in visited:  
+                    visited.add(neighbor)  
+                    queue.append((neighbor, path + [neighbor]))  
+    return [] # 경로 없음  
+  
+  
+print("(0, 0) -> (4, 4):", solve_maze(input_maze, (0, 0), (4, 4)))
+# (0, 0) -> (4, 4): [(0, 0), (1, 0), (2, 0), (2, 1), (2, 2), (3, 2), (4, 2), (4, 3), (4, 4)]
+```
+
+- 가는 경로를 표현하고자 할 때는 아래와 같이 작성할 수도 있다.
+	- 경로를 다 찾았을 때(`node == end`), 간 경로를 시각화한다.
+
+```python
+def solve_maze_with_visualization(  
+    maze: list[list[int]], start: tuple[int, int], end: tuple[int, int]  
+) -> list:  
+    len_row, len_col = len(maze), len(maze[0])  
+    directions = [(0, -1), (0, 1), (-1, 0), (1, 0)]  
+  
+    visited = set(start)  
+    queue = deque([(start, [start])])  
+  
+    while queue:  
+        node, path = queue.popleft()  
+        if node == end:  
+            # 경로 찾았으므로, 경로 보여주고(1), 그 경로 반환(2)  
+  
+            visual_board = [row[:] for row in maze]  # 보여주기 위해서 미로판을 복사  
+            visual_board[start[0]][start[1]] = "S"  # 시작점 표시  
+            visual_board[end[0]][end[1]] = "E"  # 도착점 표시  
+  
+            for neighbor in path[1:]:  
+                visual_board[neighbor[0]][neighbor[1]] = "*"  
+  
+            # 시각화를 위한 보드판 출력  
+            for visual_row in visual_board:  
+                print(" ".join([str(cell) for cell in visual_row]))  
+  
+            return path  
+  
+        for direction in directions:  
+            neighbor = (node[0] + direction[0], node[1] + direction[1])  
+  
+            if neighbor[0] < 0 or len_row <= neighbor[0]:  
+                continue  
+  
+            if neighbor[1] < 0 or len_col <= neighbor[1]:  
+                continue  
+  
+            if maze[neighbor[0]][neighbor[1]] == 0:  
+                visited.add(neighbor)  
+                queue.append((neighbor, path + [neighbor]))  
+    return []  
+  
+  
+print("경로:", solve_maze_with_visualization(input_maze, (0, 0), (4, 4)))
+
+# S 1 0 0 0
+# * 1 0 1 0
+# * * * 1 0
+# 1 1 * 1 0
+# 0 0 * * *
+# 
+# (0, 0) -> (4, 4): [(0, 0), (1, 0), (2, 0), (2, 1), (2, 2), (3, 2), (4, 2), (4, 3), (4, 4)]
+```
+
+### 연결 요소 (Connected Components) 찾기
+
+> DFS 로도 가능!
+{: .prompt-tip}
+
+연결 요소란 그래프 내에서 서로 연결된 node 들의 집합이다. 무방향 그래프에서는 모든 node 쌍 사이에 경로가 존재하는 **부분 그래프**를 의미합니다.
+
+
+![그래프](/assets/img/2025-04-18/graph_example01.png){: .w-75 .center}
+
+- 위 그래프는 아래와 같은 인접 리스트로 표현할 수 있다.
+
+```python
+graph = {  
+    "A": ["B"],  
+    "B": ["A", "C", "D"],  
+    "C": ["B", "D"],  
+    "D": ["B", "C"],  
+    "E": ["F", "G"],  
+    "F": ["E"],  
+    "G": ["E"],  
+    "H": [],  
+}
+```
+
+- 무방향 그래프에서 서로 연결된 노드 집합들을 식별을 아래와 같이 할 수 있다.
+
+```python
+from collections import deque  
+  
+def find_connected_components(graph: dict):  
+    components = []  
+    visited = set()  
+  
+    for node in graph:  
+        if node not in visited: # 첫 방문 즉, 새로운 component 발견  
+            component = []  
+  
+            # 여기서 부터는 기존의 bfs 와 같음  
+            queue = deque([node])  
+            visited.add(node)  
+            while queue:  
+                current = queue.popleft()  
+  
+                component.append(current) # node 처리  
+  
+                for neighbor in graph.get(current, []):  
+                    if neighbor not in visited:  
+                        visited.add(neighbor)  
+                        queue.append(neighbor)  
+            components.append(component)  
+    return components  
+  
+find_connected_components(new_graph)
+# [['A', 'B', 'C', 'D'], ['E', 'F', 'G'], ['H']]
+```
+
+### 이분 그래프 (Bipartite Graph) 검사
+
+> DFS 로도 가능!
+{: .prompt-tip}
+
+이분 그래프는 **node 를 두 개의 독립적인 집합**으로 나눌 수 있고, **같은 집합에 속한 node 끼리는 인접하지 않는 그래프**를 말한다. BFS 를 사용해서, 그래프가 이분 그래프인지를 판별할 수 있다.
+다시 말해서,
+- node 는 집합 A와 집합 B로 나뉜다.
+- A에 속한 어떤 node 도 A의 다른 node 와 연결되지 않는다.
+- B에 속한 어떤 node 도 B의 다른 node 와 연결되지 않는다.
+- 모든 간선은 A의 node 와 B의 node 를 연결한다.
+
+이것을 정리해서 표현하자면, 아래와 같다.
+- **집합 분할 조건**: 그래프의 모든 node 를 두 집합으로 분할할 수 있어야 함
+- **간선 조건**: 모든 간선은 서로 다른 집합에 속한 node 를 연결해야 함
+- **같은 집합 내 간선 금지**: 같은 집합에 속한 node 들 사이에는 간선이 존재하지 않아야 함
+
+> 또한 이분 그래프 판별하는 데 사용할 수 있는 또 다른 조건들로 다음 내용이 있다.
+> - **홀수 길이 사이클 부재**: 그래프에 홀수 길이의 사이클(cycle)이 없어야 함
+ >   - 즉, 모든 사이클의 길이는 짝수여야 함
+ >   - 이는 이분 그래프의 가장 중요한 특성 중 하나
+> - **이색 칠하기 가능**: 그래프의 모든 node 를 두 가지 색으로 칠할 수 있어, 인접한 node 는 항상 다른 색을 가져야 함
+>   - 인접했다는 것은 간선으로 연결되어 있다는 것이고,  연결은 다른 집합끼리만 가능한데,  색이 같다는 것은 같은 집합이라는 말이므로 모순이 된다!
+>   - 이 조건은 BFS 나 DFS 를 이용한 알고리즘에서 주로 활용
+
+![그래프](/assets/img/2025-04-18/graph_example02.png){: .w-75 .center}
+
+- 위 그래프는 아래와 같은 인접 리스트로 표현할 수 있다.
+
+```python
+graph = {  
+    "A": ["C"],  
+    "B": ["D"],  
+    "C": ["A", "E", "H"],  
+    "D": ["B", "F"],  
+    "E": ["C", "G"],  
+    "F": ["D"],  
+    "G": ["E", "H"],  
+    "H": ["C", "G"],  
+}
+```
+
+- 이분 그래프 판별은 아래와 같은 코드로 확인할 수 있다.
+
+```python
+def is_bipartite(graph: dict) -> bool:
+    """
+    그래프의 모든 node 를 두 가지 색으로 칠할 수 있어야한다는
+    조건을 바탕으로 만든 판별 코드
+    """
     # 노드별 색상 저장 (0: 미방문, 1: 집합1, -1: 집합2)
-    colors = {}
-
-    # 모든 노드에 대해 검사 (연결되지 않은 부분도 처리)
-    for start_node in graph:
-        if start_node not in colors:
-            queue = deque([start_node])
-            colors[start_node] = 1  # 첫 노드는 집합1에 배정
-
-            while queue:
-                current = queue.popleft()
-                current_color = colors[current]
-
-                for neighbor in graph.get(current, []):
-                    if neighbor not in colors:
-                        # 인접 노드는 반대 색상으로 지정
-                        colors[neighbor] = -current_color
-                        queue.append(neighbor)
-                    elif colors[neighbor] == current_color:
-                        # 인접 노드가 같은 색상이면 이분 그래프가 아님
+    colors = {} # 색 집합이면서, 방문 체크
+  
+    for start_node in graph:  
+        if start_node not in colors:  
+            colors[start_node] = 1  # 방문 표시 및 속하는 집합 번호 표시  
+  
+            # bfs 시작
+            queue = deque([start_node])  
+            while queue:  
+                node = queue.popleft()  
+                current_color = colors[node]  
+  
+                # 이웃 처리  
+                for neighbor in graph.get(node, []):  
+                    if neighbor not in colors:  # 방문하지 않았다면,  
+                        # 현재 색과 부호를 반대로 함으로써, 다른 집합임을 표현  
+                        colors[neighbor] = -current_color  # 더불어 방문 표시  
+                        queue.append(neighbor)  
+                    elif colors[neighbor] == current_color:  
+                        # 방문한 적이 있어 집합이 설정이 되었는데,
+                        # 그 집합이 현재 집합과 같다!
+                        # => 인접한 node 가 같은 색상이므로, 이분 그래프가 아니다.
                         return False
-
     return True
 
+is_bipartite(graph)
+# True
 ```
 
-### 4. 레벨별 순회 (Level Order Traversal)
+- 이분 그래프일 때, 나눠지는 그 2개의 집합을 받고 싶다면 아래와 같이 수정하면 된다.
 
-- 트리나 그래프를 레벨별로 순회하여 처리
+```python
+def is_bipartite(graph: dict) -> tuple[bool, set | None, set | None]:
+    colors = {}  
+  
+    for start_node in graph:
+        if start_node not in colors:  
+            colors[start_node] = 1
+
+            queue = deque([start_node])  
+            while queue:  
+                node = queue.popleft()  
+                current_color = colors[node]  
+  
+                for neighbor in graph.get(node, []):  
+                    if neighbor not in colors:
+                        colors[neighbor] = -current_color
+                        queue.append(neighbor)  
+                    elif colors[neighbor] == current_color:
+                        return False, None, None
+    # 집합 2개로 나누는 부분만 추가 됨
+    set1 = set()
+    set2 = set()
+    for node, color in colors.items():  
+        if color == 1:  
+            set1.add(node)  
+        else:  
+            set2.add(node)  
+    return True, set1, set2  
+  
+is_bipartite(ex_graph02)
+# (True, {'A', 'B', 'E', 'F', 'H'}, {'C', 'D', 'G'})
+```
+
+> 그래프가 이분 그래프인지 판별하는 것은 문제의 본질적인 구조를 파악하는 과정이다. 만약 그래프가 이분 그래프라면, 모든 node 를 두 집합으로 분할할 수 있고, 같은 집합 내의 node 들끼리는 절대 연결되지 않는다. 
+> 이는 다음과 같은 몇 가지 중요한 의미를 갖는다.
+> 
+> - **자원 할당 가능성**: 이분 그래프라면 서로 충돌하는 요소들을 두 그룹으로 깔끔하게 분리할 수 있다는 뜻이다. 예를 들어, 시간표 작성 문제에서 서로 충돌하는 수업들을 오전/오후 두 타임으로 분리할 수 있는지 판단할 수 있다.
+> - **최적화 가능성**: 이분 그래프 구조는 최대 매칭, 최소 버텍스 커버 같은 최적화 알고리즘을 적용할 수 있게 해준다. 이런 알고리즘들은 일반 그래프보다 이분 그래프에서 더 효율적으로 작동한다.
+> - **문제 단순화**: 복잡한 관계 네트워크가 이분 그래프라면, 문제를 두 집합 간의 관계로 단순화할 수 있어 해결 방법이 더 명확해진다.
+>
+> 반면, 그래프가 이분 그래프가 아니라면,
+> 
+> - 더 복잡한 방법(예: 3-색칠 이상)이 필요하다는 신호
+> - 단순한 이분법적 접근으로는 문제를 해결할 수 없다는 의미
+> - 다른 알고리즘이나 접근 방식을 고려해야 함
+> 
+> 즉, 이분 그래프 판별은 "이 문제가 두 그룹으로 깔끔하게 나눌 수 있는 구조인가?"라는 근본적인 질문에 답하는 과정이며, 이는 효율적인 해결책 선택의 첫 단계가 된다. BFS가 이 판별을 효율적으로 할 수 있기 때문에 그래프 알고리즘에서 중요한 응용 사례로 꼽힌다.
+{: .prompt-tip}
+
+### 레벨별 순회 (Level Order Traversal)
+
+- 트리나 그래프를 레벨 별로 탐색하면서 처리
 
 ```python
 def level_order_traversal(graph, start_node):
@@ -589,90 +851,14 @@ def level_order_traversal(graph, start_node):
 
 ```
 
-## 💻 완전한 BFS 예제: 미로 탐색 구현
-
-다음 미로에서 (0,0)에서 (4,4)까지의 최단 경로를 찾아보자.
-
-```
-0 1 0 0 0
-0 1 0 1 0
-0 0 0 1 0
-1 1 0 1 0
-0 0 0 0 0
-
-```
-
-- 여기서 0은 이동 가능한 경로, 1은 벽이다.
-
-```python
-from collections import deque
-
-def solve_maze_with_visualization(maze, start, end):
-    rows, cols = len(maze), len(maze[0])
-    directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
-    dir_names = ["↑", "↓", "←", "→"]
-
-    visited = set([start])
-    queue = deque([(start, [])])  # (위치, 이동 방향)
-
-    while queue:
-        (r, c), path = queue.popleft()
-
-        if (r, c) == end:
-            # 최단 경로 발견!
-            result_maze = [row[:] for row in maze]  # 미로 복사
-
-            # 시작점과 끝점 표시
-            result_maze[start[0]][start[1]] = 'S'
-            result_maze[end[0]][end[1]] = 'E'
-
-            # 경로 표시
-            current = start
-            for direction in path:
-                dr, dc = directions[dir_names.index(direction)]
-                current = (current[0] + dr, current[1] + dc)
-                if current != end:  # 끝점이 아니면 경로 표시
-                    result_maze[current[0]][current[1]] = '*'
-
-            # 결과 미로 출력
-            print("탐색된 최단 경로:")
-            for row in result_maze:
-                print(" ".join(str(cell) for cell in row))
-
-            return path
-
-        for i, (dr, dc) in enumerate(directions):
-            nr, nc = r + dr, c + dc
-
-            if (0 <= nr < rows and 0 <= nc < cols and
-                maze[nr][nc] == 0 and (nr, nc) not in visited):
-                visited.add((nr, nc))
-                queue.append(((nr, nc), path + [dir_names[i]]))
-
-    print("경로를 찾을 수 없습니다.")
-    return []
-
-# 미로 정의
-maze = [
-    [0, 1, 0, 0, 0],
-    [0, 1, 0, 1, 0],
-    [0, 0, 0, 1, 0],
-    [1, 1, 0, 1, 0],
-    [0, 0, 0, 0, 0]
-]
-
-# 미로 탐색 실행
-path = solve_maze_with_visualization(maze, (0, 0), (4, 4))
-print("최단 경로 방향:", " → ".join(path))
-
-```
 ## 📊 성능 최적화 팁
 
 대규모 그래프에서 BFS를 사용할 때, 고려할 최적화 기법 종류
 - **양방향 BFS (Bidirectional BFS)**: 시작점과 목표점 양쪽에서 동시에 BFS를 실행하여 중간에서 만나면 종료
-- **휴리스틱 BFS** (A 알고리즘): 목표까지의 예상 거리를 고려하여 탐색 방향을 가이드
-- **메모리 최적화**: 노드를 객체 대신 간단한 ID로 표현하여 메모리 사용량 감소
+- **휴리스틱 BFS** (A* 알고리즘): 목표까지의 예상 거리를 고려하여 탐색 방향을 가이드
+- **메모리 최적화**: node 를 객체 대신 간단한 ID 로 표현하여 메모리 사용량 감소
 - **방문 노드 기록 최적화**: 큰 그래프에서는 세트 대신 비트벡터나 해시 테이블 사용 고려
+
 ## 🌲 깊이 우선 탐색 (DFS) 이란?
 
 깊이 우선 탐색(Depth-First Search, DFS)은 그래프 탐색 알고리즘 중 하나로, 시작 정점에서 출발하여 **한 방향으로 갈 수 있을 때까지 최대한 깊게** 들어간 후, 더 이상 갈 곳이 없으면 **되돌아 나와(backtrack)** 다른 방향으로 탐색을 계속하는 방법이다.
@@ -688,14 +874,14 @@ DFS는 현재 경로에서 갈 수 있는 가장 깊은 곳까지 우선적으�
 - *최단 경로를 보장하지 않음 (BFS와의 주요 차이점)*
 - 메모리 사용이 BFS에 비해 효율적일 수 있음 (특히 깊은 그래프에서)
 
-> 💡 DFS는 미로 찾기에 비유할 수 있다. 한쪽 길을 계속 따라가다가 막다른 길에 도달하면, 마지막 갈림길로 돌아와 다른 길을 시도하는 방식과 유사하다.
+> DFS는 미로 찾기에 비유할 수 있다. 한쪽 길을 계속 따라가다가 막다른 길에 도달하면, 마지막 갈림길로 돌아와 다른 길을 시도하는 방식과 유사하다.
 {: .prompt-tip}
 
-## ⚙️ DFS 알고리즘 동작 과정
+## ⚙️ DFS 동작 과정
 
 DFS는 스택 또는 재귀를 사용하여 구현할 수 있다. 두 가지 방식 모두 본질적으로 같은 과정을 따르지만, 구현 방법이 다르다.
 
-### 1. 스택(Stack) 기반 반복적(Iterative) DFS
+### 스택(Stack) 기반 반복적(Iterative) DFS
 
 스택을 활용한 DFS 구현은 다음과 같은 단계로 이루어진다.
 1. **초기화**
@@ -747,10 +933,10 @@ def dfs_iterative(graph, start_node):
     return traversal
 ```
 
-> ❗ 이웃 노드를 스택에 넣는 순서에 따라 실제 방문 순서가 달라질 수 있다. 알파벳 순서로 방문하고 싶다면, 이웃 노드들을 역순으로 스택에 추가해야 한다.
-{: .prompt-warning}
+> 이웃 노드를 스택에 넣는 순서에 따라 실제 방문 순서가 달라질 수 있다. 알파벳 순서로 방문하고 싶다면, 이웃 노드들을 역순으로 스택에 추가해야 한다.
+{: .prompt-tip}
 
-### 2. 재귀(Recursion) 기반 DFS
+### 재귀(Recursion) 기반 DFS
 
 재귀를 활용한 DFS 구현은 함수가 자기 자신을 호출하는 방식으로 이루어진다.
 1. **현재 노드 처리**
@@ -792,12 +978,12 @@ def dfs_recursive(graph, start_node):
     return traversal
 ```
 
-> 💡 재귀 방식은 코드가 더 간결하고 직관적이다. 시스템 호출 스택이 자동으로 노드의 방문 경로를 기억해주기 때문이다.
+> 재귀 방식은 코드가 더 간결하고 직관적이다. 시스템 호출 스택이 자동으로 노드의 방문 경로를 기억해주기 때문이다.
 {: .prompt-tip}
 
-## 🔍 DFS 동작 방식 시각화
+### 🔍 DFS 동작 방식 시각화
 
-간단한 그래프에서 DFS가 어떻게 동작하는지 시각적으로 살펴보자.
+간단한 그래프에서 DFS(stack)가 어떻게 동작하는지 시각적으로 살펴보자.
 ```
     A --- B --- C
     |     |
@@ -814,6 +1000,29 @@ def dfs_recursive(graph, start_node):
 7. 스택이 비어서 종료
 
 방문 순서: **A, B, C, E, D**
+```mermaid
+flowchart TD
+    Start([시작]) --> Init["초기화 - 빈 스택 생성 - 빈 방문 집합 생성"]
+    Init --> PushStart["시작 node 를 스택에 추가"]
+    PushStart --> CheckStack{"스택이 비어있는가?"}
+    CheckStack -->|예| End([종료])
+    CheckStack -->|아니오| PopNode["스택에서 node 꺼내기"]
+    
+    PopNode --> CheckVisited{"현재 node 를 방문했는가?"}
+    CheckVisited -->|예| CheckStack
+    CheckVisited -->|아니오| MarkVisited["현재 node 방문 표시 & 방문 순서에 추가"]
+    
+    MarkVisited --> ProcessNeighbors["현재 node 의 이웃 node 들을 역순으로 스택에 추가"]
+    ProcessNeighbors --> CheckStack
+    
+    classDef process fill:#a8d5ba,stroke:#333,stroke-width:1px;
+    classDef decision fill:#ffcc99,stroke:#333,stroke-width:1px;
+    classDef start fill:#9ec6e0,stroke:#333,stroke-width:1px,color:#333;
+    
+    class Start,End start;
+    class CheckStack,CheckVisited decision;
+    class Init,PushStart,PopNode,MarkVisited,ProcessNeighbors process;
+```
 
 ## ⏱️ DFS 시간 및 공간 복잡도
 
@@ -828,14 +1037,14 @@ def dfs_recursive(graph, start_node):
 - 스택(또는 재귀 호출 스택)에 최악의 경우 모든 노드가 쌓일 수 있음: O(V)
 - 방문 기록을 위한 공간도 O(V) 필요
 
-> 💡 BFS와 DFS는 동일한 시간/공간 복잡도를 가지지만, 그래프의 특성과 문제 유형에 따라 실제 성능 차이가 있을 수 있습니다.
+> BFS와 DFS는 동일한 시간/공간 복잡도를 가지지만, 그래프의 특성과 문제 유형에 따라 실제 성능 차이가 있을 수 있습니다.
 {: .prompt-tip}
 
 ## 🛤️ DFS 활용 사례
 
-### 1. 경로 존재 확인 (Path Finding)
+### 경로 존재 확인 (Path Finding)
 
-두 노드 사이에 경로가 존재하는지 확인하는 데 사용할 수 있다.
+두 node 사이에 경로가 존재하는지 확인하는 데 사용할 수 있다.
 
 ```python
 def path_exists_dfs(graph, start_node, end_node):
@@ -861,194 +1070,8 @@ def path_exists_dfs(graph, start_node, end_node):
     return dfs_helper(start_node)
 ```
 
-### 2. 사이클 탐지 (Cycle Detection)
-
-그래프 내에 사이클이 존재하는지 확인할 수 있다.
-
-```python
-def has_cycle(graph):
-    """무방향 그래프의 사이클 탐지 함수"""
-    visited = set()
-    
-    def dfs_helper(current, parent):
-        visited.add(current)
-        
-        for neighbor in graph.get(current, []):
-            # 부모 노드가 아닌데 이미 방문한 노드라면 사이클 존재
-            if neighbor != parent:
-                if neighbor in visited:
-                    return True
-                elif dfs_helper(neighbor, current):
-                    return True
-        
-        return False
-    
-    # 모든 노드에서 확인 (연결되지 않은 컴포넌트 처리)
-    for node in graph:
-        if node not in visited:
-            if dfs_helper(node, None):
-                return True
-    
-    return False
-```
-
-### 3. 위상 정렬 (Topological Sort)
-
-방향 비순환 그래프(DAG)에서 노드들의 선후 관계를 유지하며 정렬한다.
-
-```python
-def topological_sort(graph):
-    """위상 정렬 함수"""
-    visited = set()
-    temp_mark = set()  # 임시 방문 표시 (사이클 탐지용)
-    result = []
-    
-    def dfs_helper(node):
-        # 사이클 감지
-        if node in temp_mark:
-            raise ValueError("Graph has a cycle, topological sort not possible")
-        
-        # 이미 방문했다면 스킵
-        if node in visited:
-            return
-        
-        # 임시 방문 표시
-        temp_mark.add(node)
-        
-        # 이웃 노드 방문
-        for neighbor in graph.get(node, []):
-            dfs_helper(neighbor)
-        
-        # 방문 완료 표시
-        temp_mark.remove(node)
-        visited.add(node)
-        
-        # 결과에 추가 (역순)
-        result.insert(0, node)
-    
-    # 모든 노드에 대해 DFS 수행
-    for node in graph:
-        if node not in visited:
-            dfs_helper(node)
-    
-    return result
-```
-
-### 4. 연결 요소 찾기 (Connected Components)
-
-그래프의 연결된 부분 집합들을 식별한다.
-
-```python
-def find_connected_components(graph):
-    """연결 요소 찾기 함수"""
-    visited = set()
-    components = []
-    
-    def dfs_helper(node, component):
-        visited.add(node)
-        component.append(node)
-        
-        for neighbor in graph.get(node, []):
-            if neighbor not in visited:
-                dfs_helper(neighbor, component)
-    
-    for node in graph:
-        if node not in visited:
-            component = []
-            dfs_helper(node, component)
-            components.append(component)
-    
-    return components
-```
-
-## 🔄 BFS vs DFS 비교 및 선택 가이드
-
-|특징|BFS (너비 우선 탐색)|DFS (깊이 우선 탐색)|
-|---|---|---|
-|**탐색 방식**|가까운(넓은) 순서 (레벨별)|한 방향으로 최대한 깊게 탐색 후 백트래킹|
-|**자료구조**|큐 (Queue) - FIFO|스택 (Stack) 또는 재귀 (Recursion) - LIFO|
-|**최단 경로**|보장 (가중치 없는 그래프)|보장 안 함|
-|**메모리 사용**|넓은 그래프에서 메모리 많이 사용|깊은 그래프에서 메모리 효율적|
-|**주요 활용**|최단 경로, 레벨별 탐색|경로 존재 확인, 사이클 탐지, 위상 정렬|
-
-### 언제 DFS를 선택해야 할까?
-
-- **경로의 존재 여부만 확인**할 때 (빠른 결과가 필요한 경우)
-- **깊이가 중요한 문제**에서 (예: 게임 트리 탐색, 퍼즐 솔버)
-- **메모리가 제한적**이고 그래프가 넓을 때
-- **사이클 탐지** 또는 **위상 정렬**이 필요할 때
-- **백트래킹** 전략이 필요한 문제 (예: 모든 가능한 조합 탐색)
-
-### 언제 BFS를 선택해야 할까?
-
-- **최단 경로**를 찾아야 할 때 (가중치 없는 그래프)
-- **레벨별 탐색**이 필요할 때 (예: 소셜 네트워크의 친구 추천)
-- **해답이 얕은 깊이**에 있을 가능성이 높을 때
-- **탐색 깊이가 매우 깊어질 가능성**이 있고 스택 오버플로우가 우려될 때
-
-> 💡 실제 문제 해결 시 알고리즘 선택은 그래프의 특성, 문제의 요구사항, 효율성 고려 등을 종합적으로 판단해야 한다.
-{: .prompt-tip}
-
-## 🚧 DFS 구현 시 주의사항
-
-### 재귀적 DFS의 스택 오버플로우 문제
-
-재귀 함수를 사용한 DFS 구현은 간결하고 이해하기 쉽지만, 그래프가 매우 깊은 경우 스택 오버플로우가 발생할 수 있다!
-
-#### 해결 방법
-1. **반복적 구현 사용**: 명시적인 스택을 사용하는 반복적 DFS 구현으로 전환
-
-```python
-def dfs_safe(graph, start_node):
-    """스택 오버플로우를 방지하는 반복적 DFS"""
-    visited = set()
-    stack = [start_node]
-    result = []
-    
-    while stack:
-        current = stack.pop()
-        if current not in visited:
-            visited.add(current)
-            result.append(current)
-            
-            for neighbor in graph.get(current, []):
-                if neighbor not in visited:
-                    stack.append(neighbor)
-    
-    return result
-```
-
-2. **재귀 깊이 제한 늘리기**: 파이썬에서는 `sys` 모듈을 사용하여 재귀 제한을 조정할 수 있음
-
-> ❗ 재귀 제한을 늘리는 것은 임시 해결책일 뿐, 근본적인 해결책은 아닙니다. 너무 큰 값으로 설정하면 시스템 리소스 문제가 발생할 수 있으니 주의하세요.
-{: .prompt-danger}
-
-```python
-import sys
-
-# 재귀 제한 늘리기 (주의해서 사용)
-sys.setrecursionlimit(10000)  # 기본값은 보통 1000
-
-def dfs_recursive_extended(graph, start_node):
-    # 기존 재귀적 DFS 코드
-    ...
-```
-### 이웃 노드 처리 순서
-
-- 이웃 노드를 스택에 추가하는 순서가 실제 방문 순서를 결정한다. 
-- 원하는 방문 순서가 있다면 이웃 노드 목록을 적절히 정렬해야 한다.
-```python
-# 알파벳 순서로 방문하고 싶은 경우
-neighbors = sorted(graph.get(current, []), reverse=True)  # 역순으로 스택에 추가
-
-# 특정 가중치나 속성에 따라 방문하고 싶은 경우
-neighbors = sorted(graph.get(current, []), key=lambda x: some_property(x), reverse=True)
-```
-
-## 💻 완전한 DFS 예제: 경로 존재 확인 구현
-
 두 노드 사이에 경로가 존재하는지 확인하는 문제를 DFS로 해결해보자.
-### 1. 스택 기반 구현
+#### 1. 스택 기반 구현
 
 ```python
 from collections import deque
@@ -1096,7 +1119,7 @@ def path_exists_dfs_iterative(graph, start_node, end_node):
     return False
 ```
 
-### 2. 재귀 기반 구현
+#### 2. 재귀 기반 구현
 
 ```python
 def path_exists_dfs_recursive(graph, start_node, end_node):
@@ -1139,7 +1162,7 @@ def path_exists_dfs_recursive(graph, start_node, end_node):
     return dfs_helper(start_node)
 ```
 
-### 테스트 코드
+#### 테스트 코드
 
 ```python
 # 예제 그래프
@@ -1166,8 +1189,78 @@ print("0에서 6까지 경로 존재?", path_exists_dfs_recursive(graph, 0, 6)) 
 print("6에서 7까지 경로 존재?", path_exists_dfs_recursive(graph, 6, 7))  # True
 ```
 
-## 📊 고급 DFS 응용: 위상 정렬 구현
+### 사이클 탐지 (Cycle Detection)
 
+그래프 내에 사이클이 존재하는지 확인할 수 있다.
+
+```python
+def has_cycle(graph):
+    """무방향 그래프의 사이클 탐지 함수"""
+    visited = set()
+    
+    def dfs_helper(current, parent):
+        visited.add(current)
+        
+        for neighbor in graph.get(current, []):
+            # 부모 노드가 아닌데 이미 방문한 노드라면 사이클 존재
+            if neighbor != parent:
+                if neighbor in visited:
+                    return True
+                elif dfs_helper(neighbor, current):
+                    return True
+        
+        return False
+    
+    # 모든 노드에서 확인 (연결되지 않은 컴포넌트 처리)
+    for node in graph:
+        if node not in visited:
+            if dfs_helper(node, None):
+                return True
+    
+    return False
+```
+
+### 위상 정렬 (Topological Sort)
+
+방향 비순환 그래프(DAG)에서 노드들의 선후 관계를 유지하며 정렬한다.
+
+```python
+def topological_sort(graph):
+    """위상 정렬 함수"""
+    visited = set()
+    temp_mark = set()  # 임시 방문 표시 (사이클 탐지용)
+    result = []
+    
+    def dfs_helper(node):
+        # 사이클 감지
+        if node in temp_mark:
+            raise ValueError("Graph has a cycle, topological sort not possible")
+        
+        # 이미 방문했다면 스킵
+        if node in visited:
+            return
+        
+        # 임시 방문 표시
+        temp_mark.add(node)
+        
+        # 이웃 노드 방문
+        for neighbor in graph.get(node, []):
+            dfs_helper(neighbor)
+        
+        # 방문 완료 표시
+        temp_mark.remove(node)
+        visited.add(node)
+        
+        # 결과에 추가 (역순)
+        result.insert(0, node)
+    
+    # 모든 노드에 대해 DFS 수행
+    for node in graph:
+        if node not in visited:
+            dfs_helper(node)
+    
+    return result
+```
 - 위상 정렬(Topological Sort)은 방향 비순환 그래프(DAG)에서 노드들을 선후 관계에 따라 정렬하는 알고리즘이다.
 - 활용 예시) 작업 스케줄링, 선수 과목 계획 등
 
@@ -1236,6 +1329,116 @@ dag = {
 
 print("위상 정렬 결과:", topological_sort_dfs(dag))
 # 가능한 출력: ['B', 'A', 'C', 'D', 'E', 'F', 'H', 'G']
+```
+
+### 연결 요소 찾기 (Connected Components)
+
+그래프의 연결된 부분 집합들을 식별한다.
+
+```python
+def find_connected_components(graph):
+    """연결 요소 찾기 함수"""
+    visited = set()
+    components = []
+    
+    def dfs_helper(node, component):
+        visited.add(node)
+        component.append(node)
+        
+        for neighbor in graph.get(node, []):
+            if neighbor not in visited:
+                dfs_helper(neighbor, component)
+    
+    for node in graph:
+        if node not in visited:
+            component = []
+            dfs_helper(node, component)
+            components.append(component)
+    
+    return components
+```
+
+## 🔄 BFS vs DFS 비교 및 선택 가이드
+
+|특징|BFS (너비 우선 탐색)|DFS (깊이 우선 탐색)|
+|---|---|---|
+|**탐색 방식**|가까운(넓은) 순서 (레벨별)|한 방향으로 최대한 깊게 탐색 후 백트래킹|
+|**자료구조**|큐 (Queue) - FIFO|스택 (Stack) 또는 재귀 (Recursion) - LIFO|
+|**최단 경로**|보장 (가중치 없는 그래프)|보장 안 함|
+|**메모리 사용**|넓은 그래프에서 메모리 많이 사용|깊은 그래프에서 메모리 효율적|
+|**주요 활용**|최단 경로, 레벨별 탐색|경로 존재 확인, 사이클 탐지, 위상 정렬|
+### 언제 BFS를 선택해야 할까?
+
+- **최단 경로**를 찾아야 할 때 (가중치 없는 그래프)
+- **레벨별 탐색**이 필요할 때 (예: 소셜 네트워크의 친구 추천)
+- **해답이 얕은 깊이**에 있을 가능성이 높을 때
+- **탐색 깊이가 매우 깊어질 가능성**이 있고 스택 오버플로우가 우려될 때
+
+### 언제 DFS를 선택해야 할까?
+
+- **경로의 존재 여부만 확인**할 때 (빠른 결과가 필요한 경우)
+- **깊이가 중요한 문제**에서 (예: 게임 트리 탐색, 퍼즐 솔버)
+- **메모리가 제한적**이고 그래프가 넓을 때
+- **사이클 탐지** 또는 **위상 정렬**이 필요할 때
+- **백트래킹** 전략이 필요한 문제 (예: 모든 가능한 조합 탐색)
+
+> 💡 실제 문제 해결 시 알고리즘 선택은 그래프의 특성, 문제의 요구사항, 효율성 고려 등을 종합적으로 판단해야 한다.
+{: .prompt-tip}
+
+## 🚧 DFS 구현 시 주의사항
+
+### 재귀적 DFS의 스택 오버플로우 문제
+
+재귀 함수를 사용한 DFS 구현은 간결하고 이해하기 쉽지만, 그래프가 매우 깊은 경우 스택 오버플로우가 발생할 수 있다!
+
+#### 해결 방법
+- **반복적 구현 사용**: 명시적인 스택을 사용하는 반복적 DFS 구현으로 전환
+
+```python
+def dfs_safe(graph, start_node):
+    """스택 오버플로우를 방지하는 반복적 DFS"""
+    visited = set()
+    stack = [start_node]
+    result = []
+    
+    while stack:
+        current = stack.pop()
+        if current not in visited:
+            visited.add(current)
+            result.append(current)
+            
+            for neighbor in graph.get(current, []):
+                if neighbor not in visited:
+                    stack.append(neighbor)
+    
+    return result
+```
+
+- **재귀 깊이 제한 늘리기**: 파이썬에서는 `sys` 모듈을 사용하여 재귀 제한을 조정할 수 있음
+
+> 재귀 제한을 늘리는 것은 임시 해결책일 뿐, 근본적인 해결책은 아닙니다. 너무 큰 값으로 설정하면 시스템 리소스 문제가 발생할 수 있으니 주의하세요.
+{: .prompt-danger}
+
+```python
+import sys
+
+# 재귀 제한 늘리기 (주의해서 사용)
+sys.setrecursionlimit(10000)  # 기본값은 보통 1000
+
+def dfs_recursive_extended(graph, start_node):
+    # 기존 재귀적 DFS 코드
+    ...
+```
+### 이웃 노드 처리 순서
+
+- 이웃 노드를 스택에 추가하는 순서가 실제 방문 순서를 결정한다. 
+- 원하는 방문 순서가 있다면 이웃 노드 목록을 적절히 정렬해야 한다.
+```python
+# 알파벳 순서로 방문하고 싶은 경우
+neighbors = sorted(graph.get(current, []), reverse=True)  # 역순으로 스택에 추가
+
+# 특정 가중치나 속성에 따라 방문하고 싶은 경우
+neighbors = sorted(graph.get(current, []), key=lambda x: some_property(x), reverse=True)
 ```
 
 ## 🧩 그래프 활용 사례
