@@ -19,16 +19,36 @@ mermaid: true
 math: true
 ---
 ## 🚀 TL;DR
-- w.i.p
+
+- 그래프는 **정점(Node)** 과 **간선(Edge)** 으로 구성된 관계 중심 데이터 구조로, 소셜 네트워크부터 지도 내비게이션까지 복잡한 연결 관계를 표현
+- 그래프는 **방향성**(무방향/방향)과 **가중치**(없음/있음)에 따라 분류되며, Python에서는 `dict` 를 활용한 인접 리스트로 쉽게 구현 가능
+- **BFS(너비 우선 탐색)** 는 **큐(Queue)** 자료구조를 사용해 가까운 노드부터 탐색하며, 최단 경로 보장(가중치 없는 그래프)
+- **DFS(깊이 우선 탐색)** 는 **스택(Stack)** 또는 **재귀**를 사용해 한 방향으로 깊게 탐색하며, 경로 존재 확인과 사이클 탐지에 효과적
+- BFS 는 **최단 거리 계산**, **레벨별 탐색**에 유리하고, DFS는 **경로 존재 여부**, **사이클 탐지**, **위상 정렬**에 적합
+- 그래프 탐색은 미로 찾기, 소셜 네트워크 분석, 추천 시스템, 최적 경로 계산 등 다양한 실제 문제에 응용 가능
+- AI 분야에서는 이미지 세그멘테이션, 추천 시스템, 게임 트리 탐색, 자율 주행 경로 계획 등에 그래프 탐색 알고리즘 활발히 활용
+
+| 특징         | BFS (너비 우선 탐색)     | DFS (깊이 우선 탐색)                      |
+| ---------- | ------------------ | ----------------------------------- |
+| **탐색 방식**  | 가까운(넓은) 순서 (레벨별)   | 한 방향으로 최대한 깊게 탐색 후 백트래킹             |
+| **자료구조**   | 큐 (Queue) - FIFO   | 스택 (Stack) 또는 재귀 (Recursion) - LIFO |
+| **최단 경로**  | 보장 (가중치 없는 그래프)    | 보장 안 함                              |
+| **메모리 사용** | 넓은 그래프에서 메모리 많이 사용 | 깊은 그래프에서 메모리 효율적                    |
+| **주요 활용**  | 최단 경로, 레벨별 탐색      | 경로 존재 확인, 사이클 탐지, 위상 정렬             |
+{: .table-responsive .w-100}
 
 ## 📓 실습 Jupyter Notebook
-- [notebook](https://github.com/yuiyeong/notebooks/blob/main/graph/basic_graph.ipynb)
+
+- [기본 적인 그래프 자료구조 실습](https://github.com/yuiyeong/notebooks/blob/main/graph/basic_graph.ipynb)
+- [여러 그래프 탐색 실습](https://github.com/yuiyeong/notebooks/blob/main/graph/diverse_graph_example.ipynb)
 
 ## 🌐 그래프 (Graph) 란?
+
 - 여러 개의 **점(정점 Vertex 또는 노드 Node)** 들이 서로 **선(간선 Edge 또는 링크 Link)** 으로 연결된 관계를 표현하는 자료구조
 - 데이터들이 순서대로 나열된 리스트와 달리, 그래프는 **데이터 간의 관계 중심**으로 얽혀있는 비선형 구조
 
 ### 그래프의 구성 요소
+
 - **정점 (Vertex / Node)**: 데이터를 나타내는 '점'
     - 예: 사람, 도시, 웹페이지 등
 - **간선 (Edge / Link)**: 정점 사이의 '관계'를 나타내는 '선'
@@ -48,7 +68,9 @@ math: true
 {: .prompt-tip}
 
 ## 🔍 그래프의 종류
+
 ### 방향성에 따른 분류
+
 - **무방향 그래프 (Undirected Graph)**
     - 간선에 방향이 없다.
     - A와 B가 연결되면, B도 A와 연결됨
@@ -61,9 +83,11 @@ math: true
 ![directed graph](/assets/img/2025-04-18/graph_directed.png)
 
 ### 가중치 유무에 따른 분류
+
 - **가중치 그래프 (Weighted Graph)**
     - 간선마다 숫자 값(가중치/비용)이 있음
     - 예: 도시 간 거리, 도로 통행료, 네트워크 대역폭
+
 - **비가중치 그래프 (Unweighted Graph)**
     - 간선에 별도 값이 없음 (모든 연결이 동일한 중요도)
     - 예: 단순 친구 관계망 (연결 여부만 중요)
@@ -77,6 +101,7 @@ math: true
 
 ![adjacency list](assets/img/2025-04-18/graph_adjacency_list.png)
 - 그래프의 연결 정보를 컴퓨터가 처리할 수 있도록 저장하는데 여러 방법이 있지만, 가장 많이 사용되는 **인접 리스트(Adjacency List)** 방식
+
 ### 인접 리스트 (Adjacency List) - dict 활용
 
 - **아이디어**: "각 정점마다, 그 정점과 직접 연결된 이웃(인접 정점)들의 목록을 유지하자!"
@@ -103,6 +128,7 @@ graph = {
 ```
 
 이렇게 표현하면 'A'의 이웃은 'B'와 'C'라는 것을 바로 알 수 있다!
+
 ### 인접 리스트의 장점
 - **메모리 효율**: 딱 필요한 연결 정보만 저장해서, 특히 연결선(간선)이 많지 않은 **희소 그래프(Sparse Graph)** 에 좋음
 - **이웃 찾기 빠름**: 특정 정점의 이웃들을 바로 리스트에서 꺼내볼 수 있음
@@ -824,31 +850,55 @@ is_bipartite(ex_graph02)
 
 ### 레벨별 순회 (Level Order Traversal)
 
-- 트리나 그래프를 레벨 별로 탐색하면서 처리
+시작 node 를 level 0 으로 시작하고, 이웃을 level 1, 그 이웃의 이웃들을 level 2, ... 하는 식으로 모든 연결된 node 를 탐색하는 방법
+![그래프](/assets/img/2025-04-18/graph_example02.png){: .w-75 .center}
+
+- 위 그래프는 아래와 같은 인접 리스트로 표현할 수 있다.
 
 ```python
-def level_order_traversal(graph, start_node):
-    visited = set([start_node])
-    queue = deque([(start_node, 0)])  # (노드, 레벨)
-    result = []
+graph = {  
+    "A": ["C"],  
+    "B": ["D"],  
+    "C": ["A", "E", "H"],  
+    "D": ["B", "F"],  
+    "E": ["C", "G"],  
+    "F": ["D"],  
+    "G": ["E", "H"],  
+    "H": ["C", "G"],  
+}
+```
 
-    while queue:
-        node, level = queue.popleft()
+- 기존 bfs 방식에서 level 별로 그룹 짓는 로직을 추가한다.
 
-        # 새 레벨 시작시 빈 리스트 추가
-        if level == len(result):
-            result.append([])
-
-        # 현재 레벨에 노드 추가
-        result[level].append(node)
-
-        for neighbor in graph.get(node, []):
-            if neighbor not in visited:
-                visited.add(neighbor)
-                queue.append((neighbor, level + 1))
-
+```python
+def traverse_on_level_order(graph: dict, start: str) -> list:  
+    result = []  
+  
+    # 기본 bfs 와 같은데, 레벨만 같이 넣어준다.  
+    visited = set(start)  
+    queue = deque([(start, 0)])  # root node 는 level 이 0  
+    while queue:  
+        node, level = queue.popleft()  
+  
+        # 새 레벨 시작  
+        if level == len(result):  
+            result.append([])  # 새 레벨 그룹용 list 추가  
+  
+        # 현재 노드를 레벨 그룹 list 에 추가  
+        result[level].append(node)  
+  
+        # 이제 이웃 처리  
+        for neighbor in graph.get(node, []):  
+            if neighbor not in visited:  
+                visited.add(neighbor)  
+                queue.append((neighbor, level + 1))  
+  
     return result
 
+traverse_on_level_order(graph, "A")
+# [['A'], ['C'], ['E', 'H'], ['G']]
+# 여기서 중요한 점은, B-D-F 는 연결되어있지 않기 때문에(다른 components
+# A 에서 시작한 순회에 포함되지 않는다.
 ```
 
 ## 📊 성능 최적화 팁
@@ -881,101 +931,99 @@ DFS는 현재 경로에서 갈 수 있는 가장 깊은 곳까지 우선적으�
 
 DFS는 스택 또는 재귀를 사용하여 구현할 수 있다. 두 가지 방식 모두 본질적으로 같은 과정을 따르지만, 구현 방법이 다르다.
 
-### 스택(Stack) 기반 반복적(Iterative) DFS
+![그래프 예시 03](/assets/img/2025-04-22/graph_example03.png){: .w-75 .center}
 
-스택을 활용한 DFS 구현은 다음과 같은 단계로 이루어진다.
-1. **초기화**
-    - 빈 스택 생성
-    - 방문 여부를 기록할 자료구조(예: `set`) 생성
-    - 시작 노드를 스택에 추가
-2. **반복 (스택이 빌 때까지)**
-    - 스택에서 노드 하나를 꺼냄
-    - 아직 방문하지 않았다면
-        - 방문 표시 및 처리
-        - 이웃 노드들을 스택에 추가
-3. **종료**: 스택이 비면 탐색 완료
+- 위 그래프를 인접 리스트로 표현하면 다음과 같다.
 
 ```python
-from collections import deque
-
-def dfs_iterative(graph, start_node):
-    """
-    스택을 사용한 반복적 DFS 구현
-    
-    Args:
-        graph: 인접 리스트로 표현된 그래프
-        start_node: 탐색 시작 노드
-        
-    Returns:
-        방문 순서를 담은 리스트
-    """
-    visited = set()  # 방문 기록
-    stack = deque([start_node])  # 스택 (deque를 스택으로 사용)
-    traversal = []  # 방문 순서 기록
-    
-    while stack:
-        # 스택에서 노드 꺼내기
-        current = stack.pop()  # pop()은 마지막 요소 제거 (LIFO)
-        
-        # 아직 방문하지 않은 노드라면
-        if current not in visited:
-            # 방문 표시
-            visited.add(current)
-            # 방문 순서에 추가
-            traversal.append(current)
-            
-            # 인접 노드 확인 (알파벳 역순으로 추가하면 알파벳 순 방문)
-            neighbors = sorted(graph.get(current, []), reverse=True)
-            for neighbor in neighbors:
-                if neighbor not in visited:
-                    stack.append(neighbor)
-    
-    return traversal
+graph = {  
+    "A": ["B", "C"],  
+    "B": ["A", "D", "E"],  
+    "C": ["A", "F", "G"],  
+    "D": ["B"],  
+    "E": ["B"],  
+    "F": ["C"],  
+    "G": ["C"],  
+}
 ```
 
-> 이웃 노드를 스택에 넣는 순서에 따라 실제 방문 순서가 달라질 수 있다. 알파벳 순서로 방문하고 싶다면, 이웃 노드들을 역순으로 스택에 추가해야 한다.
+### 스택(Stack) 기반 반복적(Iterative) DFS
+
+stack 을 활용한 DFS 구현은 다음과 같은 단계로 이루어진다.
+1. **초기화**
+    - 빈 stack 생성
+    - 방문 여부를 기록할 자료구조(예: `set`) 생성
+    - 시작 node 를 stack에 추가
+2. **반복 (stack이 빌 때까지)**
+    - stack 에서 node 하나를 꺼냄
+    - 아직 방문하지 않았다면
+        - 방문 표시 및 처리
+        - 이웃 node 들 중 방문하지 않은 node 만 stack 에 추가
+3. **종료**: stack 이 비워지면 탐색 완료
+
+```python
+def dfs_with_stack(graph: dict, start: str) -> list[str]:  
+    stack = deque()  # 1-1. 빈 stack 생성
+    visited = set()  # 1-2. 방문 여부를 기록할 set 생성
+    traversal_order = []  # 탐색 순서 저장용 list
+
+    stack.append(start)  # 1-3. 시작 node 를 stack에 추가
+    
+    while stack:  # 반복 (stack이 빌 때까지)
+        node = stack.pop()  # 2-1. stack 에서 node 하나를 꺼냄
+  
+        if node not in visited: # 방문하지 않은 node 라면
+            visited.add(node)  # 2-2. 방문 표시
+            traversal_order.append(node)  # node 처리
+  
+            # 항상 알파벳 순으로 방문하도록 sorted(..,reverse=) 추가
+            neighbors = sorted(graph.get(node, []), reverse=True)  
+            for neighbor in neighbors:
+                # 2-3. 이웃 node 중 방문하지 않은 node 만 stack 에 추가
+                if neighbor not in visited:  
+                    stack.append(neighbor)  
+  
+    return traversal_order  
+  
+print("stack 기반 dfs 로 탐색(A부터):", dfs_with_stack(graph, "A"))
+# stack 기반 dfs 로 탐색(A부터): ['A', 'B', 'D', 'E', 'C', 'F', 'G']
+```
+
+> 이웃 node 를 stack 에 넣는 순서에 따라 실제 방문 순서가 달라질 수 있다. 알파벳 순서로 방문하고 싶다면, 이웃 node 들을 역순으로 stack 에 추가해야 한다.
 {: .prompt-tip}
 
 ### 재귀(Recursion) 기반 DFS
 
 재귀를 활용한 DFS 구현은 함수가 자기 자신을 호출하는 방식으로 이루어진다.
-1. **현재 노드 처리**
-    - 현재 노드를 방문 표시
+1. **현재 node 처리**
+    - 현재 node 를 방문 표시
     - 필요한 작업 수행
-2. **이웃 노드 탐색**
-    - 현재 노드의 모든 이웃 확인
+2. **이웃 node 탐색**
+    - 현재 node 의 모든 이웃 확인
     - 방문하지 않은 이웃에 대해 재귀적으로 DFS 호출
 
 ```python
-def dfs_recursive(graph, start_node):
-    """
-    재귀를 사용한 DFS 구현
-    
-    Args:
-        graph: 인접 리스트로 표현된 그래프
-        start_node: 탐색 시작 노드
-        
-    Returns:
-        방문 순서를 담은 리스트
-    """
+def def_with_recursion(graph: dict, start: str) -> list[str]:  
     visited = set()  # 방문 기록
-    traversal = []  # 방문 순서 기록
-    
-    def dfs_helper(node):
-        # 방문 표시
-        visited.add(node)
-        # 방문 순서에 추가
-        traversal.append(node)
-        
-        # 인접 노드 확인 (알파벳 순서로 방문)
-        neighbors = sorted(graph.get(node, []))
-        for neighbor in neighbors:
-            if neighbor not in visited:
-                dfs_helper(neighbor)
-    
-    # 재귀 시작
-    dfs_helper(start_node)
-    return traversal
+    traversal_order = []  # 방문 순서 기록
+  
+    def dfs_helper(node):  # 재귀함수!
+        visited.add(node)  # 1-1. 현재 node 방문 표시
+        traversal_order.append(node) # 1-2. 필요한 작업 수행 
+  
+        # 항상 알파벳 순으로 방문하도록 sorted(..) 추가  
+        neighbors = sorted(graph.get(node, []))  
+        for neighbor in neighbors:  
+            if neighbor not in visited:  # 2-1. 현재 node 의 이웃 확인
+                dfs_helper(neighbor)  # 2-2. 방문하지 않은 이웃을 재귀함수로 호출
+  
+    dfs_helper(start)  # 재귀적으로 탐색 시작  
+  
+    return traversal_order  
+  
+  
+print("recursion 기반 dfs 로 탐색(A부터):", def_with_recursion(graph, "A"))
+# recursion 기반 dfs 로 탐색(A부터): ['A', 'B', 'D', 'E', 'C', 'F', 'G']
 ```
 
 > 재귀 방식은 코드가 더 간결하고 직관적이다. 시스템 호출 스택이 자동으로 노드의 방문 경로를 기억해주기 때문이다.
@@ -1037,192 +1085,212 @@ flowchart TD
 - 스택(또는 재귀 호출 스택)에 최악의 경우 모든 노드가 쌓일 수 있음: O(V)
 - 방문 기록을 위한 공간도 O(V) 필요
 
-> BFS와 DFS는 동일한 시간/공간 복잡도를 가지지만, 그래프의 특성과 문제 유형에 따라 실제 성능 차이가 있을 수 있습니다.
+> BFS와 DFS는 동일한 시간/공간 복잡도를 가지지만, 그래프의 특성과 문제 유형에 따라 실제 성능 차이가 있을 수 있다.
 {: .prompt-tip}
 
 ## 🛤️ DFS 활용 사례
 
 ### 경로 존재 확인 (Path Finding)
 
+> BFS 로도 구현이 가능하다. 현실에서는 휴리스틱 A* 알고리즘을 사용한다.
+{: prompt-tip}
+
 두 node 사이에 경로가 존재하는지 확인하는 데 사용할 수 있다.
 
-```python
-def path_exists_dfs(graph, start_node, end_node):
-    """경로 존재 여부 확인 함수"""
-    visited = set()
-    
-    def dfs_helper(current):
-        # 현재 노드가 목표 노드인지 확인
-        if current == end_node:
-            return True
-        
-        # 방문 표시
-        visited.add(current)
-        
-        # 이웃 노드 확인
-        for neighbor in graph.get(current, []):
-            if neighbor not in visited:
-                if dfs_helper(neighbor):
-                    return True
-        
-        return False
-    
-    return dfs_helper(start_node)
-```
+![그래프 예시 04](/assets/img/2025-04-22/graph_example04.png){: .w-75 .center}
 
-두 노드 사이에 경로가 존재하는지 확인하는 문제를 DFS로 해결해보자.
-#### 1. 스택 기반 구현
+- 위 그래프를 인접 리스트로 표현하면,
 
 ```python
-from collections import deque
-
-def path_exists_dfs_iterative(graph, start_node, end_node):
-    """
-    스택 기반 DFS로 두 노드 간 경로 존재 여부 확인
-    
-    Args:
-        graph: 인접 리스트로 표현된 그래프
-        start_node: 시작 노드
-        end_node: 목표 노드
-        
-    Returns:
-        경로 존재 여부 (True/False)
-    """
-    # 시작과 끝이 같은 경우
-    if start_node == end_node:
-        return True
-    
-    # 방문 기록
-    visited = set()
-    
-    # 스택 초기화
-    stack = deque([start_node])
-    
-    while stack:
-        # 현재 노드 처리
-        current = stack.pop()
-        
-        # 방문 처리
-        if current not in visited:
-            visited.add(current)
-            
-            # 목표 노드에 도달했는지 확인
-            if current == end_node:
-                return True
-            
-            # 이웃 노드 확인
-            for neighbor in graph.get(current, []):
-                if neighbor not in visited:
-                    stack.append(neighbor)
-    
-    # 경로 없음
-    return False
-```
-
-#### 2. 재귀 기반 구현
-
-```python
-def path_exists_dfs_recursive(graph, start_node, end_node):
-    """
-    재귀 기반 DFS로 두 노드 간 경로 존재 여부 확인
-    
-    Args:
-        graph: 인접 리스트로 표현된 그래프
-        start_node: 시작 노드
-        end_node: 목표 노드
-        
-    Returns:
-        경로 존재 여부 (True/False)
-    """
-    # 시작과 끝이 같은 경우
-    if start_node == end_node:
-        return True
-    
-    # 방문 기록
-    visited = set()
-    
-    def dfs_helper(current):
-        # 방문 처리
-        visited.add(current)
-        
-        # 목표 도달했는지 확인
-        if current == end_node:
-            return True
-        
-        # 이웃 노드 확인
-        for neighbor in graph.get(current, []):
-            if neighbor not in visited:
-                if dfs_helper(neighbor):
-                    return True
-        
-        # 현재 경로에서 목표 노드 못 찾음
-        return False
-    
-    # 재귀 DFS 시작
-    return dfs_helper(start_node)
-```
-
-#### 테스트 코드
-
-```python
-# 예제 그래프
-graph = {
-    0: [1, 2],
-    1: [0, 3, 4],
-    2: [0, 4],
-    3: [1, 5],
-    4: [1, 2, 5],
-    5: [3, 4],
-    6: [7],  # 연결되지 않은 컴포넌트
-    7: [6]
+graph = {  
+    "A": ["B"],  
+    "B": ["A", "D", "E"],  
+    "C": ["F", "G"],  
+    "D": ["B"],  
+    "E": ["B", "H"],  
+    "F": ["C"],  
+    "G": ["C"],  
+    "H": ["E"],  
 }
+```
 
-# 테스트
-print("스택 기반 DFS:")
-print("0에서 5까지 경로 존재?", path_exists_dfs_iterative(graph, 0, 5))  # True
-print("0에서 6까지 경로 존재?", path_exists_dfs_iterative(graph, 0, 6))  # False
-print("6에서 7까지 경로 존재?", path_exists_dfs_iterative(graph, 6, 7))  # True
+- stack 기반 구현
 
-print("\n재귀 기반 DFS:")
-print("0에서 5까지 경로 존재?", path_exists_dfs_recursive(graph, 0, 5))  # True
-print("0에서 6까지 경로 존재?", path_exists_dfs_recursive(graph, 0, 6))  # False
-print("6에서 7까지 경로 존재?", path_exists_dfs_recursive(graph, 6, 7))  # True
+```python
+def has_path_with_stack(graph: dict, start: str, end: str) -> bool:  
+    if start == end:  
+        return True
+  
+    visited = set()  
+    stack = deque([start])  
+  
+    while stack:  
+        current = stack.pop()
+        if current not in visited:  
+            visited.add(current)
+
+            if current == end:  # 경로 찾음!
+                return True  
+  
+            for neighbor in graph.get(current, []):  
+                if neighbor not in visited:  
+                    stack.append(neighbor)  
+    # 경로 없음  
+    return False
+print("A 와 H 사이에 경로가 있나?", has_path_with_stack(graph, "A", "H"))
+print("A 와 G 사이에 경로가 있나?", has_path_with_stack(graph, "A", "G"))
+# A 와 H 사이에 경로가 있나? True
+# A 와 G 사이에 경로가 있나? False
+```
+
+- 재귀 기반 구현
+
+```python
+def has_path_with_recursion(graph: dict, start: str, end: str) -> bool:  
+    if start == end:  
+        return True  
+  
+    visited = set()  
+  
+    def dfs_helper(current: str) -> bool:  
+        # 방문 처리  
+        visited.add(current)  
+  
+        if current == end:  # 경로 찾음!
+            return True  
+  
+        # 도달 못 했으므로, 이웃 node 확인  
+        for neighbor in graph.get(current, []):  
+            if neighbor not in visited:  
+                # 방문하지 않은 이웃 node 에 대해서 재귀 함수로 경로 있는지 확인  
+                return dfs_helper(neighbor)  
+        return False  
+  
+    return dfs_helper(start)  
+  
+print("A 와 D 사이에 경로가 있나?", has_path_with_recursion(graph, "A", "D"))  
+print("A 와 C 사이에 경로가 있나?", has_path_with_recursion(graph, "A", "C"))
+# A 와 D 사이에 경로가 있나? True
+# A 와 C 사이에 경로가 있나? False
 ```
 
 ### 사이클 탐지 (Cycle Detection)
+> BFS 로 구현이 가능하지만, DFS 구현 하는 것이 훨씬 로직이 단순하다.
+{: .prompt-tip}
 
-그래프 내에 사이클이 존재하는지 확인할 수 있다.
+- DFS 를 이용해서, 그래프 내에 사이클이 존재하는지 확인할 수 있다.
+	- 그래프에서 **사이클(Cycle)** 이란, 시작 node 로 돌아오는 경로를 의미한다. 더 구체적으로,
+	- 무방향 그래프: 같은 node 나 간선을 중복해서 지나지 않고, 시작 node 로 돌아올 수 있는 경로
+	- 방향 그래프: 간선의 방향을 따라 이동하면서 시작 node 로 돌아올 수 있는 경로
+
+- 사이클 탐지에서는, 현재 node 의 이전 경로 정보가 중요하다. 
+	- 무방향 그래프: 부모 노드만 알면 된다.
+	- 방향 그래프: 현재 DFS 경로에서 방문 중인 모든 노드를 추적해야 한다.
+
+![그래프 예시05](/assets/img/2025-04-22/graph_example05.png){: .w-75 .center}
+
+- 위 그래프를 인접 리스트로 표현하면,
 
 ```python
-def has_cycle(graph):
-    """무방향 그래프의 사이클 탐지 함수"""
-    visited = set()
-    
-    def dfs_helper(current, parent):
-        visited.add(current)
-        
-        for neighbor in graph.get(current, []):
-            # 부모 노드가 아닌데 이미 방문한 노드라면 사이클 존재
-            if neighbor != parent:
-                if neighbor in visited:
-                    return True
-                elif dfs_helper(neighbor, current):
-                    return True
-        
-        return False
-    
-    # 모든 노드에서 확인 (연결되지 않은 컴포넌트 처리)
-    for node in graph:
-        if node not in visited:
-            if dfs_helper(node, None):
-                return True
-    
+graph = {  
+    "A": ["B"],  
+    "B": ["A", "D", "H"],  
+    "C": ["F", "G"],  
+    "D": ["B", "E"],  
+    "E": ["D"],  
+    "F": ["C", "G"],  
+    "G": ["C", "F"],  
+    "H": ["B"],  
+}
+```
+
+- stack 기반 구현
+
+```python
+def has_cycle_in_graph_with_stack(graph: dict) -> bool:  
+    visited = set()  
+  
+    # 컴포넌트가 여러 개 일 수 있으므로, 모든 node 에 대해서 검사한다.  
+    for start_node in graph:  
+        if start_node in visited:  
+            continue  
+  
+        # (node, 그 node 의 부모) 를 저장  
+        stack = deque([(start_node, None)])  
+  
+        # start_node 에서 시작한 DFS 탐색 중 방문한 node 들  
+        local_visited = set() #  
+        while stack:  
+            current, parent = stack.pop()  
+            for neighbor in graph.get(current, []):  
+                if neighbor == parent:  
+                    continue  
+  
+                if neighbor in local_visited:  
+                    return True  
+  
+                local_visited.add(neighbor)  
+                stack.append((neighbor, current))  
+        visited.update(local_visited) # 컴포넌트로 돌았던 것을 다시 검사하지 않도록  
+    return False  
+  
+has_cycle_in_graph_with_stack(graph)
+has_cycle_in_graph_with_stack({"A": ["B"], "B": ["A"]})
+# True
+# False
+```
+
+- 재귀 기반 구현
+
+```python
+
+def has_cycle_in_graph_with_recursion(graph: dict) -> bool:  
+    visited = set()  
+  
+    def dfs_helper(current: str, parent: str | None) -> bool:  
+        visited.add(current)  
+  
+        for neighbor in graph.get(current, []):  
+            if neighbor == parent:  
+                continue  
+  
+            # 부모 node 가 아닌데 방문했다면, 사이클 존재  
+            if neighbor in visited:  
+                return True  
+            elif dfs_helper(neighbor, current):  
+                return True  
+        return False  
+    # 컴포넌트가 여러 개 일 수 있으므로, 모든 node 에 대해서 검사  
+    for start_node in graph:  
+        if start_node in visited:  
+            continue  
+  
+        if dfs_helper(start_node, None):  
+            return True  
+  
     return False
+
+has_cycle_in_graph_with_recursion(graph)
+has_cycle_in_graph_with_recursion({"A": ["B"], "B": ["A"]})
+# True
+# False
 ```
 
 ### 위상 정렬 (Topological Sort)
 
-방향 비순환 그래프(DAG)에서 노드들의 선후 관계를 유지하며 정렬한다.
+> 다음 사항을 주의해야한다.
+> - 위상 정렬의 결과는 유일하지 않을 수 있음 (여러 가능한 순서가 존재할 수 있음)
+> - 사이클이 있는 그래프에서는 위상 정렬이 불가능 (모순된 관계 존재)
+> - 모든 노드가 연결되지 않은 그래프(여러 컴포넌트)에서도 위상 정렬 가능
+{: .prompt-warning}
+
+- 위상 정렬은 **방향 비순환 그래프(DAG, Directed Acyclic Graph)** 에서 node 들을 선후 관계에 따라 일렬로 나열하는 알고리즘
+- 쉽게 말해, 작업들 간에 "이 작업은 저 작업보다 먼저 해야 한다"와 같은 선행 관계가 있을 때, 모든 선행 관계를 위반하지 않는 작업 순서를 찾아주는 것
+
+위상 정렬을 하려면,
+- **방향성**: 모든 간선은 방향을 가짐 (A → B는 "A가 B보다 먼저 와야 함"을 의미)
+- **비순환**: 그래프 내에 순환(사이클)이 없어야 함 (순환이 있으면 모순된 선행 관계가 존재)
+- **선행 관계 보존**: 결과 순서에서 모든 노드는 자신의 선행 노드들보다 뒤에 위치
 
 ```python
 def topological_sort(graph):
@@ -1261,7 +1329,19 @@ def topological_sort(graph):
     
     return result
 ```
-- 위상 정렬(Topological Sort)은 방향 비순환 그래프(DAG)에서 노드들을 선후 관계에 따라 정렬하는 알고리즘이다.
+
+- 알고리즘 동작 방식
+	1. 모든 node 를 "미방문" 상태로 초기화
+	2. 각 node 에서 DFS 시작
+	    - node 를 "임시 방문" 표시 (현재 탐색 경로 추적)
+	    - node 의 모든 이웃 방문
+	    - node 를 "영구 방문" 표시
+	    - **결과 리스트의 앞쪽에 node 추가** (역순 삽입)
+	3. 탐색 중 "임시 방문" node 를 다시 만나면 사이클 존재 → 위상 정렬 불가능
+
+> DFS 기반 위상 정렬의 핵심은 "더 이상 갈 곳이 없는" node (끝 node)부터 역순으로 결과에 추가하는 것이다. 이렇게 하면 의존성이 없는 node 가 먼저 처리된다.
+{: .prompt-tip}
+
 - 활용 예시) 작업 스케줄링, 선수 과목 계획 등
 
 ```python
@@ -1331,42 +1411,17 @@ print("위상 정렬 결과:", topological_sort_dfs(dag))
 # 가능한 출력: ['B', 'A', 'C', 'D', 'E', 'F', 'H', 'G']
 ```
 
-### 연결 요소 찾기 (Connected Components)
-
-그래프의 연결된 부분 집합들을 식별한다.
-
-```python
-def find_connected_components(graph):
-    """연결 요소 찾기 함수"""
-    visited = set()
-    components = []
-    
-    def dfs_helper(node, component):
-        visited.add(node)
-        component.append(node)
-        
-        for neighbor in graph.get(node, []):
-            if neighbor not in visited:
-                dfs_helper(neighbor, component)
-    
-    for node in graph:
-        if node not in visited:
-            component = []
-            dfs_helper(node, component)
-            components.append(component)
-    
-    return components
-```
-
 ## 🔄 BFS vs DFS 비교 및 선택 가이드
 
-|특징|BFS (너비 우선 탐색)|DFS (깊이 우선 탐색)|
-|---|---|---|
-|**탐색 방식**|가까운(넓은) 순서 (레벨별)|한 방향으로 최대한 깊게 탐색 후 백트래킹|
-|**자료구조**|큐 (Queue) - FIFO|스택 (Stack) 또는 재귀 (Recursion) - LIFO|
-|**최단 경로**|보장 (가중치 없는 그래프)|보장 안 함|
-|**메모리 사용**|넓은 그래프에서 메모리 많이 사용|깊은 그래프에서 메모리 효율적|
-|**주요 활용**|최단 경로, 레벨별 탐색|경로 존재 확인, 사이클 탐지, 위상 정렬|
+| 특징         | BFS (너비 우선 탐색)     | DFS (깊이 우선 탐색)                      |
+| ---------- | ------------------ | ----------------------------------- |
+| **탐색 방식**  | 가까운(넓은) 순서 (레벨별)   | 한 방향으로 최대한 깊게 탐색 후 백트래킹             |
+| **자료구조**   | 큐 (Queue) - FIFO   | 스택 (Stack) 또는 재귀 (Recursion) - LIFO |
+| **최단 경로**  | 보장 (가중치 없는 그래프)    | 보장 안 함                              |
+| **메모리 사용** | 넓은 그래프에서 메모리 많이 사용 | 깊은 그래프에서 메모리 효율적                    |
+| **주요 활용**  | 최단 경로, 레벨별 탐색      | 경로 존재 확인, 사이클 탐지, 위상 정렬             |
+{: .table-responsive .w-100}
+
 ### 언제 BFS를 선택해야 할까?
 
 - **최단 경로**를 찾아야 할 때 (가중치 없는 그래프)
@@ -1387,9 +1442,9 @@ def find_connected_components(graph):
 
 ## 🚧 DFS 구현 시 주의사항
 
-### 재귀적 DFS의 스택 오버플로우 문제
+### 재귀적 DFS의 Stack Overflow 문제
 
-재귀 함수를 사용한 DFS 구현은 간결하고 이해하기 쉽지만, 그래프가 매우 깊은 경우 스택 오버플로우가 발생할 수 있다!
+재귀 함수를 사용한 DFS 구현은 간결하고 이해하기 쉽지만, 그래프가 매우 깊은 경우 stack overflow 가 발생할 수 있다!
 
 #### 해결 방법
 - **반복적 구현 사용**: 명시적인 스택을 사용하는 반복적 DFS 구현으로 전환
@@ -1416,7 +1471,7 @@ def dfs_safe(graph, start_node):
 
 - **재귀 깊이 제한 늘리기**: 파이썬에서는 `sys` 모듈을 사용하여 재귀 제한을 조정할 수 있음
 
-> 재귀 제한을 늘리는 것은 임시 해결책일 뿐, 근본적인 해결책은 아닙니다. 너무 큰 값으로 설정하면 시스템 리소스 문제가 발생할 수 있으니 주의하세요.
+> 재귀 제한을 늘리는 것은 임시 해결책일 뿐, 근본적인 해결책은 아니다. 너무 큰 값으로 설정하면 시스템 리소스 문제가 발생할 수 있으니 주의해야한다.
 {: .prompt-danger}
 
 ```python
@@ -1429,10 +1484,12 @@ def dfs_recursive_extended(graph, start_node):
     # 기존 재귀적 DFS 코드
     ...
 ```
+
 ### 이웃 노드 처리 순서
 
 - 이웃 노드를 스택에 추가하는 순서가 실제 방문 순서를 결정한다. 
 - 원하는 방문 순서가 있다면 이웃 노드 목록을 적절히 정렬해야 한다.
+
 ```python
 # 알파벳 순서로 방문하고 싶은 경우
 neighbors = sorted(graph.get(current, []), reverse=True)  # 역순으로 스택에 추가
@@ -1473,65 +1530,81 @@ neighbors = sorted(graph.get(current, []), key=lambda x: some_property(x), rever
     - 실세계 개체와 그들 간의 관계를 표현하는 그래프
     - 검색 엔진, 챗봇, 질의응답 시스템 등에 활용
 
-그래프 자료구조는 노드(정점)와 엣지(간선)로 구성된 관계 중심의 데이터 구조로, 소셜 네트워크, 분자 구조, 지식 그래프 등 다양한 실제 세계의 관계를 표현한다. 하지만 이런 그래프 구조를 머신러닝 알고리즘에 직접 입력하기는 어렵다.
+그래프 자료구조는 node(정점)와 edge(간선)로 구성된 관계 중심의 데이터 구조로, 소셜 네트워크, 분자 구조, 지식 그래프 등 다양한 실제 세계의 관계를 표현한다. 하지만 이런 그래프 구조를 머신러닝 알고리즘에 직접 입력하기는 어렵다.
 
 그래서 그래프 임베딩를 하게된다. 그래프 임베딩은 이러한 복잡한 그래프 구조를 벡터 공간의 저차원 벡터(임베딩)로 변환하는 기술이다. 이를 통해 그래프의 구조적 정보와 특성을 보존하면서도 머신러닝 모델이 처리할 수 있는 형태로 변환하는 것이다.
 
-그래그 자료구조와 그래프 임베딩의 구체적인 연관성은 다음과 같다.
+다시말해서, 그래프 자료구조와 그래프 임베딩의 구체적인 연관성은 다음과 같다.
 
 1. **그래프 표현의 확장**: 기본 그래프 자료구조(인접 리스트, 인접 행렬 등)는 그래프 임베딩의 입력 데이터
 2. **그래프 탐색 알고리즘의 활용**: BFS, DFS 와 같은 그래프 탐색 알고리즘은 많은 그래프 임베딩 기법(Node2Vec, DeepWalk 등)에서 노드 간 관계를 학습하기 위한 무작위 워크(random walk) 생성에 활용
 3. **특성 추출**: 그래프의 구조적 특성(중심성 지표, 군집 계수 등)은 그래프 임베딩 과정에서 보존해야 할 중요한 정보
 4. **그래프 신경망(GNN)**: 최신 그래프 임베딩 기법인 GNN 은 그래프 구조를 직접 학습하여 노드, 엣지, 또는 그래프 전체의 임베딩을 생성. 이때 메시지 패싱 메커니즘은 그래프 탐색의 개념을 확장한 것으로 볼 수 있다.
 
-예를 들어, `Node2Vec` 알고리즘은 그래프에서 BFS 와 DFS 의 특성을 조합한 편향된 무작위 워크(biased random walk)를 수행하여 노드 시퀀스를 생성한 후, `Word2Vec` 과 유사한 방식으로 노드 임베딩을 학습합니다.
-## ✨ AI 분야에서의 BFS 응용
+예를 들어, `Node2Vec` 알고리즘은 그래프에서 BFS 와 DFS 의 특성을 조합한 편향된 무작위 워크(biased random walk)를 수행하여 node 시퀀스를 생성한 후, `Word2Vec` 과 유사한 방식으로 node 임베딩을 학습한다.
+
+## 🧠 AI 분야에서의 그래프 탐색 알고리즘 응용
+
+인공지능 분야에서는 BFS(너비 우선 탐색)와 DFS(깊이 우선 탐색) 알고리즘이 다양한 문제 해결에 활용된다.
 
 ### 이미지 세그멘테이션 (Image Segmentation)
 
-- 이미지 내에서 특정 픽셀과 비슷한 속성을 가진 인접 영역을 찾는데 활용
-- Flood fill 알고리즘은 BFS의 대표적인 응용 사례
-
-```python
-def flood_fill(image, sr, sc, new_color):
-    rows, cols = len(image), len(image[0])
-    original_color = image[sr][sc]
-
-    # 이미 새 색상이면 변경 불필요
-    if original_color == new_color:
-        return image
-
-    directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
-    queue = deque([(sr, sc)])
-
-    while queue:
-        r, c = queue.popleft()
-        image[r][c] = new_color
-
-        for dr, dc in directions:
-            nr, nc = r + dr, c + dc
-            if (0 <= nr < rows and 0 <= nc < cols and
-                image[nr][nc] == original_color):
-                queue.append((nr, nc))
-
-    return image
-
-```
+- 이미지 내에서 특정 픽셀과 비슷한 속성을 가진 인접 영역을 찾는데 **BFS** 활용
+- *Flood fill* 알고리즘은 BFS 의 대표적인 응용 사례로, 의료 영상 분석과 컴퓨터 비전 시스템에서 활용됨
 
 ### 추천 시스템 (Recommendation Systems)
 
-- 사용자-아이템 관계 그래프에서 특정 사용자와 유사한 취향을 가진 사용자 찾기
-- BFS를 활용하여 "친구의 친구" 관계를 탐색하는 협업 필터링
+- 사용자-아이템 관계 그래프에서 특정 사용자와 유사한 취향을 가진 사용자 찾기에 **BFS** 활용
+- "친구의 친구" 관계를 탐색하는 협업 필터링 기법에서 BFS 의 레벨별 탐색 특성이 효과적
+
+### 게임 트리 탐색 (Game Tree Search)
+
+- 체스, 바둑, 오목과 같은 턴제 게임에서 다음 수를 결정할 때 **DFS** 활용
+- *미니맥스(Minimax)* 와 *알파-베타 가지치기(Alpha-Beta Pruning)* 알고리즘의 기본 탐색 전략으로 DFS가 사용됨
+- 특히 체스 프로그램에서는 이러한 DFS 기반 알고리즘에 다양한 최적화 기법이 적용됨
+
+### 제약 만족 문제 (Constraint Satisfaction Problems)
+
+- 스도쿠, 퍼즐, 일정 계획 등 다양한 제약 만족 문제 해결에 **DFS**와 백트래킹 결합하여 활용
+- 가능한 모든 솔루션을 체계적으로 탐색하면서 조건을 만족하지 않는 경로는 빠르게 제거
 
 ### 상태 공간 탐색 (State-Space Search)
 
-- 게임이나 퍼즐 문제에서 현재 상태에서 목표 상태까지의 최단 해결 경로 찾기
-- 루빅스 큐브 해법, 8-퍼즐 문제, 체스 게임 등에 활용
+- 게임이나 퍼즐 문제에서 현재 상태에서 목표 상태까지의 최단 해결 경로를 찾는데 **BFS** 활용
+- 루빅스 큐브 해법, 8-퍼즐 문제 등에서 BFS는 최소 단계 해결책을 보장함
 
-### 로봇 경로 계획 (Path Planning)
+### 로봇 경로 계획 (Robot Path Planning)
 
-- 로봇이 장애물을 피해 목적지까지 이동하는 최적 경로 탐색
-- 격자(grid) 기반 지도에서 자주 활용됨
+- 로봇이 장애물을 피해 목적지까지 이동하는 최적 경로 탐색에 **BFS** 주로 활용
+- 격자(grid) 기반 환경에서 최단 경로를 보장하는 BFS의 특성이 중요하게 작용함
 
-> 💡 BFS는 가장 가까운 관계 또는 최단 거리(단계)가 중요한 문제 상황에서 유용하게 적용될 수 있는 기본적인 탐색 도구이다.
+### 지식 그래프 추론 (Knowledge Graph Reasoning)
+
+- 지식 그래프에서 관계 패턴 탐색과 추론에 **DFS** 활용
+- 두 개체 간의 관계 경로 찾기나 새로운 관계 유추에 DFS의 깊이 탐색 특성이 유용함
+
+### 결정 트리 생성 (Decision Tree Construction)
+
+- 머신러닝에서 결정 트리 알고리즘은 **DFS** 방식으로 트리를 구성하고 순회함
+- 특성 공간을 재귀적으로 분할하면서 최적의 분류/회귀 모델을 생성하는 과정에서 DFS 활용
+
+### 강화학습에서의 정책 탐색 (Policy Search in RL)
+
+- 강화학습에서 **DFS**는 상태 공간을 깊이 탐색하여 장기적 보상이 높은 정책을 찾는 데 활용
+- 특히 모델 기반 강화학습에서 의사결정 트리를 탐색할 때 DFS 방식의 접근이 유용함
+
+> 강화학습에서는 상태 공간이 방대하기 때문에 순수한 DFS 보다는 Monte Carlo Tree Search 와 같은 최적화된 방법으로 발전된다.
+{: .prompt-tip}
+
+### 자연어 구문 분석 (Natural Language Parsing)
+
+- 자연어 처리에서 구문 트리 생성 및 탐색에 **DFS** 활용
+- 문장의 구문 구조를 분석하는 차트 파서(Chart parser)에서 DFS 방식으로 구문 트리 구성
+
+### 자율 주행 경로 계획 (Autonomous Driving Path Planning)
+
+- 자율 주행 자동차의 복잡한 환경에서 경로 계획에 **DFS**와 **BFS** 모두 활용 가능
+- 짧은 경로는 BFS 로, 장애물이 많은 복잡한 환경에서의 탐색은 한정된 깊이의 DFS 로 접근
+
+> 실제 자율 주행 시스템에서는 그래프 탐색 알고리즘을 기반으로 한 A* 알고리즘이나 RRT(Rapidly-exploring Random Tree)와 같은 더 효율적인 방법을 사용한다.
 {: .prompt-tip}
