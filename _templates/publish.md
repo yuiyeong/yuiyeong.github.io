@@ -16,6 +16,6 @@ if (publish !== "yes") {
 }
 
 // _posts 폴더로 이동
-const fileName = currentPath.split('/').pop();
+const fileName = currentPath.split('/').pop().replace(".md", "");
 await tp.file.move("_posts/" + fileName);
 -%>
