@@ -1,5 +1,5 @@
 ---
-title: "🚣 (AI 부트캠프 13기) 프로젝트를 위한 협업 Github 부트캠프 후기: CLI에서 협업까지"
+title: "🚣 (AI 부트캠프 13기) 프로젝트를 위한 협업 Git 수업 후기: CLI에서 협업까지"
 date: 2025-04-24 21:40:00 +0900
 categories:
   - BOOTCAMP
