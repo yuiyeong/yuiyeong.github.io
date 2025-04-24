@@ -838,6 +838,3 @@ $$ R^2 = 1 - \frac{SSE}{SST} = \frac{SSR}{SST} $$
 
 - 편향-분산 트레이드오프(Bias-Variance Tradeoff): 모델의 편향(bias)을 줄이면 분산(variance)이 증가하고, 분산을 줄이면 편향이 증가하는 상충 관계. 최적의 모델은 이 둘 사이의
   균형을 찾는 것
-
-<br/>
-
