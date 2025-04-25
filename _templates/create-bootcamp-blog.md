@@ -24,7 +24,7 @@ math: true
 
 const content = `
 
-![이미지](/assets/img/2025){: .w-75 .center}
+![이미지](/assets/img/){: .w-75 .center}
 
 ## 📝 학습내용
 
