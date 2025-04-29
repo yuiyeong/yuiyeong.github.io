@@ -1,9 +1,19 @@
 ---
-title: "🤖 머신러닝 기초: 선형회귀와 상관관계 분석 마스터하기"
+title: "🤖 머신러닝 기초: 선형회귀와 상관관계 분석 살펴보기"
 date: 2025-04-25 12:06:00 +0900
-categories: 
+categories:
+  - MACHINE_LEARNING
+  - LINEAR_REGRESSION
 tags:
   - 급발진거북이
+  - 머신러닝
+  - 선형회귀
+  - linear-regression
+  - 상관계수
+  - sklearn
+  - python
+  - 파이썬
+  - machinelearning
 toc: true
 comments: false
 mermaid: true
