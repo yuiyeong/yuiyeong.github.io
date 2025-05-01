@@ -1,8 +1,21 @@
 ---
 title: 📏 선형 회귀(Linear Regression)
 date: 2025-04-08 10:43:00 +0900
-categories: [ MACHINE_LEARNING, LINEAR_REGRESSION ]
-tags: [ '급발진거북이', 'torch', 'tensor', 'linear regression', 'machen learning', 'deeplearning', 'python', '파이썬', '선형회귀', '머신러닝', '딥러닝' ]
+categories:
+  - MACHINE_LEARNING
+  - LINEAR_REGRESSION
+tags:
+  - 급발진거북이
+  - torch
+  - tensor
+  - deeplearning
+  - python
+  - 파이썬
+  - 선형회귀
+  - 머신러닝
+  - 딥러닝
+  - machinelearning
+  - linear-regression
 toc: true
 comments: false
 mermaid: true
