@@ -528,3 +528,559 @@ plt.scatter(time_series.index[anomalies == -1],
 plt.legend()
 plt.title('Anomaly Detection in Time Series')
 ```
+
+
+---
+
+## 📈 시계열 데이터와 순차적 데이터
+
+**시계열 데이터**란 시간의 흐름에 따라 순서대로 기록된 관측값들의 집합이다. 주가 변동, 기온 변화, 인구 증가 등이 대표적인 사례다. 이러한 데이터는 시간 순서가 중요한 의미를 가지며, 이를 무시하고 단순히 섞어버리면 중요한 정보를 잃게 된다.
+
+[시계열 데이터 구조 시각화]
+
+### 주요 특징
+
+- **시간 의존성**: 하나의 관측값이 앞뒤 관측값과 연관이 있다
+- **순서성**: 데이터의 순서가 바뀌면 의미가 변할 수 있다
+- **패턴 존재**: 추세, 계절성, 주기성 등 반복되는 패턴이 나타난다
+
+```python
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+# 시계열 데이터 생성 예제
+dates = pd.date_range(start='2020-01-01', end='2020-12-31', freq='D')
+time_series = pd.Series(np.random.randn(len(dates)), index=dates)
+
+# 시각화
+plt.figure(figsize=(12, 6))
+plt.plot(time_series.index, time_series.values)
+plt.title('시계열 데이터 예제')
+plt.xlabel('날짜')
+plt.ylabel('값')
+# 출력: 2020년 연중 랜덤 시계열 데이터 그래프
+```
+
+## 🔄 시계열 데이터의 구성 성분
+
+### 규칙 성분(Systematic Component)
+
+**규칙 성분**은 예측 가능한 패턴을 의미하며, 다음과 같이 분류된다:
+
+1. **추세(Trend)**: 장기적인 증가 또는 감소 경향
+2. **계절성(Seasonality)**: 규칙적인 주기로 반복되는 패턴
+3. **순환성(Cyclical)**: 불규칙한 주기로 반복되는 패턴
+
+```mermaid
+graph LR
+    A[시계열 데이터] --> B[추세 성분]
+    A --> C[계절성 성분]
+    A --> D[순환성 성분]
+    A --> E[불규칙 성분]
+    
+    B --> F[장기 증감 패턴]
+    C --> G[주기적 반복 패턴]
+    D --> H[비주기적 반복 패턴]
+    E --> I[무작위 노이즈]
+```
+
+> 시계열의 규칙 성분은 데이터의 전반적인 구조를 이해하고 예측하는 데 핵심적인 역할을 한다. 이러한 성분들을 정확히 파악해야 효과적인 예측 모델을 구축할 수 있다. {: .prompt-tip}
+
+### 불규칙 성분(Irregular Component)
+
+**불규칙 성분**은 예측 불가능한 무작위 변동을 의미한다. 이는 다음과 같은 특징을 가진다:
+
+- 예측할 수 없는 무작위성
+- 평균이 0인 특성
+- 외부 충격(shock) 또는 노이즈로 인해 발생
+
+```python
+# 시계열 성분 분해 실습
+from statsmodels.tsa.seasonal import seasonal_decompose
+
+# 주가 데이터 생성 (ARIMA 모델 활용)
+np.random.seed(42)
+n_points = 365
+t = np.arange(n_points)
+trend = 0.02 * t + 50
+seasonal = 10 * np.sin(2 * np.pi * t / 30)
+noise = np.random.normal(0, 2, n_points)
+stock_price = trend + seasonal + noise
+
+# pandas 시계열로 변환
+stock_ts = pd.Series(stock_price, index=pd.date_range('2020-01-01', periods=n_points))
+
+# 성분 분해
+decomposition = seasonal_decompose(stock_ts, model='additive', period=30)
+
+# 시각화
+fig, (ax1, ax2, ax3, ax4) = plt.subplots(4, 1, figsize=(12, 10))
+decomposition.observed.plot(ax=ax1)
+ax1.set_title('원본 데이터')
+decomposition.trend.plot(ax=ax2)
+ax2.set_title('추세 성분')
+decomposition.seasonal.plot(ax=ax3)
+ax3.set_title('계절성 성분')
+decomposition.resid.plot(ax=ax4)
+ax4.set_title('불규칙 성분')
+# 출력: 주가 데이터의 4가지 성분 시각화
+```
+
+## 📊 시계열 데이터의 특성
+
+### 기술적 분석(Descriptive Analysis)
+
+**기술적 분석**은 시계열 데이터의 과거 패턴을 파악하는 방법이다. 주로 금융 시장에서 기술적 지표를 통해 매매 시점을 결정하는 데 사용된다.
+
+주요 분석 방법:
+
+- 이동 평균선(Moving Average)
+- 볼린저 밴드(Bollinger Bands)
+- RSI(Relative Strength Index)
+- MACD(Moving Average Convergence Divergence)
+
+```python
+# 기술적 분석 예제
+import ta
+
+# 주가 데이터 생성
+stock_data = pd.DataFrame({
+    'Close': stock_ts,
+    'High': stock_ts * 1.02,
+    'Low': stock_ts * 0.98,
+    'Volume': np.random.randint(1000, 5000, n_points)
+})
+
+# 이동 평균 계산
+stock_data['MA20'] = stock_data['Close'].rolling(window=20).mean()
+stock_data['MA50'] = stock_data['Close'].rolling(window=50).mean()
+
+# RSI 계산
+stock_data['RSI'] = ta.momentum.RSIIndicator(stock_data['Close']).rsi()
+
+# 시각화
+fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 8))
+stock_data[['Close', 'MA20', 'MA50']].plot(ax=ax1)
+ax1.set_title('주가와 이동 평균선')
+stock_data['RSI'].plot(ax=ax2)
+ax2.set_title('RSI 지표')
+# 출력: 주가 차트와 기술적 지표 시각화
+```
+
+### 예측적 분석(Predictive Analysis)
+
+**예측적 분석**은 과거 데이터를 바탕으로 미래를 예측하는 방법이다. 시계열 예측에는 다양한 모델이 사용된다:
+
+1. **통계 모델**: ARIMA, SARIMA, 지수 평활법
+2. **머신러닝 모델**: XGBoost, Random Forest, LSTM
+3. **하이브리드 모델**: 여러 모델을 조합한 앙상블 방법
+
+```python
+# ARIMA 모델을 이용한 예측 예제
+from pmdarima import auto_arima
+
+# 자동 ARIMA 모델 적합
+model = auto_arima(stock_ts, seasonal=True, m=30, trace=True)
+
+# 미래 30일 예측
+forecast = model.predict(n_periods=30)
+forecast_index = pd.date_range(start=stock_ts.index[-1], periods=31, freq='D')[1:]
+
+# 시각화
+plt.figure(figsize=(12, 6))
+plt.plot(stock_ts.index[-90:], stock_ts.values[-90:], label='실제 데이터')
+plt.plot(forecast_index, forecast, label='예측값', color='red')
+plt.title('ARIMA 모델 주가 예측')
+plt.legend()
+# 출력: 실제 주가와 ARIMA 예측값 비교 그래프
+```
+
+### 독립 항등 분포(IID)
+
+**IID**는 데이터가 서로 독립적이고 동일한 분포를 따른다는 가정이다.
+
+$$ X_1, X_2, ..., X_n \sim IID(F) $$
+
+여기서:
+
+- 독립성: $P(X_i | X_j) = P(X_i)$ for all $i \neq j$
+- 항등성: $X_i \sim F$ for all $i$
+
+> 시계열 데이터는 일반적으로 IID 가정을 위반한다. 자기 상관으로 인해 데이터 포인트들이 서로 의존적이기 때문이다. 이는 전통적인 통계 방법 대신 시계열 전용 분석 방법을 사용해야 하는 이유이다. {: .prompt-warning}
+
+### 자기 상관(Autocorrelation)
+
+**자기 상관**은 시계열의 현재 값이 과거 값과 얼마나 관련이 있는지를 측정하는 지표이다.
+
+ACF(Autocorrelation Function): $$ \rho_k = \frac{Cov(Y_t, Y_{t-k})}{Var(Y_t)} $$
+
+```python
+# 자기상관함수 분석
+from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
+
+fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 8))
+
+# ACF 플롯
+plot_acf(stock_ts, lags=40, ax=ax1)
+ax1.set_title('Autocorrelation Function (ACF)')
+
+# PACF 플롯
+plot_pacf(stock_ts, lags=40, ax=ax2)
+ax2.set_title('Partial Autocorrelation Function (PACF)')
+# 출력: ACF와 PACF 플롯
+```
+
+### 마르코프 속성(Markov Property)
+
+**마르코프 속성**은 미래 상태가 현재 상태에만 의존하고 과거 상태에는 직접적으로 의존하지 않는다는 개념이다.
+
+$$ P(X_{t+1} | X_t, X_{t-1}, ..., X_1) = P(X_{t+1} | X_t) $$
+
+이는 시계열 모델링에서 매우 중요한 가정으로, 많은 예측 모델의 기초가 된다.
+
+### 정상성(Stationarity)
+
+**정상 시계열**은 시간에 따라 통계적 특성이 변하지 않는 시계열을 의미한다. 강정상성과 약정상성으로 구분된다.
+
+**약정상성 조건**:
+
+1. 평균이 시간에 무관: $E[Y_t] = \mu$ (상수)
+2. 분산이 시간에 무관: $Var[Y_t] = \sigma^2$ (상수)
+3. 공분산이 시차에만 의존: $Cov[Y_t, Y_{t-k}] = \gamma_k$
+
+> 시계열 분석의 많은 모델들은 정상성을 가정한다. 비정상 시계열의 경우 차분(differencing)이나 변환을 통해 정상화시켜야 한다. {: .prompt-tip}
+
+```python
+# 정상성 검정
+from statsmodels.tsa.stattools import adfuller
+
+# Augmented Dickey-Fuller 테스트
+result = adfuller(stock_ts)
+print(f'ADF Statistic: {result[0]}')
+print(f'p-value: {result[1]}')
+print('Critical Values:')
+for key, value in result[4].items():
+    print(f'\t{key}: {value}')
+
+# 차분을 통한 정상화
+diff_ts = stock_ts.diff().dropna()
+
+# 정상화 후 재검정
+result_diff = adfuller(diff_ts)
+print(f'\n차분 후 ADF Statistic: {result_diff[0]}')
+print(f'차분 후 p-value: {result_diff[1]}')
+# 출력: 정상성 검정 결과와 차분 후 검정 결과
+```
+
+## 🔍 시계열 데이터의 분석과정
+
+시계열 데이터 분석은 체계적인 과정을 따른다:
+
+```mermaid
+flowchart TD
+    A[데이터 수집] --> B[데이터 탐색 및 시각화]
+    B --> C[정상성 확인]
+    C --> D{정상?}
+    D -->|Yes| E[모델 선택]
+    D -->|No| F[차분/변환]
+    F --> C
+    E --> G[모델 학습]
+    G --> H[모델 진단]
+    H --> I{적합성?}
+    I -->|Yes| J[예측 수행]
+    I -->|No| E
+    J --> K[결과 해석]
+```
+
+### 1단계: 데이터 탐색
+
+- 데이터의 시간 범위 확인
+- 누락값, 이상치 처리
+- 기본 통계량 분석
+
+### 2단계: 시각화
+
+- 시계열 플롯으로 전반적인 패턴 파악
+- ACF/PACF 플롯으로 자기상관 분석
+- 계절-추세 분해 플롯
+
+### 3단계: 전처리
+
+- 정상성 확보를 위한 차분
+- 계절성 조정
+- 로그 변환 등 안정화 변환
+
+### 4단계: 모델링
+
+- 적절한 모델 선택 (ARIMA, SARIMA 등)
+- 파라미터 최적화
+- 모델 진단 및 검증
+
+### 5단계: 예측과 평가
+
+- 예측 수행
+- 신뢰구간 계산
+- 예측 성능 평가 (MAE, RMSE, MAPE)
+
+## 🌊 시계열의 진동수를 활용한 분석
+
+**푸리에 변환(Fourier Transform)**을 통해 시계열의 주파수 성분을 분석할 수 있다. 이는 주기성이 강한 신호 분석에 특히 유용하다.
+
+$$ X(f) = \int_{-\infty}^{\infty} x(t) e^{-j2\pi ft} dt $$
+
+```python
+# 주파수 도메인 분석
+from scipy.fft import fft, fftfreq
+
+# FFT 수행
+n = len(stock_ts)
+yf = fft(stock_ts)
+freq = fftfreq(n, 1)  # 일별 데이터
+
+# 파워 스펙트럼 플롯
+plt.figure(figsize=(12, 6))
+plt.plot(freq[:n//2], np.abs(yf[:n//2]))
+plt.title('파워 스펙트럼')
+plt.xlabel('주파수')
+plt.ylabel('진폭')
+# 출력: 주파수 도메인에서의 시계열 분석
+```
+
+## ⏳ 시간에 따른 변화를 분석
+
+### 점진적 변화 분석
+
+- **선형 추세 분석**: 회귀 분석을 통한 장기 추세 파악
+- **로그 선형 모델**: 기하급수적 성장 패턴 분석
+- **구간별 추세 분석**: 시계열 구간 분할 후 각 구간의 특성 분석
+
+```python
+# 추세 분석 예제
+import statsmodels.api as sm
+
+# 시간 변수 생성
+t = np.arange(len(stock_ts))
+X = sm.add_constant(t)
+
+# 선형 회귀 모델
+model = sm.OLS(stock_ts, X).fit()
+print(model.summary())
+
+# 추세선 시각화
+plt.figure(figsize=(12, 6))
+plt.scatter(t, stock_ts, alpha=0.5, label='실제 데이터')
+plt.plot(t, model.predict(X), 'r-', label='추세선')
+plt.title('선형 추세 분석')
+plt.legend()
+# 출력: 주가 데이터의 선형 추세선
+```
+
+## 🔬 시계열 데이터의 성분 분해
+
+### 가법 모델 (Additive Model)
+
+$$ Y_t = T_t + S_t + R_t $$
+
+여기서:
+
+- $Y_t$: 관측값
+- $T_t$: 추세 성분
+- $S_t$: 계절성 성분
+- $R_t$: 잔차(불규칙) 성분
+
+### 승법 모델 (Multiplicative Model)
+
+$$ Y_t = T_t \times S_t \times R_t $$
+
+```python
+# 성분 분해 비교
+from statsmodels.tsa.seasonal import seasonal_decompose
+
+# 가법 모델
+additive = seasonal_decompose(stock_ts, model='additive', period=30)
+
+# 승법 모델 (양수 값만 있는 경우)
+positive_ts = stock_ts + abs(stock_ts.min()) + 1
+multiplicative = seasonal_decompose(positive_ts, model='multiplicative', period=30)
+
+# 비교 시각화
+fig, axes = plt.subplots(2, 2, figsize=(15, 10))
+additive.trend.plot(ax=axes[0,0], title='가법 모델 - 추세')
+additive.seasonal.plot(ax=axes[0,1], title='가법 모델 - 계절성')
+multiplicative.trend.plot(ax=axes[1,0], title='승법 모델 - 추세')
+multiplicative.seasonal.plot(ax=axes[1,1], title='승법 모델 - 계절성')
+# 출력: 가법 모델과 승법 모델 비교
+```
+
+## 📈 이동 평균 모델(MA)
+
+**이동 평균 모델**은 과거의 오차(noise)를 이용해 현재값을 예측하는 모델이다.
+
+MA(q) 모델: $$ Y_t = \mu + \epsilon_t + \theta_1\epsilon_{t-1} + ... + \theta_q\epsilon_{t-q} $$
+
+여기서 $\epsilon_t$는 백색 잡음(white noise)이다.
+
+### MA 모델의 특징
+
+- 메모리가 제한적 (최대 q 시점까지만 영향)
+- ACF가 q차수에서 급격히 감소
+- 유한한 기억력 (Finite memory)
+
+```python
+# MA 모델 예제
+from statsmodels.tsa.arima.model import ARIMA
+
+# MA(2) 모델 적합
+ma_model = ARIMA(stock_ts, order=(0, 0, 2))
+ma_result = ma_model.fit()
+
+# 모델 진단
+print(ma_result.summary())
+
+# 잔차 분석
+plt.figure(figsize=(12, 6))
+ma_result.resid.plot()
+plt.title('MA(2) 모델 잔차')
+plt.xlabel('날짜')
+plt.ylabel('잔차')
+# 출력: MA 모델의 잔차 플롯
+```
+
+## 🔄 자기 회귀 모델(AR)
+
+**자기 회귀 모델**은 과거의 값을 이용해 현재값을 예측하는 모델이다.
+
+AR(p) 모델: $$ Y_t = c + \phi_1Y_{t-1} + \phi_2Y_{t-2} + ... + \phi_pY_{t-p} + \epsilon_t $$
+
+여기서:
+
+- $c$: 상수항
+- $\phi_i$: 자기 회귀 계수
+- $\epsilon_t$: 백색 잡음
+
+### AR 모델의 특징
+
+- PACF가 p차수에서 급격히 감소
+- 무한한 기억력 (Infinite memory)
+- 안정성을 위해 $|\phi| < 1$ 조건 필요
+
+```python
+# AR 모델 예제
+# AR(2) 모델 적합
+ar_model = ARIMA(stock_ts, order=(2, 0, 0))
+ar_result = ar_model.fit()
+
+# 모델 요약
+print(ar_result.summary())
+
+# 예측
+forecast_ar = ar_result.forecast(steps=30)
+
+# 시각화
+plt.figure(figsize=(12, 6))
+plt.plot(stock_ts.index[-90:], stock_ts.values[-90:], label='실제 데이터')
+plt.plot(forecast_index, forecast_ar, label='AR(2) 예측', color='green')
+plt.title('AR 모델 예측')
+plt.legend()
+# 출력: AR 모델 예측 결과
+```
+
+## 🚀 실무 적용 사례
+
+### 1. 소매업 수요 예측
+
+시계열 분석을 통해 제품 수요를 예측하여 재고를 최적화할 수 있다:
+
+```python
+# 소매업 수요 예측 예제
+from sklearn.metrics import mean_absolute_error, mean_squared_error
+
+# 주간 판매 데이터 생성
+weekly_sales = stock_ts.resample('W').sum().asfreq('W', method='pad')
+
+# 계절적 ARIMA 모델
+sarima_model = ARIMA(weekly_sales, order=(1,1,1), seasonal_order=(1,1,1,52))
+sarima_result = sarima_model.fit()
+
+# 예측 수행
+forecast_weekly = sarima_result.forecast(steps=12)
+
+# 예측 성능 평가
+if len(weekly_sales) > 12:
+    actual = weekly_sales[-12:]
+    predicted = forecast_weekly[:12]
+    
+    mae = mean_absolute_error(actual, predicted)
+    rmse = np.sqrt(mean_squared_error(actual, predicted))
+    
+    print(f'Mean Absolute Error: {mae:.2f}')
+    print(f'Root Mean Square Error: {rmse:.2f}')
+# 출력: 수요 예측 성능 지표
+```
+
+### 2. 금융 리스크 관리
+
+시계열 분석을 통해 Value at Risk (VaR) 계산:
+
+```python
+# VaR 계산 예제
+def calculate_var(returns, confidence_level=0.95):
+    """
+    Value at Risk 계산
+    """
+    # 수익률 계산
+    daily_returns = returns.pct_change().dropna()
+    
+    # GARCH 모델로 변동성 예측
+    from arch import arch_model
+    
+    garch_model = arch_model(daily_returns * 100, vol='GARCH', p=1, q=1)
+    garch_result = garch_model.fit(disp='off')
+    
+    # 조건부 변동성 예측
+    forecast = garch_result.forecast(horizon=1)
+    volatility = forecast.variance.values[-1] ** 0.5
+    
+    # VaR 계산
+    from scipy.stats import norm
+    var = norm.ppf(1 - confidence_level) * volatility
+    
+    return var
+
+var_95 = calculate_var(stock_ts)
+print(f'95% VaR: {var_95:.4f}')
+# 출력: 일일 95% 신뢰수준의 VaR 값
+```
+
+### 3. 웹 트래픽 예측
+
+웹사이트 트래픽 패턴 분석과 예측:
+
+```python
+# 웹 트래픽 분석 예제
+# 시간대별 트래픽 패턴 생성
+hourly_traffic = pd.DataFrame({
+    'hour': range(24),
+    'weekday_avg': [100, 80, 60, 40, 30, 40, 80, 120, 150, 160, 
+                    155, 160, 165, 170, 175, 180, 185, 190, 180, 170, 
+                    160, 140, 120, 110],
+    'weekend_avg': [80, 70, 60, 50, 40, 40, 50, 60, 70, 80, 
+                    90, 100, 110, 120, 120, 120, 115, 110, 100, 90, 
+                    80, 75, 70, 75]
+})
+
+# 시각화
+plt.figure(figsize=(12, 6))
+plt.plot(hourly_traffic['hour'], hourly_traffic['weekday_avg'], 
+         label='주중 평균', marker='o')
+plt.plot(hourly_traffic['hour'], hourly_traffic['weekend_avg'], 
+         label='주말 평균', marker='s')
+plt.title('시간대별 웹 트래픽 패턴')
+plt.xlabel('시간')
+plt.ylabel('방문자 수')
+plt.xticks(range(0, 24, 2))
+plt.legend()
+plt.grid(True, alpha=0.3)
+# 출력: 평일과 주말의 시간대별 트래픽 패턴
+```
