@@ -38,59 +38,216 @@ math: true
 
 생성 모델의 핵심 아이디어는 **복잡한 데이터가 저차원의 필수적인 정보의 조합으로 생성될 수 있다**는 것이다. 예를 들어, 사람 얼굴 사진은 "성인", "남성", "안경", "앞머리 없는 헤어스타일" 등의 필수적인 정보로 기술할 수 있다.
 
+**"복잡한 데이터가 여러 간단한 특성들의 조합으로 표현될 수 있다" 의 예시)**
+
+```mermaid
+graph TD
+    subgraph "저차원 특성"
+        L1["직선 1<br/>각도: 0°<br/>길이: 짧음"]
+        L2["직선 2<br/>각도: 30°<br/>길이: 중간"]
+        L3["직선 3<br/>각도: 60°<br/>길이: 짧음"]
+        L4["직선 4<br/>각도: 90°<br/>길이: 중간"]
+        L5["직선 5<br/>각도: 120°<br/>길이: 짧음"]
+        L6["직선 6<br/>각도: 150°<br/>길이: 중간"]
+        L7["...더 많은 직선들"]
+    end
+    
+    subgraph "조합 과정"
+        C1["특성 조합 1<br/>L1 + L2 + L3"]
+        C2["특성 조합 2<br/>L4 + L5 + L6"]
+        C3["전체 조합 모든 직선의 가중합"]
+    end
+    
+    subgraph "고차원 결과"
+        R1["부분적 호(Partial Arc)"]
+        R2["더 큰 호(Larger Arc)"]
+        R3["완전한 원(Complete Circle)"]
+    end
+    
+    L1 --> C1
+    L2 --> C1
+    L3 --> C1
+    L4 --> C2
+    L5 --> C2
+    L6 --> C2
+    L7 --> C3
+    
+    C1 --> R1
+    C2 --> R2
+    C1 --> C3
+    C2 --> C3
+    C3 --> R3
+    
+    style L1 fill:#e1f5fe
+    style L2 fill:#e1f5fe
+    style L3 fill:#e1f5fe
+    style L4 fill:#e1f5fe
+    style L5 fill:#e1f5fe
+    style L6 fill:#e1f5fe
+    style L7 fill:#e1f5fe
+    style C3 fill:#fff3e0
+    style R3 fill:#e8f5e8
+```
+
+```mermaid
+flowchart LR
+
+subgraph "Step 1: 기본 직선들"
+
+S1["| (수직선)"]
+
+S2["— (수평선)"]
+
+S3["/ (대각선 1)"]
+
+S4["\ (대각선 2)"]
+
+end
+
+subgraph "Step 2: 4개 직선 조합"
+
+C1["거친 사각형<br/>□"]
+
+end
+
+subgraph "Step 3: 8개 직선 조합"
+
+C2["8각형<br/>⬟"]
+
+end
+
+subgraph "Step 4: 16개 직선 조합"
+
+C3["16각형<br/>(더 둥근 형태)"]
+
+end
+
+subgraph "Step 5: 무한히 많은 직선"
+
+C4["완벽한 원<br/>●"]
+
+end
+
+S1 --> C1
+
+S2 --> C1
+
+S3 --> C1
+
+S4 --> C1
+
+C1 --> C2
+
+C2 --> C3
+
+C3 --> C4
+
+style S1 fill:#ffebee
+
+style S2 fill:#ffebee
+
+style S3 fill:#ffebee
+
+style S4 fill:#ffebee
+
+style C1 fill:#fff3e0
+
+style C2 fill:#f1f8e9
+
+style C3 fill:#e8f5e8
+
+style C4 fill:#e0f2f1
+```
+
 ### 수학적/이론적 표현 (Mathematical Expression)
 
-생성 모델은 데이터 $X$와 특성 $Y$의 **결합 분포** $P(X,Y)$ 또는 조건부 분포 $P(X|Y)$를 학습한다.
+생성 모델은 데이터 $$X$$ 와 특성 $$Y$$의 **결합 분포** $$P(X,Y)$$ 또는 조건부 분포 $$P(X|Y)$$ 를 학습한다.
 
-레이블 $Y$가 없는 경우에는 데이터의 **주변 분포(Marginal Distribution)** $P(X)$를 직접 학습한다:
+레이블 $$Y$$ 가 없는 경우에는 데이터의 **주변 분포(Marginal Distribution)** $$P(X)$$ 를 직접 학습한다.
 
 $$P(X) = \int P(X|Y)P(Y)dY$$
+## 🎯 확률 분포의 종류와 의미
 
-[시각적 표현 넣기: 복잡한 원을 여러 직선의 조합으로 근사하는 개념도]
+### 결합 분포 (Joint Distribution) **P(X,Y)**
 
-### 고전적 생성 모델들
+**결합 분포**는 두 개 이상의 확률 변수가 **동시에 특정 값을 가질 확률**을 나타낸다.
 
-**가우시안 혼합 모델 (Gaussian Mixture Model, GMM)**
+```
+P(X,Y) = "데이터 X와 레이블 Y가 동시에 발생할 확률"
+```
+
+**예시**
+
+- X: 이미지 데이터 (28×28 픽셀)
+- Y: 숫자 레이블 (0~9)
+- P(X,Y): "특정 이미지와 특정 숫자가 함께 나타날 확률"
+
+###  조건부 분포 (Conditional Distribution) **P(X|Y)**
+
+**조건부 분포**는 특정 조건(Y)이 주어졌을 때 X가 가질 수 있는 확률 분포이다.
+
+```
+P(X|Y) = "레이블 Y가 주어졌을 때, 데이터 X의 확률 분포"
+```
+
+**생성 모델에서의 의미**
+
+- **"숫자 7이라는 조건이 주어졌을 때, 어떤 이미지들이 나올 수 있는가?"**
+- 조건부 생성: 원하는 클래스의 데이터를 생성
+
+### 주변 분포 (Marginal Distribution) **P(X)**
+
+**주변 분포**는 다른 변수들을 모두 **적분(또는 합)으로 제거**하고 남은 하나의 변수의 분포이다.
+
+```
+P(X) = "레이블에 상관없이 데이터 X 자체의 분포"
+```
+
+**핵심 공식**
+$$P(X) = \int P(X|Y)P(Y)dY$$
+
+이는 **전확률 법칙(Law of Total Probability)** 이다.
+
+## 🎨 고전적 생성 모델들
+
+### 가우시안 혼합 모델 (Gaussian Mixture Model, GMM)
 
 - 여러 가우시안 분포를 조합하여 실제 데이터 분포에 근사
 - 각 가우시안의 평균, 분산, 가중치를 학습
+- 1981년에 발표
 
-**제한된 볼츠만 머신 (Restricted Boltzmann Machine, RBM)**
+### 제한된 볼츠만 머신 (Restricted Boltzmann Machine, RBM)
 
 - 신경망 기반의 생성 모델
 - 볼츠만 분포에 따라 에너지가 낮을수록 확률 밀도가 높아지는 원리 활용
+- 1985년에 발표
 
-**자기회귀 분포 추정 (Auto-Regressive Distribution Estimator)**
+### 자기회귀 분포 추정 (Auto-Regressive Distribution Estimator)
 
 - 현재 픽셀 값을 이전 픽셀 값들에 의존하여 추정
 - 마르코프 체인 가정을 기반으로 순차적 생성
+- 2011년에 발표
 
-```python
-import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.mixture import GaussianMixture
+> 생성 모델은 단순히 새로운 데이터를 만드는 것뿐만 아니라, 데이터의 내재된 구조와 패턴을 이해하여 다양한 작업을 수행할 수 있게 해준다.
+{: .prompt-tip}
 
-# 가우시안 혼합 모델 예시
-# 2차원 데이터 생성
-np.random.seed(42)
-data1 = np.random.normal([2, 2], [0.5, 0.5], (100, 2))
-data2 = np.random.normal([6, 6], [0.8, 0.8], (150, 2))
-data = np.vstack([data1, data2])
+### 마르코프 체인 (Markov Chain) 이론
 
-# GMM 학습
-gmm = GaussianMixture(n_components=2)
-gmm.fit(data)
+**"현재 상태가 미래를 결정하는 데 충분하다"**는 **마르코프 성질(Markov Property)**을 만족하는 확률 과정이다.
 
-# 새로운 데이터 생성
-generated_data, _ = gmm.sample(50)
+**마르코프 성질**
 
-print(f"원본 데이터 평균: {data.mean(axis=0)}")
-print(f"생성된 데이터 평균: {generated_data.mean(axis=0)}")
-# 원본 데이터 평균: [4.21 4.33]
-# 생성된 데이터 평균: [4.18 4.41]
-```
+$$P(X_{t+1}|X_t, X_{t-1}, ..., X_1) = P(X_{t+1}|X_t)$$
 
-> 생성 모델은 단순히 새로운 데이터를 만드는 것뿐만 아니라, 데이터의 내재된 구조와 패턴을 이해하여 다양한 작업을 수행할 수 있게 해준다. {: .prompt-tip}
+"미래는 과거와 독립적이고, 오직 현재 상태에만 의존한다."
+
+**마르코프 체인의 핵심 성질**
+
+- 시간 동질성 (Time Homogeneity): 전이 확률이 시간에 따라 변하지 않음
+- 정상 분포 (Stationary Distribution): 충분히 오랜 시간 후 도달하는 평형 상태
+
+> 마르코프 체인은 생성 모델에서 **순차적 생성 과정**을 모델링하는 핵심 도구다. "현재 상태만 알면 다음을 예측할 수 있다"는 성질 덕분에 계산상 효율적이면서도 복잡한 시퀀스를 생성할 수 있다.
+{: .prompt-tip}
 
 ## ⚔️ 판별 모델 vs 생성 모델
 
@@ -98,9 +255,9 @@ print(f"생성된 데이터 평균: {generated_data.mean(axis=0)}")
 
 판별 모델은 데이터 $X$가 주어졌을 때 특성 $Y$가 나타날 **조건부 확률** $P(Y|X)$를 직접 반환하는 모델이다.
 
-**특징:**
+**특징**
 
-- **결정 경계(Decision Boundary)**를 학습
+- **결정 경계(Decision Boundary)** 를 학습
 - 두 클래스 간의 가장 도드라지는 특성만 학습하면 충분
 - 학습이 상대적으로 쉽고 빠름
 - 객관적인 평가 지표(정확도, F1-score 등) 존재
@@ -109,7 +266,7 @@ print(f"생성된 데이터 평균: {generated_data.mean(axis=0)}")
 
 생성 모델은 데이터의 **분포 자체**를 학습한다.
 
-**특징:**
+**특징**
 
 - 각 클래스가 **어떻게 생겼는지** 모든 특성을 학습
 - 복잡하게 얽힌 분포를 학습해야 해서 더 어려움

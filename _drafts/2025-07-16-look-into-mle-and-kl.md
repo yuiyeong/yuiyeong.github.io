@@ -30,7 +30,6 @@ math: true
 ## 📓 실습 Jupyter Notebook
 
 - [Maximum Likelihood Estimation & KL Divergence in Generative Models](https://github.com/yuiyeong/notebooks/blob/main/deep_learning/mle_kl_divergence_generative_models.ipynb)
-
 ## 🎯 최대 가능도 추정(Maximum Likelihood Estimation, MLE)이란?
 
 **최대 가능도 추정(MLE)** 은 주어진 데이터가 특정 확률분포에서 나왔다고 가정할 때, 그 데이터가 나올 확률을 최대화하는 분포의 파라미터를 찾는 통계학적 방법이다.
@@ -107,6 +106,434 @@ plt.show()
 print(f"MLE 추정값: p = {mle_estimate:.3f}")
 print(f"최대 likelihood: {max(likelihoods):.6f}")
 ```
+
+
+### 다양한 분포에서의 MLE 예시
+
+#### 1. 정규분포의 MLE
+
+정규분포 $$N(\mu, \sigma^2)$$에서 평균과 분산을 추정하는 가장 기본적인 예시다.
+
+**이론적 유도**:
+
+로그 가능도 함수: $$ \ell(\mu, \sigma^2) = -\frac{n}{2}\log(2\pi) - \frac{n}{2}\log(\sigma^2) - \frac{1}{2\sigma^2}\sum_{i=1}^{n}(x_i - \mu)^2 $$
+
+미분하여 0이 되는 점을 찾으면:
+
+- $$\hat{\mu}_{MLE} = \frac{1}{n}\sum_{i=1}^{n}x_i$$ (표본 평균)
+- $$\hat{\sigma^2}_{MLE} = \frac{1}{n}\sum_{i=1}^{n}(x_i - \hat{\mu})^2$$ (표본 분산)
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.stats import norm
+from scipy.optimize import minimize_scalar
+
+def gaussian_mle_example():
+    """정규분포 MLE 예시"""
+    # 실제 모집단 파라미터
+    true_mu, true_sigma = 5.0, 2.0
+    
+    # 다양한 샘플 크기로 실험
+    sample_sizes = [10, 50, 200, 1000]
+    
+    fig, axes = plt.subplots(2, 2, figsize=(12, 10))
+    axes = axes.ravel()
+    
+    for i, n in enumerate(sample_sizes):
+        # 데이터 생성
+        data = np.random.normal(true_mu, true_sigma, n)
+        
+        # MLE 추정
+        mu_mle = np.mean(data)
+        sigma_mle = np.sqrt(np.mean((data - mu_mle)**2))
+        
+        # 시각화
+        x = np.linspace(true_mu - 4*true_sigma, true_mu + 4*true_sigma, 100)
+        true_pdf = norm.pdf(x, true_mu, true_sigma)
+        estimated_pdf = norm.pdf(x, mu_mle, sigma_mle)
+        
+        axes[i].hist(data, bins=20, density=True, alpha=0.7, 
+                    label=f'데이터 (n={n})')
+        axes[i].plot(x, true_pdf, 'r-', linewidth=2, 
+                    label=f'실제: μ={true_mu}, σ={true_sigma}')
+        axes[i].plot(x, estimated_pdf, 'b--', linewidth=2,
+                    label=f'MLE: μ={mu_mle:.2f}, σ={sigma_mle:.2f}')
+        
+        axes[i].set_title(f'샘플 크기: {n}')
+        axes[i].legend()
+        axes[i].grid(True, alpha=0.3)
+        
+        print(f"n={n}: μ_MLE={mu_mle:.3f} (오차: {abs(mu_mle-true_mu):.3f}), "
+              f"σ_MLE={sigma_mle:.3f} (오차: {abs(sigma_mle-true_sigma):.3f})")
+    
+    plt.tight_layout()
+    plt.show()
+
+gaussian_mle_example()
+```
+
+#### 2. 포아송 분포의 MLE
+
+포아송 분포는 단위 시간당 발생하는 이벤트 수를 모델링할 때 사용된다.
+
+**수학적 유도**:
+
+포아송 분포: $$P(X = k) = \frac{\lambda^k e^{-\lambda}}{k!}$$
+
+로그 가능도: $$ \ell(\lambda) = \sum_{i=1}^{n}(x_i \log \lambda - \lambda - \log(x_i!)) $$
+
+미분하여 0이 되는 점: $$ \hat{\lambda}_{MLE} = \frac{1}{n}\sum_{i=1}^{n}x_i $$
+
+```python
+from scipy.stats import poisson
+
+def poisson_mle_example():
+    """포아송 분포 MLE 예시"""
+    # 실제 파라미터 (예: 시간당 평균 고객 수)
+    true_lambda = 3.5
+    sample_size = 200
+    
+    # 데이터 생성 (시간당 고객 수 관측)
+    data = np.random.poisson(true_lambda, sample_size)
+    
+    # MLE 추정
+    lambda_mle = np.mean(data)
+    
+    # 다양한 λ 값에 대한 likelihood 계산
+    lambda_range = np.linspace(2, 5, 100)
+    log_likelihoods = []
+    
+    for lam in lambda_range:
+        # 포아송 분포의 로그 가능도 계산
+        log_likelihood = np.sum(poisson.logpmf(data, lam))
+        log_likelihoods.append(log_likelihood)
+    
+    # 시각화
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+    
+    # 데이터 히스토그램과 추정 분포
+    unique_values = np.arange(0, max(data) + 1)
+    observed_freq = [(data == k).sum() / len(data) for k in unique_values]
+    expected_freq_true = [poisson.pmf(k, true_lambda) for k in unique_values]
+    expected_freq_mle = [poisson.pmf(k, lambda_mle) for k in unique_values]
+    
+    ax1.bar(unique_values - 0.2, observed_freq, 0.4, 
+           label='관측 빈도', alpha=0.7)
+    ax1.bar(unique_values + 0.2, expected_freq_mle, 0.4, 
+           label=f'MLE 추정 (λ={lambda_mle:.2f})', alpha=0.7)
+    ax1.plot(unique_values, expected_freq_true, 'ro-', 
+            label=f'실제 분포 (λ={true_lambda})')
+    
+    ax1.set_xlabel('발생 횟수')
+    ax1.set_ylabel('확률')
+    ax1.set_title('포아송 분포 MLE')
+    ax1.legend()
+    ax1.grid(True, alpha=0.3)
+    
+    # 로그 가능도 곡선
+    ax2.plot(lambda_range, log_likelihoods, 'b-', linewidth=2)
+    ax2.axvline(lambda_mle, color='r', linestyle='--', 
+               label=f'MLE: λ={lambda_mle:.2f}')
+    ax2.axvline(true_lambda, color='g', linestyle='--', 
+               label=f'실제: λ={true_lambda}')
+    
+    ax2.set_xlabel('λ (모수)')
+    ax2.set_ylabel('로그 가능도')
+    ax2.set_title('로그 가능도 함수')
+    ax2.legend()
+    ax2.grid(True, alpha=0.3)
+    
+    plt.tight_layout()
+    plt.show()
+    
+    print(f"실제 λ: {true_lambda}")
+    print(f"MLE 추정 λ: {lambda_mle:.3f}")
+    print(f"추정 오차: {abs(lambda_mle - true_lambda):.3f}")
+
+poisson_mle_example()
+```
+
+#### 3. 베르누이 분포의 MLE (이진 분류의 기초)
+
+베르누이 분포는 이진 분류 문제의 기본이 되는 분포다.
+
+```python
+def bernoulli_mle_example():
+    """베르누이 분포 MLE 예시 - 이진 분류 관점"""
+    # 실제 성공 확률
+    true_p = 0.7
+    sample_size = 100
+    
+    # 데이터 생성 (1: 성공, 0: 실패)
+    data = np.random.binomial(1, true_p, sample_size)
+    
+    # MLE 추정
+    p_mle = np.mean(data)  # 성공 횟수 / 전체 시도 횟수
+    
+    # 다양한 p 값에 대한 likelihood 계산
+    p_range = np.linspace(0.01, 0.99, 100)
+    log_likelihoods = []
+    
+    for p in p_range:
+        # 베르누이 분포의 로그 가능도
+        log_likelihood = np.sum(data * np.log(p) + (1 - data) * np.log(1 - p))
+        log_likelihoods.append(log_likelihood)
+    
+    # 시각화
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+    
+    # 데이터 시각화
+    success_count = np.sum(data)
+    failure_count = len(data) - success_count
+    
+    ax1.bar(['실패 (0)', '성공 (1)'], [failure_count, success_count], 
+           alpha=0.7, color=['red', 'blue'])
+    ax1.set_ylabel('빈도')
+    ax1.set_title(f'베르누이 시행 결과 (n={sample_size})')
+    ax1.text(0, failure_count/2, f'{failure_count}회', 
+            ha='center', va='center', fontsize=12, fontweight='bold')
+    ax1.text(1, success_count/2, f'{success_count}회', 
+            ha='center', va='center', fontsize=12, fontweight='bold')
+    
+    # 로그 가능도 곡선
+    ax2.plot(p_range, log_likelihoods, 'b-', linewidth=2)
+    ax2.axvline(p_mle, color='r', linestyle='--', 
+               label=f'MLE: p={p_mle:.3f}')
+    ax2.axvline(true_p, color='g', linestyle='--', 
+               label=f'실제: p={true_p}')
+    
+    ax2.set_xlabel('성공 확률 p')
+    ax2.set_ylabel('로그 가능도')
+    ax2.set_title('로그 가능도 함수')
+    ax2.legend()
+    ax2.grid(True, alpha=0.3)
+    
+    plt.tight_layout()
+    plt.show()
+    
+    print(f"실제 성공 확률: {true_p}")
+    print(f"MLE 추정 확률: {p_mle:.3f}")
+    print(f"95% 신뢰구간: [{p_mle - 1.96*np.sqrt(p_mle*(1-p_mle)/sample_size):.3f}, "
+          f"{p_mle + 1.96*np.sqrt(p_mle*(1-p_mle)/sample_size):.3f}]")
+
+bernoulli_mle_example()
+```
+
+#### 4. 다항분포의 MLE (다중 분류의 기초)
+
+다항분포는 다중 분류 문제의 기본이 되는 분포다.
+
+```python
+def multinomial_mle_example():
+    """다항분포 MLE 예시 - 다중 분류 관점"""
+    # 실제 클래스 확률 (3개 클래스)
+    true_probs = np.array([0.5, 0.3, 0.2])
+    sample_size = 1000
+    
+    # 데이터 생성
+    data = np.random.multinomial(1, true_probs, sample_size)
+    class_counts = np.sum(data, axis=0)
+    
+    # MLE 추정 (각 클래스의 상대 빈도)
+    probs_mle = class_counts / sample_size
+    
+    # 시각화
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+    
+    classes = ['클래스 A', '클래스 B', '클래스 C']
+    x_pos = np.arange(len(classes))
+    
+    # 빈도 비교
+    width = 0.35
+    ax1.bar(x_pos - width/2, true_probs, width, 
+           label='실제 확률', alpha=0.7, color='skyblue')
+    ax1.bar(x_pos + width/2, probs_mle, width, 
+           label='MLE 추정', alpha=0.7, color='orange')
+    
+    ax1.set_xlabel('클래스')
+    ax1.set_ylabel('확률')
+    ax1.set_title('다항분포 MLE')
+    ax1.set_xticks(x_pos)
+    ax1.set_xticklabels(classes)
+    ax1.legend()
+    ax1.grid(True, alpha=0.3)
+    
+    # 카운트 시각화
+    ax2.bar(classes, class_counts, alpha=0.7, color='green')
+    ax2.set_ylabel('관측 빈도')
+    ax2.set_title(f'클래스별 관측 빈도 (총 {sample_size}개)')
+    
+    for i, count in enumerate(class_counts):
+        ax2.text(i, count + 10, str(count), ha='center', fontweight='bold')
+    
+    plt.tight_layout()
+    plt.show()
+    
+    print("실제 확률:", true_probs)
+    print("MLE 추정 확률:", probs_mle)
+    print("추정 오차:", np.abs(true_probs - probs_mle))
+    
+    # 로그 가능도 계산
+    log_likelihood = np.sum(class_counts * np.log(probs_mle))
+    print(f"로그 가능도: {log_likelihood:.2f}")
+
+multinomial_mle_example()
+```
+
+### MLE가 왜 중요한가?
+
+#### 1. 통계적 성질의 우수성
+
+MLE는 다음과 같은 바람직한 통계적 성질을 가진다:
+
+**일치성(Consistency)**: 샘플 크기가 커질수록 참값에 수렴 $$ \hat{\theta}_n \xrightarrow{p} \theta_0 \quad \text{as } n \to \infty $$
+
+**점근적 정규성(Asymptotic Normality)**: 대표본에서 정규분포를 따름 $$ \sqrt{n}(\hat{\theta}_n - \theta_0) \xrightarrow{d} N(0, I^{-1}(\theta_0)) $$
+
+**점근적 효율성(Asymptotic Efficiency)**: 가능한 최소 분산을 가짐
+
+```python
+def mle_properties_demonstration():
+    """MLE의 통계적 성질 시연"""
+    true_mu = 0
+    true_sigma = 1
+    sample_sizes = [10, 50, 100, 500, 1000, 5000]
+    n_simulations = 1000
+    
+    # 각 샘플 크기별로 MLE 추정값들 수집
+    mle_estimates = {}
+    
+    for n in sample_sizes:
+        estimates = []
+        for _ in range(n_simulations):
+            data = np.random.normal(true_mu, true_sigma, n)
+            mu_mle = np.mean(data)
+            estimates.append(mu_mle)
+        mle_estimates[n] = np.array(estimates)
+    
+    # 시각화
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 5))
+    
+    # 1. 일치성 확인 (분산이 줄어듦)
+    variances = [np.var(mle_estimates[n]) for n in sample_sizes]
+    theoretical_variances = [true_sigma**2 / n for n in sample_sizes]
+    
+    ax1.loglog(sample_sizes, variances, 'bo-', label='실제 분산')
+    ax1.loglog(sample_sizes, theoretical_variances, 'r--', label='이론적 분산 (σ²/n)')
+    ax1.set_xlabel('샘플 크기')
+    ax1.set_ylabel('MLE 추정량의 분산')
+    ax1.set_title('일치성: 분산이 1/n으로 감소')
+    ax1.legend()
+    ax1.grid(True, alpha=0.3)
+    
+    # 2. 점근적 정규성 확인 (히스토그램)
+    n_large = 1000
+    estimates_large = mle_estimates[n_large]
+    
+    ax2.hist(estimates_large, bins=50, density=True, alpha=0.7, 
+            label=f'MLE 분포 (n={n_large})')
+    
+    # 이론적 정규분포 overlay
+    x = np.linspace(estimates_large.min(), estimates_large.max(), 100)
+    theoretical_std = true_sigma / np.sqrt(n_large)
+    theoretical_pdf = norm.pdf(x, true_mu, theoretical_std)
+    ax2.plot(x, theoretical_pdf, 'r-', linewidth=2, 
+            label=f'이론적 N({true_mu}, {theoretical_std:.4f}²)')
+    
+    ax2.axvline(true_mu, color='g', linestyle='--', 
+               label='참값')
+    ax2.set_xlabel('MLE 추정값')
+    ax2.set_ylabel('밀도')
+    ax2.set_title('점근적 정규성')
+    ax2.legend()
+    ax2.grid(True, alpha=0.3)
+    
+    plt.tight_layout()
+    plt.show()
+    
+    print("=== MLE의 통계적 성질 확인 ===")
+    for n in sample_sizes:
+        bias = np.mean(mle_estimates[n]) - true_mu
+        variance = np.var(mle_estimates[n])
+        theoretical_var = true_sigma**2 / n
+        print(f"n={n:4d}: 편향={bias:6.4f}, 분산={variance:6.4f}, "
+              f"이론적 분산={theoretical_var:6.4f}")
+
+mle_properties_demonstration()
+```
+
+#### 2. 머신러닝에서의 역할
+
+MLE는 머신러닝의 거의 모든 영역에서 핵심적인 역할을 한다:
+
+**선형 회귀**: 잔차의 정규분포 가정 하에서 최소제곱법은 MLE와 동일 **로지스틱 회귀**: 베르누이 분포의 MLE로 유도 **신경망**: Cross-entropy 손실함수는 MLE의 변형 **생성모델**: 데이터 분포를 학습하는 기본 원리
+
+```python
+def mle_in_ml_examples():
+    """머신러닝에서 MLE 활용 예시"""
+    
+    # 1. 로지스틱 회귀 = 베르누이 분포 MLE
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.datasets import make_classification
+    
+    # 데이터 생성
+    X, y = make_classification(n_samples=1000, n_features=2, n_redundant=0, 
+                             n_informative=2, n_clusters_per_class=1, random_state=42)
+    
+    # 로지스틱 회귀 학습
+    model = LogisticRegression()
+    model.fit(X, y)
+    
+    # 예측 확률 (베르누이 분포의 모수 p)
+    probs = model.predict_proba(X)[:, 1]
+    
+    # 로그 가능도 계산 (베르누이 분포)
+    log_likelihood = np.sum(y * np.log(probs + 1e-15) + 
+                           (1 - y) * np.log(1 - probs + 1e-15))
+    
+    print(f"로지스틱 회귀의 로그 가능도: {log_likelihood:.2f}")
+    
+    # 2. 선형 회귀 = 정규분포 MLE
+    from sklearn.linear_model import LinearRegression
+    
+    # 회귀 데이터 생성
+    np.random.seed(42)
+    X_reg = np.random.randn(100, 1)
+    y_reg = 2 * X_reg.flatten() + 1 + np.random.randn(100) * 0.5
+    
+    # 선형 회귀 학습
+    reg_model = LinearRegression()
+    reg_model.fit(X_reg, y_reg)
+    
+    # 예측과 잔차
+    y_pred = reg_model.predict(X_reg)
+    residuals = y_reg - y_pred
+    
+    # 잔차의 분산 추정 (MLE)
+    sigma_mle = np.sqrt(np.mean(residuals**2))
+    
+    # 로그 가능도 계산 (정규분포)
+    log_likelihood_reg = -0.5 * len(y_reg) * np.log(2 * np.pi * sigma_mle**2) - \
+                        np.sum(residuals**2) / (2 * sigma_mle**2)
+    
+    print(f"선형 회귀의 로그 가능도: {log_likelihood_reg:.2f}")
+    print(f"추정된 노이즈 표준편차: {sigma_mle:.3f}")
+
+mle_in_ml_examples()
+```
+
+#### 3. 베이지안 추론과의 관계
+
+MLE는 베이지안 추론에서 **무정보 사전분포(non-informative prior)** 를 사용했을 때의 **최대 사후확률(MAP) 추정**과 같다:
+
+$$ \text{MAP: } \hat{\theta}_{MAP} = \arg\max_\theta p(\theta|X) = \arg\max_\theta p(X|\theta)p(\theta) $$
+
+$$ \text{만약 } p(\theta) \text{가 상수라면: } \hat{\theta}_{MAP} = \hat{\theta}_{MLE} $$
+
+#### 4. 정보이론적 해석
+
+MLE는 **쿨백-라이블러 발산(KL Divergence)을 최소화**하는 것과 동치이다. 이는 다음 섹션에서 자세히 다룰 예정이다.
 
 ### 생성모델에서 MLE의 역할
 
@@ -323,6 +750,341 @@ def discrete_kl_divergence():
 
 discrete_kl_divergence()
 ```
+
+### MLE와 KL Divergence의 깊은 관계
+
+MLE와 KL Divergence는 표면적으로 다른 개념처럼 보이지만, 실제로는 **같은 목표를 추구하는 두 가지 다른 관점**이다.
+
+#### 수학적 연결: MLE = KL Divergence 최소화
+
+경험적 분포(empirical distribution) $$\hat{p}_{data}(x)$$와 모델 분포 $$p_{\theta}(x)$$ 사이의 KL divergence를 생각해보자:
+
+$$ D_{KL}(\hat{p}_{data} || p_{\theta}) = \sum_x \hat{p}_{data}(x) \log \frac{\hat{p}_{data}(x)}{p_{\theta}(x)} $$
+
+$$ = \sum_x \hat{p}_{data}(x) \log \hat{p}_{data}(x) - \sum_x \hat{p}_{data}(x) \log p_{\theta}(x) $$
+
+$$ = H(\hat{p}_{data}) - \mathbb{E}_{\hat{p}_{data}}[\log p_{\theta}(x)] $$
+
+여기서 첫 번째 항 $$H(\hat{p}_{data})$$는 데이터에만 의존하므로 상수이다. 따라서 KL divergence를 최소화하는 것은 **교차 엔트로피 항을 최대화**하는 것과 같다:
+
+$$ \min_{\theta} D_{KL}(\hat{p}_{data} || p_{\theta}) \equiv \max_{\theta} \mathbb{E}_{\hat{p}_{data}}[\log p_{\theta}(x)] $$
+
+경험적 분포에서의 기댓값은 표본 평균이므로:
+
+$$ \max_{\theta} \mathbb{E}_{\hat{p}_{data}}[\log p_{\theta}(x)] = \max_{\theta} \frac{1}{n} \sum_{i=1}^{n} \log p_{\theta}(x_i) $$
+
+이것이 바로 **MLE의 로그 가능도 함수**이다!
+
+> **핵심 통찰**: MLE로 모델을 학습하는 것은 경험적 데이터 분포와 모델 분포 사이의 KL divergence를 최소화하는 것과 정확히 같다. {: .prompt-tip}
+
+```python
+def mle_kl_relationship_demo():
+    """MLE와 KL Divergence의 관계 시연"""
+    
+    # 실제 데이터 분포 시뮬레이션
+    true_mu, true_sigma = 2.0, 1.0
+    data = np.random.normal(true_mu, true_sigma, 1000)
+    
+    # 경험적 분포 생성 (히스토그램)
+    bins = np.linspace(data.min() - 1, data.max() + 1, 50)
+    empirical_counts, _ = np.histogram(data, bins=bins, density=True)
+    bin_centers = (bins[:-1] + bins[1:]) / 2
+    empirical_probs = empirical_counts * (bins[1] - bins[0])  # 확률로 정규화
+    empirical_probs = empirical_probs / empirical_probs.sum()  # 합이 1이 되도록
+    
+    # 다양한 모델 파라미터에 대해 KL divergence와 log-likelihood 계산
+    mu_range = np.linspace(0, 4, 50)
+    sigma_fixed = 1.0
+    
+    kl_divergences = []
+    log_likelihoods = []
+    
+    for mu in mu_range:
+        # 모델 확률 계산
+        model_probs = norm.pdf(bin_centers, mu, sigma_fixed)
+        model_probs = model_probs / model_probs.sum()  # 정규화
+        
+        # KL divergence 계산 (empirical || model)
+        kl_div = np.sum(empirical_probs * np.log(empirical_probs / (model_probs + 1e-15)))
+        kl_divergences.append(kl_div)
+        
+        # Log-likelihood 계산
+        log_likelihood = np.sum(norm.logpdf(data, mu, sigma_fixed))
+        log_likelihoods.append(log_likelihood)
+    
+    # MLE 추정값
+    mu_mle = np.mean(data)
+    
+    # 시각화
+    fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(18, 5))
+    
+    # 1. 경험적 분포 vs 최적 모델 분포
+    x = np.linspace(data.min() - 1, data.max() + 1, 100)
+    empirical_pdf = norm.pdf(x, np.mean(data), np.std(data))
+    optimal_model_pdf = norm.pdf(x, mu_mle, sigma_fixed)
+    
+    ax1.hist(data, bins=30, density=True, alpha=0.6, label='데이터')
+    ax1.plot(x, empirical_pdf, 'g-', linewidth=2, label='경험적 분포')
+    ax1.plot(x, optimal_model_pdf, 'r--', linewidth=2, label=f'최적 모델 (μ={mu_mle:.2f})')
+    ax1.set_xlabel('x')
+    ax1.set_ylabel('밀도')
+    ax1.set_title('분포 비교')
+    ax1.legend()
+    ax1.grid(True, alpha=0.3)
+    
+    # 2. KL Divergence
+    ax2.plot(mu_range, kl_divergences, 'b-', linewidth=2)
+    ax2.axvline(mu_mle, color='r', linestyle='--', 
+               label=f'MLE 최적값 (μ={mu_mle:.2f})')
+    ax2.axvline(true_mu, color='g', linestyle='--', 
+               label=f'실제값 (μ={true_mu})')
+    ax2.set_xlabel('모델 평균 μ')
+    ax2.set_ylabel('KL Divergence')
+    ax2.set_title('KL Divergence (경험적 || 모델)')
+    ax2.legend()
+    ax2.grid(True, alpha=0.3)
+    
+    # 3. Log-Likelihood
+    ax3.plot(mu_range, log_likelihoods, 'purple', linewidth=2)
+    ax3.axvline(mu_mle, color='r', linestyle='--', 
+               label=f'MLE 최적값 (μ={mu_mle:.2f})')
+    ax3.axvline(true_mu, color='g', linestyle='--', 
+               label=f'실제값 (μ={true_mu})')
+    ax3.set_xlabel('모델 평균 μ')
+    ax3.set_ylabel('Log-Likelihood')
+    ax3.set_title('Log-Likelihood')
+    ax3.legend()
+    ax3.grid(True, alpha=0.3)
+    
+    plt.tight_layout()
+    plt.show()
+    
+    # 최적값에서의 지표 비교
+    optimal_idx = np.argmin(kl_divergences)
+    mle_idx = np.argmax(log_likelihoods)
+    
+    print(f"=== MLE와 KL Divergence 최소화의 동치성 확인 ===")
+    print(f"KL divergence 최소값에서의 μ: {mu_range[optimal_idx]:.3f}")
+    print(f"Log-likelihood 최대값에서의 μ: {mu_range[mle_idx]:.3f}")
+    print(f"실제 MLE 추정값: {mu_mle:.3f}")
+    print(f"두 방법의 차이: {abs(mu_range[optimal_idx] - mu_range[mle_idx]):.6f}")
+
+mle_kl_relationship_demo()
+```
+
+#### Cross-Entropy와의 관계
+
+머신러닝에서 자주 사용하는 **Cross-Entropy 손실함수**는 실제로 **Negative Log-Likelihood**이다:
+
+분류 문제에서 Cross-Entropy: $$ \text{CrossEntropy} = -\frac{1}{n}\sum_{i=1}^{n} \sum_{c=1}^{C} y_{ic} \log p_{ic} $$
+
+MLE의 Negative Log-Likelihood: $$ \text{NLL} = -\frac{1}{n}\sum_{i=1}^{n} \log p_{\theta}(y_i|x_i) $$
+
+두 식이 동일함을 알 수 있다!
+
+```python
+def cross_entropy_mle_demo():
+    """Cross-Entropy와 MLE의 관계 시연"""
+    
+    # 3-클래스 분류 문제 시뮬레이션
+    n_samples = 1000
+    n_classes = 3
+    
+    # 실제 레이블 (원-핫 인코딩)
+    true_labels = np.random.randint(0, n_classes, n_samples)
+    y_true = np.eye(n_classes)[true_labels]
+    
+    # 모델 예측 (소프트맥스 출력)
+    logits = np.random.randn(n_samples, n_classes)
+    y_pred = np.exp(logits) / np.sum(np.exp(logits), axis=1, keepdims=True)
+    
+    # 1. Cross-Entropy 계산
+    cross_entropy = -np.mean(np.sum(y_true * np.log(y_pred + 1e-15), axis=1))
+    
+    # 2. Negative Log-Likelihood 계산 (동일한 것)
+    nll = -np.mean([np.log(y_pred[i, true_labels[i]] + 1e-15) 
+                    for i in range(n_samples)])
+    
+    # 3. 다항분포의 MLE로 해석
+    # 각 클래스별 확률을 MLE로 추정
+    class_counts = np.bincount(true_labels, minlength=n_classes)
+    mle_probs = class_counts / n_samples
+    
+    print(f"=== Cross-Entropy와 MLE의 동치성 ===")
+    print(f"Cross-Entropy: {cross_entropy:.6f}")
+    print(f"Negative Log-Likelihood: {nll:.6f}")
+    print(f"차이: {abs(cross_entropy - nll):.10f}")
+    print()
+    print(f"클래스별 실제 빈도: {class_counts}")
+    print(f"MLE 추정 확률: {mle_probs}")
+    
+    # 시각화
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
+    
+    # 클래스 분포
+    classes = [f'클래스 {i}' for i in range(n_classes)]
+    ax1.bar(classes, class_counts, alpha=0.7, color='skyblue')
+    ax1.set_ylabel('빈도')
+    ax1.set_title('클래스별 데이터 분포')
+    
+    for i, count in enumerate(class_counts):
+        ax1.text(i, count + 10, str(count), ha='center', fontweight='bold')
+    
+    # 예측 확률 분포 예시 (첫 100개 샘플)
+    sample_indices = range(100)
+    ax2.plot(sample_indices, y_pred[:100, 0], 'r-', label='클래스 0 확률', alpha=0.7)
+    ax2.plot(sample_indices, y_pred[:100, 1], 'g-', label='클래스 1 확률', alpha=0.7)
+    ax2.plot(sample_indices, y_pred[:100, 2], 'b-', label='클래스 2 확률', alpha=0.7)
+    
+    ax2.set_xlabel('샘플 인덱스')
+    ax2.set_ylabel('예측 확률')
+    ax2.set_title('모델 예측 확률 (첫 100개 샘플)')
+    ax2.legend()
+    ax2.grid(True, alpha=0.3)
+    
+    plt.tight_layout()
+    plt.show()
+
+cross_entropy_mle_demo()
+```
+
+#### 정보이론적 해석의 통합
+
+MLE와 KL Divergence의 관계를 정보이론적으로 해석하면:
+
+1. **압축 관점**: MLE는 데이터를 가장 효율적으로 압축할 수 있는 모델을 찾는다
+2. **정보 손실 최소화**: KL divergence는 모델을 사용함으로써 발생하는 정보 손실을 최소화한다
+3. **예측 정확도**: 두 방법 모두 모델의 예측 정확도를 최대화한다
+
+```python
+def information_theory_integration():
+    """정보이론적 관점에서의 MLE-KL 통합"""
+    
+    # 시나리오: 이미지 픽셀 값 분포 모델링
+    # 실제 이미지의 픽셀 값들 (0-255)
+    np.random.seed(42)
+    
+    # 가상의 "자연 이미지" 픽셀 분포 (bimodal)
+    true_pixels = np.concatenate([
+        np.random.normal(60, 20, 500),   # 어두운 영역
+        np.random.normal(180, 30, 500)   # 밝은 영역
+    ])
+    true_pixels = np.clip(true_pixels, 0, 255).astype(int)
+    
+    # 경험적 분포 생성
+    pixel_counts = np.bincount(true_pixels, minlength=256)
+    empirical_dist = pixel_counts / pixel_counts.sum()
+    
+    # 다양한 모델로 피팅
+    models = {
+        'Uniform': np.ones(256) / 256,
+        'Single Gaussian': None,  # 계산 후 채움
+        'Optimal Model': empirical_dist  # 완벽한 모델
+    }
+    
+    # 단일 가우시안 모델 (MLE로 추정)
+    mu_mle = np.mean(true_pixels)
+    sigma_mle = np.std(true_pixels)
+    x_range = np.arange(256)
+    gaussian_model = norm.pdf(x_range, mu_mle, sigma_mle)
+    gaussian_model = gaussian_model / gaussian_model.sum()
+    models['Single Gaussian'] = gaussian_model
+    
+    # 각 모델에 대한 지표 계산
+    results = {}
+    
+    for name, model_dist in models.items():
+        # KL Divergence
+        kl_div = np.sum(empirical_dist * np.log(empirical_dist / (model_dist + 1e-15)))
+        
+        # Cross-Entropy
+        cross_entropy = -np.sum(empirical_dist * np.log(model_dist + 1e-15))
+        
+        # Entropy of empirical distribution
+        entropy_empirical = -np.sum(empirical_dist * np.log(empirical_dist + 1e-15))
+        
+        # Log-Likelihood (on original data)
+        log_likelihood = np.sum([np.log(model_dist[pixel] + 1e-15) for pixel in true_pixels])
+        
+        # Compression efficiency (bits per pixel)
+        bits_per_pixel = -log_likelihood / len(true_pixels) / np.log(2)
+        
+        results[name] = {
+            'KL_Divergence': kl_div,
+            'Cross_Entropy': cross_entropy,
+            'Log_Likelihood': log_likelihood,
+            'Bits_per_Pixel': bits_per_pixel
+        }
+    
+    # 결과 출력
+    print("=== 정보이론적 관점에서의 모델 비교 ===")
+    print(f"경험적 분포의 엔트로피: {entropy_empirical:.4f} bits")
+    print()
+    
+    for name, metrics in results.items():
+        print(f"{name}:")
+        print(f"  KL Divergence: {metrics['KL_Divergence']:.4f}")
+        print(f"  Cross Entropy: {metrics['Cross_Entropy']:.4f}")
+        print(f"  Log-Likelihood: {metrics['Log_Likelihood']:.2f}")
+        print(f"  압축 효율성: {metrics['Bits_per_Pixel']:.4f} bits/pixel")
+        print()
+    
+    # 시각화
+    fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(15, 10))
+    
+    # 1. 실제 데이터와 모델 분포
+    ax1.hist(true_pixels, bins=50, density=True, alpha=0.6, label='실제 데이터')
+    ax1.plot(x_range, empirical_dist, 'g-', linewidth=2, label='경험적 분포')
+    ax1.plot(x_range, gaussian_model, 'r--', linewidth=2, label='가우시안 모델')
+    ax1.set_xlabel('픽셀 값')
+    ax1.set_ylabel('확률 밀도')
+    ax1.set_title('실제 분포 vs 모델 분포')
+    ax1.legend()
+    ax1.grid(True, alpha=0.3)
+    
+    # 2. KL Divergence 비교
+    model_names = list(results.keys())
+    kl_values = [results[name]['KL_Divergence'] for name in model_names]
+    
+    ax2.bar(model_names, kl_values, alpha=0.7, color=['red', 'blue', 'green'])
+    ax2.set_ylabel('KL Divergence')
+    ax2.set_title('모델별 KL Divergence (낮을수록 좋음)')
+    ax2.tick_params(axis='x', rotation=45)
+    
+    # 3. 압축 효율성
+    compression_values = [results[name]['Bits_per_Pixel'] for name in model_names]
+    
+    ax3.bar(model_names, compression_values, alpha=0.7, color=['red', 'blue', 'green'])
+    ax3.set_ylabel('Bits per Pixel')
+    ax3.set_title('압축 효율성 (낮을수록 좋음)')
+    ax3.tick_params(axis='x', rotation=45)
+    
+    # 4. Cross-Entropy vs KL Divergence 관계
+    ce_values = [results[name]['Cross_Entropy'] for name in model_names]
+    
+    ax4.scatter(kl_values, ce_values, s=100, alpha=0.7)
+    for i, name in enumerate(model_names):
+        ax4.annotate(name, (kl_values[i], ce_values[i]), 
+                    xytext=(5, 5), textcoords='offset points')
+    
+    ax4.set_xlabel('KL Divergence')
+    ax4.set_ylabel('Cross Entropy')
+    ax4.set_title('KL Divergence vs Cross Entropy')
+    ax4.grid(True, alpha=0.3)
+    
+    plt.tight_layout()
+    plt.show()
+    
+    print("=== 핵심 통찰 ===")
+    print("1. KL Divergence가 낮을수록 더 좋은 모델")
+    print("2. Cross-Entropy = KL Divergence + 데이터 엔트로피")
+    print("3. 압축 효율성과 모델 품질은 반비례 관계")
+    print("4. MLE는 이 모든 지표를 동시에 최적화")
+
+information_theory_integration()
+```
+
+이렇게 MLE와 KL Divergence는 서로 다른 관점에서 같은 목표를 추구하는 **쌍대 개념(dual concepts)** 이다. MLE는 "데이터를 가장 잘 설명하는 모델"을 찾고, KL Divergence 최소화는 "실제 분포와 가장 가까운 모델"을 찾는다. 결국 둘 다 **최적의 모델**을 찾는 것이 목표이며, 수학적으로는 완전히 동치이다.
 
 ## 🤖 VAE에서의 MLE와 KL Divergence 활용
 
