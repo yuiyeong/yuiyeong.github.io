@@ -12,6 +12,9 @@ tags:
   - 머신러닝
   - python
   - pytorch
+  - tensor
+  - torch
+  - 파이썬
 toc: true
 comments: false
 mermaid: true
@@ -19,18 +22,68 @@ math: true
 ---
 ## 📦 사용하는 python package
 
-- torch==2.1.0+
-- numpy==1.26.0
-- matplotlib==3.10.0
+- numpy==2.2.6  
+- pandas==2.3.1  
+- matplotlib==3.10.3  
+- seaborn==0.13.2  
+- tqdm==4.67.1  
+- pillow==11.2.1  
+- torch==2.5.1
+- torchvision==0.21.0
 
 ## 🚀 TL;DR
 
 - **딥러닝 프레임워크**는 복잡한 신경망 구현을 간소화하여 개발자가 모델 설계에 집중할 수 있게 해주는 필수 도구
 - **PyTorch**는 Papers with Code 기준 2023년 가장 많이 사용되는 프레임워크로, 62%의 SOTA 모델이 PyTorch로 구현됨
-- **텐서(Tensor)** 는 숫자들의 다차원 컨테이너로, 레고 블록처럼 조립하고 변형할 수 있는 PyTorch의 기본 단위
+- **PyTorch**는 동적 계산 그래프와 직관적인 API로 딥러닝 연구와 개발에 최적화된 프레임워크다
+- **텐서(Tensor)** 는 PyTorch의 핵심 자료구조로, NumPy 배열과 유사하지만 GPU 가속과 자동 미분을 지원한다
+- **Autograd**는 자동 미분 시스템으로 역전파 알고리즘을 자동으로 처리해 모델 학습을 간편하게 만든다
+- **nn.Module**을 상속받아 신경망 모델을 정의하고, **DataLoader**로 효율적인 데이터 처리 파이프라인을 구축한다
 - **CUDA 텐서**를 통해 GPU 연산을 투명하게 처리하며, 자동 메모리 관리와 비동기 실행으로 최적화된 성능 제공
-- **동적 계산 그래프**와 **Autograd** 엔진으로 자동 미분을 지원하여 복잡한 모델도 쉽게 학습 가능
 - **torch.compile()**, **FSDP**, **DTensor** 등 최신 기능으로 대규모 모델 학습과 추론 속도를 획기적으로 개선
+
+## 🔥 PyTorch란?
+
+**PyTorch**는 페이스북(현 Meta)에서 개발한 오픈소스 딥러닝 프레임워크로, 연구와 프로덕션 환경 모두에서 널리 사용되고 있다.
+
+PyTorch의 핵심 철학은 **"연구자 친화적"** 이다. 복잡한 모델도 직관적으로 구현할 수 있고, 디버깅이 쉬우며, 동적으로 네트워크를 변경할 수 있다는 장점이 있다.
+
+```mermaid
+mindmap
+  root((PyTorch))
+    (핵심 특징)
+      [동적 계산 그래프]
+        (실행 중 그래프 변경)
+        (디버깅 용이)
+      [파이썬다운 설계]
+        (직관적 API)
+        (NumPy 호환성)
+      [강력한 GPU 지원]
+        (CUDA 통합)
+        (분산 학습)
+    (주요 컴포넌트)
+      [torch.Tensor]
+        (기본 자료구조)
+        (GPU 연산 지원)
+      [torch.nn]
+        (신경망 레이어)
+        (손실함수)
+      [torch.optim]
+        (최적화 알고리즘)
+        (학습률 스케줄러)
+      [torch.utils.data]
+        (데이터 로딩)
+        (배치 처리)
+    (이미지 처리)
+      [torchvision]
+        (전처리 도구)
+        (사전학습 모델)
+        (데이터셋)
+```
+
+> PyTorch는 **동적 계산 그래프(Dynamic Computation Graph)** 를 사용하여 모델을 실행하면서 그래프를 구성한다. 이는 TensorFlow 1.x의 정적 그래프와 달리 더 유연하고 직관적인 개발을 가능하게 한다.
+{: .prompt-tip}
+
 
 ## 🎯 왜 딥러닝 프레임워크가 필요한가?
 
@@ -111,7 +164,7 @@ PyTorch가 선호되는 이유는 다음과 같다:
 > PyTorch는 **"연구자가 만든, 연구자를 위한"** 프레임워크로 시작했지만, 이제는 산업계에서도 널리 사용되는 표준이 되었다.
 {: .prompt-tip}
 
-## 🖥️ PyTorch의 GPU 활용 메커니즘
+## 🖥️ PyTorch 의 GPU 활용 메커니즘
 
 PyTorch가 GPU를 활용하는 방식을 이해하기 위해, 택배 배송 시스템에 비유해보자.
 
@@ -119,7 +172,7 @@ PyTorch가 GPU를 활용하는 방식을 이해하기 위해, 택배 배송 시�
 
 ### CUDA 텐서와 디바이스 관리
 
-PyTorch에서 텐서는 CPU 또는 GPU 메모리에 저장될 수 있다:
+PyTorch에서 텐서는 CPU 또는 GPU 메모리에 저장될 수 있다.
 
 ```python
 import torch
@@ -148,7 +201,7 @@ if torch.cuda.is_available():
 
 ### GPU 메모리 관리
 
-GPU 메모리는 제한적이므로 효율적인 관리가 중요하다. 마치 배송 센터의 공간이 한정되어 있는 것과 같다:
+GPU 메모리는 제한적이므로 효율적인 관리가 중요하다. 마치 배송 센터의 공간이 한정되어 있는 것과 같다.
 
 ```python
 # GPU 메모리 모니터링
@@ -175,13 +228,74 @@ if torch.cuda.is_available():
     print(f"메모리 해제 후: {allocated_final:.2f} GB")
 ```
 
-## 🔢 텐서(Tensor) 기본부터 심화까지
+## 📊 텐서(Tensor): PyTorch의 핵심
 
-텐서는 PyTorch의 기본 단위로, **숫자들을 담는 다차원 상자**라고 생각하면 된다. 레고 블록처럼 다양한 모양으로 조립하고 변형할 수 있다.
+**텐서(Tensor)** 는 PyTorch의 가장 기본적인 자료구조로 **숫자들을 담는 다차원 상자**라고 생각하면 된다.
 
-### 📌 텐서 기본 사용법
+NumPy의 `ndarray`와 매우 유사하지만 GPU에서 연산할 수 있고 자동 미분을 지원한다는 차이점이 있다.
 
-먼저 텐서가 무엇인지 간단한 예시로 알아보자:
+### 텐서의 기본 개념
+
+텐서는 다차원 배열을 의미하며, 스칼라(0차원), 벡터(1차원), 행렬(2차원), 그리고 더 높은 차원의 데이터를 통합적으로 표현한다.
+
+```python
+import torch
+import numpy as np
+
+# 다양한 방법으로 텐서 생성
+# 1. 직접 생성
+tensor_direct = torch.tensor([1, 2, 3, 4])
+print(f"직접 생성: {tensor_direct}")
+# 출력: 직접 생성: tensor([1, 2, 3, 4])
+
+# 2. NumPy 배열에서 변환
+numpy_array = np.array([1, 2, 3, 4])
+tensor_from_numpy = torch.from_numpy(numpy_array)
+print(f"NumPy에서 변환: {tensor_from_numpy}")
+# 출력: NumPy에서 변환: tensor([1, 2, 3, 4], dtype=torch.int64)
+
+# 3. 특수 텐서 생성
+zeros_tensor = torch.zeros(3, 4)  # 0으로 채워진 3x4 텐서
+ones_tensor = torch.ones(2, 3)   # 1로 채워진 2x3 텐서
+random_tensor = torch.randn(2, 3) # 정규분포 난수로 채워진 2x3 텐서
+
+print(f"0 텐서 크기: {zeros_tensor.shape}")  
+# 출력: 0 텐서 크기: torch.Size([3, 4])
+print(f"난수 텐서:\n{random_tensor}")
+# 출력: 난수 텐서:
+# tensor([[-0.2947,  0.8459, -1.0341],
+#         [ 0.5896, -0.4741,  1.0491]])
+```
+
+### 텐서의 주요 속성과 연산
+
+```python
+# 텐서의 기본 속성
+tensor = torch.randn(3, 4, 5)
+print(f"텐서 모양: {tensor.shape}")        # torch.Size([3, 4, 5])
+print(f"텐서 차원: {tensor.dim()}")         # 3
+print(f"데이터 타입: {tensor.dtype}")       # torch.float32
+print(f"저장 장치: {tensor.device}")       # cpu
+
+# 기본 연산
+a = torch.tensor([1, 2, 3])
+b = torch.tensor([4, 5, 6])
+
+# 요소별 연산
+print(f"덧셈: {a + b}")                    # tensor([5, 7, 9])
+print(f"곱셈: {a * b}")                    # tensor([4, 10, 18])
+
+# 행렬 연산
+matrix_a = torch.randn(3, 4)
+matrix_b = torch.randn(4, 2)
+matrix_mult = torch.matmul(matrix_a, matrix_b)  # 또는 matrix_a @ matrix_b
+print(f"행렬 곱셈 결과 크기: {matrix_mult.shape}")  
+# 출력: 행렬 곱셈 결과 크기: torch.Size([3, 2])
+```
+
+### 텐서 기본 사용법
+
+먼저 텐서가 무엇인지 간단한 예시로 알아보자.
 
 ```python
 import torch
@@ -212,9 +326,9 @@ print(f"텐서의 전체 원소 개수: {tensor_2d.numel()}")  # 6
 print(f"텐서의 데이터 타입: {tensor_2d.dtype}")  # torch.int64
 ```
 
-### 🎨 텐서의 다양한 생성 방법
+### 텐서의 다양한 생성 방법
 
-텐서를 만드는 방법은 마치 요리 재료를 준비하는 것처럼 다양하다:
+텐서를 만드는 방법은 마치 요리 재료를 준비하는 것처럼 다양하다.
 
 ```python
 # 1. 특정 값으로 가득 채우기
@@ -262,9 +376,9 @@ print("\n원본과 같은 모양의 영 텐서:")
 print(zeros_like_original)
 ```
 
-### 🧮 텐서 연산과 변형
+### 텐서 연산과 변형
 
-텐서는 레고 블록처럼 다양하게 조작할 수 있다:
+텐서는 레고 블록처럼 다양하게 조작할 수 있다.
 
 ```python
 # 기본 산술 연산
@@ -314,9 +428,9 @@ transposed = reshaped.t()  # 또는 reshaped.transpose(0, 1)
 print(f"\n전치 후 shape: {transposed.shape}")  # [4, 3]
 ```
 
-### 🎯 텐서 인덱싱과 슬라이싱
+### 텐서 인덱싱과 슬라이싱
 
-텐서에서 원하는 부분만 꺼내는 방법은 마치 케이크를 자르는 것과 같다:
+텐서에서 원하는 부분만 꺼내는 방법은 마치 케이크를 자르는 것과 같다.
 
 ```python
 # 2차원 텐서 생성
@@ -349,9 +463,9 @@ print("\n선택된 행들:")
 print(selected_rows)
 ```
 
-### 🚀 텐서 심화 활용
+### 텐서 심화 활용
 
-이제 좀 더 고급 기능들을 살펴보자:
+이제 좀 더 고급 기능들을 살펴보자.
 
 ```python
 # 브로드캐스팅 (자동 크기 맞추기)
@@ -396,11 +510,581 @@ print(f"\nx의 그래디언트: {x.grad}")  # 2x = [2, 4, 6]
 > 텐서는 PyTorch의 **기본 빌딩 블록**이다. 레고 블록처럼 이것들을 조합해서 복잡한 신경망을 만들 수 있다!
 {: .prompt-tip}
 
+### GPU 활용
+
+```python
+# GPU 사용 가능 여부 확인
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print(f"사용 장치: {device}")
+
+# CPU 텐서를 GPU로 이동
+if torch.cuda.is_available():
+    tensor_cpu = torch.randn(1000, 1000)
+    tensor_gpu = tensor_cpu.to(device)  # 또는 tensor_cpu.cuda()
+    print(f"GPU 텐서 장치: {tensor_gpu.device}")
+    # 출력: GPU 텐서 장치: cuda:0
+    
+    # GPU에서 연산 수행
+    result = torch.matmul(tensor_gpu, tensor_gpu.T)
+    print(f"GPU 연산 결과 크기: {result.shape}")
+```
+
+> 텐서를 GPU로 이동시킬 때는 `.to(device)` 메서드를 사용하는 것이 권장된다. 이는 장치에 관계없이 일관된 코드를 작성할 수 있게 해준다.
+{: .prompt-tip}
+
+## ⚡ Autograd: 자동 미분의 마법
+
+**Autograd**는 PyTorch의 자동 미분 시스템으로, 텐서의 모든 연산을 추적하여 자동으로 그래디언트를 계산한다. 이는 딥러닝의 핵심인 역전파(Backpropagation) 알고리즘을 자동으로 처리해준다.
+
+### 계산 그래프와 그래디언트
+
+```python
+import torch
+
+# requires_grad=True로 그래디언트 추적 활성화
+x = torch.tensor([2.0], requires_grad=True)
+y = torch.tensor([3.0], requires_grad=True)
+
+# 순전파 계산
+z = x * y + x**2
+loss = z.sum()
+
+print(f"x: {x}")           # tensor([2.], requires_grad=True)
+print(f"y: {y}")           # tensor([3.], requires_grad=True)
+print(f"z: {z}")           # tensor([10.], grad_fn=<AddBackward0>)
+print(f"loss: {loss}")     # tensor(10., grad_fn=<SumBackward0>)
+
+# 역전파 수행
+loss.backward()
+
+# 그래디언트 확인
+print(f"x의 그래디언트: {x.grad}")  # tensor([7.]) = dy/dx = y + 2*x = 3 + 2*2
+print(f"y의 그래디언트: {y.grad}")  # tensor([2.]) = dy/dy = x = 2
+```
+
+### 실제 신경망에서의 활용
+
+```python
+import torch
+import torch.nn as nn
+
+# 간단한 선형 회귀 예제
+# 데이터 준비
+x_data = torch.randn(100, 1)
+y_data = 3 * x_data + 2 + torch.randn(100, 1) * 0.1  # y = 3x + 2 + noise
+
+# 모델 정의
+model = nn.Linear(1, 1)  # 입력 1개, 출력 1개
+criterion = nn.MSELoss()
+optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
+
+# 학습 과정
+for epoch in range(100):
+    # 순전파
+    y_pred = model(x_data)
+    loss = criterion(y_pred, y_data)
+    
+    # 역전파
+    optimizer.zero_grad()  # 그래디언트 초기화
+    loss.backward()        # 그래디언트 계산
+    optimizer.step()       # 파라미터 업데이트
+    
+    if epoch % 20 == 0:
+        print(f"Epoch {epoch}, Loss: {loss.item():.4f}")
+
+# 학습된 파라미터 확인
+print(f"학습된 가중치: {model.weight.item():.4f}")  # 약 3에 가까운 값
+print(f"학습된 편향: {model.bias.item():.4f}")     # 약 2에 가까운 값
+```
+
+> `optimizer.zero_grad()`는 매우 중요하다. PyTorch는 기본적으로 그래디언트를 누적하므로, 각 배치마다 그래디언트를 초기화해야 올바른 학습이 가능하다.
+{: .prompt-warning}
+
+## 🧠 torch.nn: 신경망 구축의 핵심
+
+**torch.nn** 모듈은 신경망 레이어, 활성화 함수, 손실 함수 등 딥러닝 모델 구축에 필요한 모든 구성 요소를 제공한다.
+
+### nn.Module: 모든 모델의 기반
+
+모든 PyTorch 모델은 `nn.Module`을 상속받아 구현한다. 이는 파라미터 관리, GPU 이동, 저장/로딩 등의 기능을 자동으로 제공한다.
+
+```python
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
+class SimpleNet(nn.Module):
+    def __init__(self, input_size, hidden_size, output_size):
+        super(SimpleNet, self).__init__()
+        self.fc1 = nn.Linear(input_size, hidden_size)
+        self.fc2 = nn.Linear(hidden_size, hidden_size)
+        self.fc3 = nn.Linear(hidden_size, output_size)
+        self.dropout = nn.Dropout(0.2)
+        
+    def forward(self, x):
+        x = F.relu(self.fc1(x))
+        x = self.dropout(x)
+        x = F.relu(self.fc2(x))
+        x = self.dropout(x)
+        x = self.fc3(x)
+        return x
+
+# 모델 인스턴스 생성
+model = SimpleNet(input_size=784, hidden_size=128, output_size=10)
+
+# 모델 정보 확인
+print(f"모델 구조:\n{model}")
+print(f"전체 파라미터 수: {sum(p.numel() for p in model.parameters())}")
+# 출력: 전체 파라미터 수: 101770
+
+# 순전파 테스트
+sample_input = torch.randn(32, 784)  # 배치 크기 32, 입력 차원 784
+output = model(sample_input)
+print(f"출력 크기: {output.shape}")  # torch.Size([32, 10])
+```
+
+### 주요 레이어와 활성화 함수
+
+```python
+# 다양한 레이어 예시
+conv_layer = nn.Conv2d(in_channels=3, out_channels=64, kernel_size=3, padding=1)
+pool_layer = nn.MaxPool2d(kernel_size=2, stride=2)
+batch_norm = nn.BatchNorm2d(64)
+linear_layer = nn.Linear(512, 256)
+
+# 활성화 함수
+relu = nn.ReLU()
+sigmoid = nn.Sigmoid()
+tanh = nn.Tanh()
+leaky_relu = nn.LeakyReLU(0.2)
+
+# 정규화 레이어
+dropout = nn.Dropout(0.5)
+layer_norm = nn.LayerNorm(256)
+
+# 손실 함수
+mse_loss = nn.MSELoss()                    # 회귀용
+cross_entropy = nn.CrossEntropyLoss()      # 분류용
+bce_loss = nn.BCEWithLogitsLoss()          # 이진 분류용
+
+print("주요 컴포넌트들이 성공적으로 생성되었습니다.")
+```
+
+### Sequential 을 활용한 간단한 모델 정의
+
+```python
+# Sequential을 사용한 간단한 모델 정의
+simple_model = nn.Sequential(
+    nn.Linear(784, 256),
+    nn.ReLU(),
+    nn.Dropout(0.2),
+    nn.Linear(256, 128),
+    nn.ReLU(),
+    nn.Dropout(0.2),
+    nn.Linear(128, 10)
+)
+
+print(f"Sequential 모델:\n{simple_model}")
+
+# 파라미터 확인
+for name, param in simple_model.named_parameters():
+    print(f"{name}: {param.shape}")
+# 출력 예시:
+# 0.weight: torch.Size([256, 784])
+# 0.bias: torch.Size([256])
+# 3.weight: torch.Size([128, 256])
+# ...
+```
+
+## 🎯 torch.optim: 최적화의 핵심
+
+**torch.optim** 모듈은 다양한 최적화 알고리즘을 제공하여 모델의 파라미터를 효율적으로 업데이트한다.
+
+### 주요 최적화 알고리즘
+
+```python
+import torch.optim as optim
+
+# 모델 정의 (앞서 정의한 SimpleNet 사용)
+model = SimpleNet(784, 128, 10)
+
+# 다양한 최적화 알고리즘
+sgd_optimizer = optim.SGD(model.parameters(), lr=0.01, momentum=0.9)
+adam_optimizer = optim.Adam(model.parameters(), lr=0.001, betas=(0.9, 0.999))
+rmsprop_optimizer = optim.RMSprop(model.parameters(), lr=0.01)
+adamw_optimizer = optim.AdamW(model.parameters(), lr=0.001, weight_decay=0.01)
+
+print("다양한 최적화 알고리즘이 준비되었습니다.")
+
+# 학습률 스케줄러
+scheduler = optim.lr_scheduler.StepLR(adam_optimizer, step_size=10, gamma=0.1)
+cosine_scheduler = optim.lr_scheduler.CosineAnnealingLR(adam_optimizer, T_max=50)
+
+# 학습률 변화 확인
+for epoch in range(5):
+    print(f"Epoch {epoch}: 학습률 = {adam_optimizer.param_groups[0]['lr']:.6f}")
+    scheduler.step()
+# 출력:
+# Epoch 0: 학습률 = 0.001000
+# Epoch 1: 학습률 = 0.001000
+# ...
+```
+
+## 📁 torch.utils.data: 효율적인 데이터 처리
+
+**torch.utils.data** 모듈은 대용량 데이터를 효율적으로 처리하기 위한 도구들을 제공한다.
+
+### Dataset 과 DataLoader
+
+```python
+import torch
+from torch.utils.data import Dataset, DataLoader
+import numpy as np
+
+# 커스텀 데이터셋 정의
+class CustomDataset(Dataset):
+    def __init__(self, data, labels, transform=None):
+        self.data = data
+        self.labels = labels
+        self.transform = transform
+    
+    def __len__(self):
+        return len(self.data)
+    
+    def __getitem__(self, idx):
+        sample = self.data[idx]
+        label = self.labels[idx]
+        
+        if self.transform:
+            sample = self.transform(sample)
+            
+        return sample, label
+
+# 예시 데이터 생성
+data = np.random.randn(1000, 784)
+labels = np.random.randint(0, 10, 1000)
+
+# 데이터셋과 데이터로더 생성
+dataset = CustomDataset(data, labels)
+dataloader = DataLoader(
+    dataset, 
+    batch_size=32, 
+    shuffle=True, 
+    num_workers=2,  # 멀티프로세싱
+    pin_memory=True  # GPU 사용 시 성능 향상
+)
+
+print(f"데이터셋 크기: {len(dataset)}")
+print(f"배치 수: {len(dataloader)}")
+
+# 데이터로더 사용 예시
+for batch_idx, (data, target) in enumerate(dataloader):
+    print(f"배치 {batch_idx}: 데이터 크기 {data.shape}, 레이블 크기 {target.shape}")
+    if batch_idx >= 2:  # 처음 3개 배치만 확인
+        break
+# 출력:
+# 배치 0: 데이터 크기 torch.Size([32, 784]), 레이블 크기 torch.Size([32])
+# 배치 1: 데이터 크기 torch.Size([32, 784]), 레이블 크기 torch.Size([32])
+# 배치 2: 데이터 크기 torch.Size([32, 784]), 레이블 크기 torch.Size([32])
+```
+
+## 📦 PyTorch Dataset 구현 가이드
+
+PyTorch의 `torch.utils.data.Dataset`을 상속받아 커스텀 데이터셋을 만들 때 **반드시 구현해야 하는 함수**는 다음 2개다.
+
+#### `__len__` 메서드
+
+```python
+from typing import Any, Optional, Callable, Tuple, Union, List
+import torch
+from torch.utils.data import Dataset
+
+class CustomDataset(Dataset):
+    def __len__(self) -> int:
+        """
+        데이터셋의 전체 크기를 반환
+        
+        Returns:
+            int: 데이터셋에 포함된 샘플의 총 개수
+        """
+        pass  # 구현 필요
+```
+
+#### `__getitem__` 메서드
+
+```python
+def __getitem__(self, index: int) -> Any:
+    """
+    주어진 인덱스에 해당하는 데이터 샘플을 반환
+    
+    Args:
+        index (int): 가져올 데이터의 인덱스 (0 <= index < len(dataset))
+        
+    Returns:
+        Any: 보통 (data, label) 튜플 형태이지만, 용도에 따라 다양한 형태 가능
+        
+    Raises:
+        IndexError: 인덱스가 범위를 벗어날 때
+    """
+    pass  # 구현 필요
+```
+
+### 자주 구현되는 부가적인 함수들
+
+#### `__init__` 생성자
+
+```python
+def __init__(
+    self, 
+    data_path: str,
+    transform: Optional[Callable] = None,
+    target_transform: Optional[Callable] = None,
+    **kwargs
+) -> None:
+    """
+    데이터셋 초기화
+    
+    Args:
+        data_path (str): 데이터가 저장된 경로
+        transform (Optional[Callable]): 입력 데이터에 적용할 변환
+        target_transform (Optional[Callable]): 레이블에 적용할 변환
+        **kwargs: 기타 설정 파라미터
+    """
+    super().__init__()
+    self.data_path = data_path
+    self.transform = transform
+    self.target_transform = target_transform
+    # 데이터 로딩 및 초기화 로직
+```
+
+#### `__repr__` 메서드
+
+```python
+def __repr__(self) -> str:
+    """
+    데이터셋의 문자열 표현을 반환 (디버깅용)
+    
+    Returns:
+        str: 데이터셋 정보를 포함한 문자열
+    """
+    head = "Dataset " + self.__class__.__name__
+    body = [f"Number of datapoints: {self.__len__()}"]
+    if hasattr(self, 'data_path'):
+        body.append(f"Root location: {self.data_path}")
+    body += [f"Transforms: {self.transform}"]
+    body += [f"Target transforms: {self.target_transform}"]
+    
+    lines = [head] + [" " * 4 + line for line in body]
+    return '\n'.join(lines)
+```
+
+#### 클래스 정보 관련 메서드들
+
+```python
+def get_classes(self) -> List[str]:
+    """
+    데이터셋의 클래스 이름 목록을 반환
+    
+    Returns:
+        List[str]: 클래스 이름들의 리스트
+    """
+    pass
+
+def get_class_to_idx(self) -> dict:
+    """
+    클래스 이름을 인덱스로 매핑하는 딕셔너리 반환
+    
+    Returns:
+        dict: {클래스_이름: 인덱스} 형태의 딕셔너리
+    """
+    pass
+
+@property
+def num_classes(self) -> int:
+    """
+    클래스의 총 개수를 반환
+    
+    Returns:
+        int: 클래스 개수
+    """
+    return len(self.get_classes())
+```
+
+#### 데이터 분할 관련 메서드들
+
+```python
+def split_dataset(
+    self, 
+    train_ratio: float = 0.8, 
+    random_seed: Optional[int] = None
+) -> Tuple['CustomDataset', 'CustomDataset']:
+    """
+    데이터셋을 훈련용과 검증용으로 분할
+    
+    Args:
+        train_ratio (float): 훈련 데이터 비율 (0.0 ~ 1.0)
+        random_seed (Optional[int]): 랜덤 시드
+        
+    Returns:
+        Tuple[CustomDataset, CustomDataset]: (훈련용, 검증용) 데이터셋
+    """
+    pass
+
+def get_subset(self, indices: List[int]) -> 'CustomDataset':
+    """
+    주어진 인덱스들에 해당하는 서브셋 반환
+    
+    Args:
+        indices (List[int]): 추출할 인덱스들의 리스트
+        
+    Returns:
+        CustomDataset: 서브셋 데이터셋
+    """
+    pass
+```
+
+#### 통계 정보 메서드들
+
+```python
+def get_sample_weights(self) -> torch.Tensor:
+    """
+    클래스 불균형 해결을 위한 샘플 가중치 반환
+    
+    Returns:
+        torch.Tensor: 각 샘플의 가중치
+    """
+    pass
+
+def compute_mean_std(self) -> Tuple[torch.Tensor, torch.Tensor]:
+    """
+    데이터셋의 평균과 표준편차 계산 (정규화용)
+    
+    Returns:
+        Tuple[torch.Tensor, torch.Tensor]: (평균, 표준편차)
+    """
+    pass
+
+def get_label_distribution(self) -> dict:
+    """
+    각 클래스별 샘플 개수 반환
+    
+    Returns:
+        dict: {클래스_인덱스: 샘플_개수} 딕셔너리
+    """
+    pass
+```
+
+## 🖼️ 이미지 데이터 처리: torchvision의 활용
+
+**torchvision** 은 컴퓨터 비전 작업을 위한 도구들을 제공하는 PyTorch의 확장 패키지다. 이미지 전처리, 데이터 증강, 사전 훈련된 모델 등을 포함한다.
+
+### 이미지 전처리와 데이터 증강
+
+```python
+import torchvision.transforms as transforms
+from torchvision import datasets
+from PIL import Image
+import matplotlib.pyplot as plt
+
+# 기본 전처리 파이프라인
+basic_transform = transforms.Compose([
+    transforms.Resize((224, 224)),          # 크기 조정
+    transforms.ToTensor(),                  # PIL Image를 텐서로 변환
+    transforms.Normalize(                   # 정규화
+        mean=[0.485, 0.456, 0.406],        # ImageNet 평균
+        std=[0.229, 0.224, 0.225]          # ImageNet 표준편차
+    )
+])
+
+# 데이터 증강을 포함한 전처리 (훈련용)
+train_transform = transforms.Compose([
+    transforms.Resize((256, 256)),
+    transforms.RandomCrop(224),             # 랜덤 크롭
+    transforms.RandomHorizontalFlip(p=0.5), # 50% 확률로 좌우 반전
+    transforms.RandomRotation(10),          # ±10도 랜덤 회전
+    transforms.ColorJitter(                 # 색상 변화
+        brightness=0.2, 
+        contrast=0.2, 
+        saturation=0.2, 
+        hue=0.1
+    ),
+    transforms.ToTensor(),
+    transforms.Normalize(
+        mean=[0.485, 0.456, 0.406],
+        std=[0.229, 0.224, 0.225]
+    )
+])
+
+# 테스트용 전처리 (증강 없음)
+test_transform = transforms.Compose([
+    transforms.Resize((224, 224)),
+    transforms.ToTensor(),
+    transforms.Normalize(
+        mean=[0.485, 0.456, 0.406],
+        std=[0.229, 0.224, 0.225]
+    )
+])
+
+print("이미지 전처리 파이프라인이 준비되었습니다.")
+```
+
+### 내장 데이터셋 활용
+
+```python
+from torchvision import datasets
+import os
+
+# 데이터 저장 경로
+data_dir = './data'
+
+# CIFAR-10 데이터셋 로딩
+train_dataset = datasets.CIFAR10(
+    root=data_dir,
+    train=True,
+    download=True,
+    transform=train_transform
+)
+
+test_dataset = datasets.CIFAR10(
+    root=data_dir,
+    train=False,
+    download=False,
+    transform=test_transform
+)
+
+# 데이터로더 생성
+train_loader = DataLoader(
+    train_dataset,
+    batch_size=64,
+    shuffle=True,
+    num_workers=4,
+    pin_memory=True
+)
+
+test_loader = DataLoader(
+    test_dataset,
+    batch_size=64,
+    shuffle=False,
+    num_workers=4,
+    pin_memory=True
+)
+
+print(f"훈련 데이터: {len(train_dataset)}개")
+print(f"테스트 데이터: {len(test_dataset)}개")
+print(f"클래스 수: {len(train_dataset.classes)}")
+print(f"클래스 이름: {train_dataset.classes}")
+
+# 샘플 데이터 확인
+sample_data, sample_label = train_dataset[0]
+print(f"샘플 이미지 크기: {sample_data.shape}")
+print(f"샘플 레이블: {sample_label} ({train_dataset.classes[sample_label]})")
+```
+
 ## 🏗️ PyTorch로 실제 모델 구현하기
 
-이제 실제로 간단한 신경망을 만들어보자. 먼저 **다층 퍼셉트론(MLP)**을 의사코드부터 시작해서 단계별로 구현해보겠다.
+이제 실제로 간단한 신경망을 만들어보자. 먼저 **다층 퍼셉트론(MLP)** 을 의사코드부터 시작해서 단계별로 구현해보겠다.
 
-### 📝 MLP 의사코드로 이해하기
+### MLP 의사코드로 이해하기
 
 MLP는 마치 **결정을 내리는 과정**과 같다. 여러 정보(입력)를 받아서, 중간에 여러 단계의 판단을 거쳐, 최종 결정(출력)을 내린다.
 
@@ -429,9 +1113,9 @@ MLP는 마치 **결정을 내리는 과정**과 같다. 여러 정보(입력)를
         4. 가중치_업데이트(그래디언트)
 ```
 
-### 🛠️ PyTorch로 MLP 구현하기
+### PyTorch로 MLP 구현하기
 
-이제 위의 의사코드를 실제 PyTorch 코드로 구현해보자:
+이제 위의 의사코드를 실제 PyTorch 코드로 구현해보자.
 
 ```python
 import torch
@@ -488,9 +1172,9 @@ total_params = sum(p.numel() for p in model.parameters())
 print(f"\n총 파라미터 개수: {total_params:,}")
 ```
 
-### 🎓 모델 학습 과정 구현
+### 모델 학습 과정 구현
 
-이제 모델을 학습시켜보자. 학습은 마치 **선생님이 학생에게 문제를 내고 답을 확인하며 가르치는 과정**과 같다:
+이제 모델을 학습시켜보자. 학습은 마치 **선생님이 학생에게 문제를 내고 답을 확인하며 가르치는 과정**과 같다.
 
 ```python
 # 간단한 학습 함수
@@ -568,9 +1252,9 @@ train_loader = DataLoader(dataset, batch_size=32, shuffle=True)
 # train_model(model, train_loader, num_epochs=5)
 ```
 
-### 🔍 모델 평가하기
+### 모델 평가하기
 
-학습한 모델이 잘 작동하는지 확인해보자:
+학습한 모델이 잘 작동하는지 확인해보자.
 
 ```python
 def evaluate_model(model, test_loader):
@@ -602,9 +1286,9 @@ test_loader = DataLoader(test_dataset, batch_size=32)
 # evaluate_model(model, test_loader)
 ```
 
-### 🎨 커스텀 레이어 만들기
+### 커스텀 레이어 만들기
 
-때로는 특별한 기능이 필요할 때가 있다. 직접 레이어를 만들어보자:
+때로는 특별한 기능이 필요할 때가 있다. 직접 레이어를 만들어보자.
 
 ```python
 class CustomAttentionLayer(nn.Module):
@@ -656,6 +1340,164 @@ print(f"어텐션 가중치 shape: {attention.shape}")
 
 > PyTorch로 모델을 만드는 것은 **레고 블록을 조립하는 것**과 같다. 기본 블록(레이어)들을 조합해서 원하는 구조를 만들 수 있다!
 {: .prompt-tip}
+
+## 🏗️ CNN 모델 구현: 이미지 분류의 핵심
+
+**합성곱 신경망(Convolutional Neural Network, CNN)** 은 이미지 데이터 처리에 특화된 딥러닝 아키텍처다.
+
+### 기본 CNN 모델 구현
+
+```python
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
+class BasicCNN(nn.Module):
+    def __init__(self, num_classes=10):
+        super(BasicCNN, self).__init__()
+        
+        # 합성곱 레이어들
+        self.conv1 = nn.Conv2d(3, 32, kernel_size=3, padding=1)   # 32x32x3 -> 32x32x32
+        self.conv2 = nn.Conv2d(32, 64, kernel_size=3, padding=1)  # 32x32x32 -> 32x32x64
+        self.conv3 = nn.Conv2d(64, 128, kernel_size=3, padding=1) # 16x16x64 -> 16x16x128
+        
+        # 배치 정규화
+        self.bn1 = nn.BatchNorm2d(32)
+        self.bn2 = nn.BatchNorm2d(64)
+        self.bn3 = nn.BatchNorm2d(128)
+        
+        # 풀링 레이어
+        self.pool = nn.MaxPool2d(2, 2)  # 크기를 절반으로 축소
+        
+        # 완전연결 레이어들
+        self.fc1 = nn.Linear(128 * 8 * 8, 512)  # 8x8x128 = 8192
+        self.fc2 = nn.Linear(512, num_classes)
+        
+        # 드롭아웃
+        self.dropout = nn.Dropout(0.5)
+        
+    def forward(self, x):
+        # 첫 번째 합성곱 블록
+        x = self.pool(F.relu(self.bn1(self.conv1(x))))  # 32x32x32 -> 16x16x32
+        
+        # 두 번째 합성곱 블록  
+        x = self.pool(F.relu(self.bn2(self.conv2(x))))  # 16x16x64 -> 8x8x64
+        
+        # 세 번째 합성곱 블록
+        x = F.relu(self.bn3(self.conv3(x)))             # 8x8x128
+        
+        # 평탄화 (Flatten)
+        x = x.view(x.size(0), -1)  # (batch_size, 8*8*128)
+        
+        # 완전연결 레이어들
+        x = F.relu(self.fc1(x))
+        x = self.dropout(x)
+        x = self.fc2(x)
+        
+        return x
+
+# 모델 생성 및 정보 확인
+model = BasicCNN(num_classes=10)
+print(f"모델 구조:\n{model}")
+
+# 파라미터 수 계산
+total_params = sum(p.numel() for p in model.parameters())
+trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+print(f"전체 파라미터 수: {total_params:,}")
+print(f"훈련 가능한 파라미터 수: {trainable_params:,}")
+
+# 순전파 테스트
+sample_input = torch.randn(4, 3, 32, 32)  # CIFAR-10 크기
+output = model(sample_input)
+print(f"입력 크기: {sample_input.shape}")
+print(f"출력 크기: {output.shape}")
+```
+
+### 고급 CNN 아키텍처: ResNet 스타일 블록
+
+```python
+class ResidualBlock(nn.Module):
+    """ResNet의 기본 블록"""
+    def __init__(self, in_channels, out_channels, stride=1):
+        super(ResidualBlock, self).__init__()
+        
+        self.conv1 = nn.Conv2d(in_channels, out_channels, 
+                              kernel_size=3, stride=stride, padding=1, bias=False)
+        self.bn1 = nn.BatchNorm2d(out_channels)
+        
+        self.conv2 = nn.Conv2d(out_channels, out_channels, 
+                              kernel_size=3, stride=1, padding=1, bias=False)
+        self.bn2 = nn.BatchNorm2d(out_channels)
+        
+        # 스킵 연결을 위한 다운샘플링
+        self.downsample = None
+        if stride != 1 or in_channels != out_channels:
+            self.downsample = nn.Sequential(
+                nn.Conv2d(in_channels, out_channels, 
+                         kernel_size=1, stride=stride, bias=False),
+                nn.BatchNorm2d(out_channels)
+            )
+    
+    def forward(self, x):
+        identity = x
+        
+        out = F.relu(self.bn1(self.conv1(x)))
+        out = self.bn2(self.conv2(out))
+        
+        if self.downsample is not None:
+            identity = self.downsample(x)
+        
+        out += identity  # 스킵 연결
+        out = F.relu(out)
+        
+        return out
+
+class ResNet(nn.Module):
+    def __init__(self, num_classes=10):
+        super(ResNet, self).__init__()
+        
+        self.in_channels = 64
+        
+        # 초기 합성곱 레이어
+        self.conv1 = nn.Conv2d(3, 64, kernel_size=3, padding=1, bias=False)
+        self.bn1 = nn.BatchNorm2d(64)
+        
+        # ResNet 블록들
+        self.layer1 = self._make_layer(64, 2, stride=1)
+        self.layer2 = self._make_layer(128, 2, stride=2)
+        self.layer3 = self._make_layer(256, 2, stride=2)
+        
+        # 전역 평균 풀링과 분류기
+        self.avg_pool = nn.AdaptiveAvgPool2d((1, 1))
+        self.fc = nn.Linear(256, num_classes)
+        
+    def _make_layer(self, out_channels, num_blocks, stride):
+        layers = []
+        layers.append(ResidualBlock(self.in_channels, out_channels, stride))
+        self.in_channels = out_channels
+        
+        for _ in range(1, num_blocks):
+            layers.append(ResidualBlock(out_channels, out_channels))
+            
+        return nn.Sequential(*layers)
+    
+    def forward(self, x):
+        x = F.relu(self.bn1(self.conv1(x)))
+        
+        x = self.layer1(x)
+        x = self.layer2(x)  
+        x = self.layer3(x)
+        
+        x = self.avg_pool(x)
+        x = x.view(x.size(0), -1)
+        x = self.fc(x)
+        
+        return x
+
+# ResNet 모델 생성
+resnet_model = ResNet(num_classes=10)
+print(f"ResNet 파라미터 수: {sum(p.numel() for p in resnet_model.parameters()):,}")
+```
 
 ## 🚀 최신 PyTorch 트렌드
 
@@ -718,7 +1560,7 @@ print(f"속도 향상: {normal_time/compiled_time:.2f}x")
 
 ### TorchScript - 프로덕션 배포
 
-TorchScript는 PyTorch 모델을 Python 없이도 실행할 수 있게 만든다. 마치 **포장해서 배송 준비**를 하는 것과 같다:
+TorchScript는 PyTorch 모델을 Python 없이도 실행할 수 있게 만든다. 마치 **포장해서 배송 준비**를 하는 것과 같다.
 
 ```python
 # 모델을 TorchScript로 변환
@@ -758,7 +1600,7 @@ output = loaded_model(example_input)
 
 ### PyTorch Lightning - 연구 코드 구조화
 
-PyTorch Lightning은 코드를 깔끔하게 정리해주는 **정리 도우미**와 같다:
+PyTorch Lightning은 코드를 깔끔하게 정리해주는 **정리 도우미**와 같다.
 
 ```python
 import pytorch_lightning as pl
@@ -782,18 +1624,6 @@ class LitModel(pl.LightningModule):
         return torch.optim.Adam(self.parameters(), lr=1e-3)
 
 # 학습은 이렇게 간단하게!
-# trainer = pl.Trainer(max_epochs=10)
-# trainer.fit(model, train_dataloader)
+trainer = pl.Trainer(max_epochs=10)
+trainer.fit(model, train_dataloader)
 ```
-
-## 🔮 PyTorch의 미래
-
-PyTorch는 계속 진화하고 있다. 주목할 만한 방향성:
-
-- **torch.compile()의 지속적 개선**: 더 빠른 추론과 학습
-- **DTensor**: 분산 텐서를 통한 대규모 모델 지원
-- **Better Quantization**: INT4, INT2 등 극단적 양자화
-- **Sparse Tensor 개선**: 더 효율적인 희소 연산
-
-> PyTorch는 단순한 딥러닝 프레임워크를 넘어, **AI 연구와 프로덕션의 표준 플랫폼**으로 자리잡고 있다. 마치 스마트폰이 우리 일상의 필수품이 된 것처럼!
-{: .prompt-tip}
