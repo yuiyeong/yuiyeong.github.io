@@ -1,9 +1,18 @@
 ---
-title: "PyTorch Lightning: 딥러닝 모델 개발을 위한 고수준 프레임워크"
-date: 2025-07-03 21:33:00 +0900
-categories: 
+title: ⚡️ PyTorch Lightning 으로 구축하는 LLM 모델링 실험 환경
+date: 2025-07-23 12:57:00 +0900
+categories:
+  - DEEP_LEARNING
+  - LLM
 tags:
   - 급발진거북이
+  - pytorch
+  - pytorch-lightning
+  - huggingface
+  - wandb
+  - python
+  - 파이썬
+  - deeplearning
 toc: true
 comments: false
 mermaid: true
@@ -11,196 +20,286 @@ math: true
 ---
 ## 📦 사용하는 python package
 
-- torch==2.0.0+
-- pytorch-lightning==2.0.0+
-- torchvision==0.15.0+
-- tensorboard==2.12.0+
-- torchmetrics==0.11.0+
+- torch==2.1.0+
+- pytorch-lightning==2.1.0+
+- transformers==4.35.0+
+- datasets==2.14.0+
 - wandb==0.15.0+
+- tokenizers==0.14.0+
+- accelerate==0.24.0+
 
 ## 🚀 TL;DR
 
-- PyTorch Lightning은 PyTorch의 **보일러플레이트 코드를 제거**하고 **연구와 프로덕션 모두에 적합한** 구조를 제공하는 프레임워크다
-- **LightningModule**과 **Trainer**를 중심으로 학습 루프를 추상화하여 코드 재사용성과 가독성을 크게 향상시킨다
-- **자동 배치 처리**, **멀티 GPU 학습**, **체크포인트 관리** 등이 내장되어 있어 복잡한 설정 없이 사용 가능하다
-- **콜백 시스템**과 **로거 통합**으로 실험 관리와 모니터링이 편리하다
-- **Weights & Biases (wandb)** 통합으로 실험 추적, 시각화, 협업이 매우 간편해진다
-- 처음부터 모델을 학습하거나 **사전학습된 모델을 파인튜닝**하는 등 다양한 시나리오를 깔끔하게 구현할 수 있다
+- **PyTorch Lightning** 은 복잡한 딥러닝 실험을 체계적으로 관리할 수 있는 고수준 프레임워크로, 보일러플레이트 코드를 대폭 줄여준다
+- **LightningModule**, **LightningDataModule**, **Trainer**가 핵심 컴포넌트로, 각각 모델 정의, 데이터 처리, 학습 과정을 담당한다
+- **HuggingFace Transformers** 와의 완벽한 호환성으로 사전 훈련된 LLM을 쉽게 활용할 수 있다
+- **Wandb 통합**을 통해 실험 추적, 하이퍼파라미터 최적화, 모델 성능 비교를 체계적으로 수행할 수 있다
+- **멀티 GPU 분산 학습**, **그래디언트 체크포인팅**, **자동 혼합 정밀도** 등 대규모 LLM 학습에 필수적인 기능들을 간단한 설정으로 활용 가능하다
+- **콜백 시스템**과 **플러그인 아키텍처**를 통해 학습 과정을 세밀하게 제어하고 확장할 수 있다
 
-## 🌩️ PyTorch Lightning이란?
+## 📓 실습 Jupyter Notebook
 
-PyTorch Lightning은 PyTorch 코드를 구조화하고 확장 가능하게 만들어주는 고수준 프레임워크다. 연구자와 엔지니어가 **핵심 로직에만 집중**할 수 있도록 반복적인 보일러플레이트 코드를 제거하고, 모범 사례를 자동으로 적용해준다.
+- w.i.p.
 
-일반적인 PyTorch 코드에서는 학습 루프, 검증 루프, 디바이스 할당, 그래디언트 계산 등을 모두 수동으로 작성해야 한다. PyTorch Lightning은 이러한 부분을 **표준화된 인터페이스**로 추상화하여 코드의 재현성과 확장성을 높인다.
+## ⚡ PyTorch Lightning 이란?
+
+**[PyTorch Lightning](https://lightning.ai/docs/pytorch/stable/starter/introduction.html)** 은 PyTorch 위에 구축된 고수준 프레임워크로, 연구자와 개발자가 복잡한 딥러닝 실험을 보다 체계적이고 재현 가능하게 수행할 수 있도록 설계된 오픈소스 프로젝트다. Lightning의 핵심 철학은 **"과학적 코드와 엔지니어링 코드의 분리"** 이다.
+
+### PyTorch Lightning 의 핵심 가치
+
+PyTorch Lightning 은 딥러닝 연구와 개발에서 반복적으로 나타나는 문제들을 해결하기 위해 만들어졌다. 순수 PyTorch 로 작업할 때 우리는 종종 다음과 같은 보일러플레이트 코드들을 반복해서 작성하게 된다.
+
+**순수 PyTorch에서 반복되는 코드들**
+
+- GPU/CPU 장치 관리 및 텐서 이동
+- 분산 학습을 위한 복잡한 설정
+- 학습/검증/테스트 루프의 구현
+- 체크포인트 저장 및 로딩
+- 로깅 및 메트릭 추적
+- 그래디언트 누적 및 클리핑
+
+Lightning 은 이러한 엔지니어링 코드들을 프레임워크 내부로 숨기고, 연구자가 **모델 아키텍처와 학습 로직에만 집중**할 수 있도록 해준다.
+
+> PyTorch Lightning을 사용하면 **95%의 보일러플레이트 코드를 제거**하면서도 **PyTorch의 모든 유연성을 유지**할 수 있다. 특히 LLM과 같은 대규모 모델 학습에서 그 가치가 더욱 빛난다.
+{: .prompt-tip}
+
+### Lightning vs 순수 PyTorch 비교
+
+![Lightning vs PyToch](/assets/img/2025-07-23/img_torch_vs_lightning.png)
+
+Lightning을 사용하지 않을 때와 사용할 때의 차이를 간단히 비교해보면 다음과 같다.
+
+**순수 PyTorch의 일반적인 학습 루프**
 
 ```python
-# 일반 PyTorch 코드
+# 수백 줄의 복잡한 학습 루프
 for epoch in range(num_epochs):
+    model.train()
     for batch in train_loader:
+        # 장치 이동, 그래디언트 초기화, 순전파, 역전파, 옵티마이저 스텝...
+        inputs = batch['input_ids'].to(device)
+        labels = batch['labels'].to(device)
+        
         optimizer.zero_grad()
-        loss = model(batch)
+        outputs = model(inputs)
+        loss = criterion(outputs, labels)
         loss.backward()
         optimizer.step()
-    # 검증, 로깅, 체크포인트 저장 등...
-
-# PyTorch Lightning - 위의 모든 과정이 자동화됨
-trainer = Trainer(max_epochs=num_epochs)
-trainer.fit(model, train_loader)
+        
+    # 검증 루프, 메트릭 계산, 로깅...
 ```
 
-## 🔧 핵심 컴포넌트
-
-### LightningModule - 모델의 중심
-
-**LightningModule**은 PyTorch의 `nn.Module`을 확장한 클래스로, 모델 아키텍처와 학습 로직을 하나로 묶는다. 모든 학습 관련 코드가 하나의 클래스에 체계적으로 정리되어 있어 관리가 용이하다.
-
-주요 메서드:
-
-- `__init__()`: 모델 레이어 정의
-- `forward()`: 순전파 로직
-- `training_step()`: 학습 단계 정의
-- `validation_step()`: 검증 단계 정의
-- `test_step()`: 테스트 단계 정의
-- `configure_optimizers()`: 옵티마이저와 스케줄러 설정
+**PyTorch Lightning을 사용한 경우**
 
 ```python
-import pytorch_lightning as pl
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
+# 단 몇 줄로 동일한 기능 구현
+trainer = Trainer(max_epochs=num_epochs)
+trainer.fit(model, train_loader, val_loader)
+```
 
-class MyModel(pl.LightningModule):
-    def __init__(self, input_dim=784, hidden_dim=128, output_dim=10):
+이러한 간결함은 단순히 코드 길이를 줄이는 것 이상의 의미를 가진다. **오류 가능성 감소**, **재현성 향상**, **확장성 개선** 등의 실질적인 이점을 제공한다.
+
+## 🏗️ PyTorch Lightning 핵심 컴포넌트
+
+PyTorch Lightning의 아키텍처는 관심사의 분리(Separation of Concerns) 원칙에 따라 설계되었다. 각 컴포넌트는 명확한 역할과 책임을 가지며, 이들이 유기적으로 연결되어 전체 학습 파이프라인을 구성한다.
+
+```mermaid
+---
+title: PyTorch Lightning 아키텍처
+---
+
+graph LR
+
+	subgraph A[LightningModule]
+		A1[training_step]
+		A2[validation_step]
+		A3[configure_optimizers]
+		A4[forward]
+	end
+
+	subgraph C[LightningDataModule]
+		C1[prepare_data]
+		C2[setup]	
+		C3[train_dataloader]
+		C4[val_dataloader]
+	end
+	
+	A --> |모델 정의| B[Trainer]
+	C --> |데이터 공급| B
+	D[Callbacks] --> |학습 제어| B
+	E[Logger] --> |실험 추적| B
+	F[Plugins] --> |하드웨어 최적화| B
+```
+
+### LightningModule: 모델의 중심
+
+**LightningModule**은 PyTorch의 `nn.Module`을 확장한 클래스로, 모델 아키텍처뿐만 아니라 학습, 검증, 테스트 로직까지 포함한다. 이는 객체지향 프로그래밍의 캡슐화 원칙을 딥러닝에 적용한 것이다.
+
+**LightningModule의 핵심 메서드들**
+
+- **`training_step`**: 단일 학습 배치에 대한 처리 로직 정의
+- **`validation_step`**: 검증 중 각 배치 처리 방법 정의
+- **`configure_optimizers`**: 옵티마이저와 스케줄러 설정
+- **`forward`**: 순전파 로직 (추론 시 사용)
+
+각 메서드는 특정한 시점에 Trainer에 의해 자동으로 호출되며, 개발자는 해당 시점에서 수행되어야 할 로직만 구현하면 된다.
+
+```python
+class LLMLightningModule(pl.LightningModule):
+    def __init__(self, model_name: str, learning_rate: float = 1e-4):
         super().__init__()
-        self.fc1 = nn.Linear(input_dim, hidden_dim)
-        self.fc2 = nn.Linear(hidden_dim, output_dim)
+        # HuggingFace 모델 로드
+        self.model = AutoModelForCausalLM.from_pretrained(model_name)
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name)
+        self.learning_rate = learning_rate
         
-    def forward(self, x):
-        x = F.relu(self.fc1(x))
-        x = self.fc2(x)
-        return x
+        # 하이퍼파라미터 자동 저장
+        self.save_hyperparameters()
     
     def training_step(self, batch, batch_idx):
-        x, y = batch
-        logits = self(x)
-        loss = F.cross_entropy(logits, y)
-        self.log('train_loss', loss)
+        # 학습 스텝 정의 - Trainer가 자동으로 호출
+        outputs = self.model(**batch)
+        loss = outputs.loss
+        
+        # 자동 로깅
+        self.log('train_loss', loss, prog_bar=True)
         return loss
     
     def validation_step(self, batch, batch_idx):
-        x, y = batch
-        logits = self(x)
-        loss = F.cross_entropy(logits, y)
-        acc = (logits.argmax(dim=1) == y).float().mean()
-        self.log('val_loss', loss)
-        self.log('val_acc', acc)
+        # 검증 스텝 정의
+        outputs = self.model(**batch)
+        loss = outputs.loss
         
+        self.log('val_loss', loss, prog_bar=True)
+        return loss
+    
     def configure_optimizers(self):
-        return torch.optim.Adam(self.parameters(), lr=1e-3)
+        # 옵티마이저 및 스케줄러 설정
+        optimizer = torch.optim.AdamW(self.parameters(), lr=self.learning_rate)
+        scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=1000)
+        
+        return {
+            "optimizer": optimizer,
+            "lr_scheduler": {
+                "scheduler": scheduler,
+                "monitor": "val_loss"
+            }
+        }
 ```
 
-- log 함수
-	- `self.log()`는 LightningModule에서 제공하는 메서드로, 훈련 과정에서 메트릭을 로깅하고 다양한 로거(Logger)에 자동으로 전송하는 역할을 합니다.
-```python
-def log(  
-    self,  
-    name: str,                    # 로깅할 메트릭 이름  
-    value: Any,                   # 로깅할 값 (텐서, 숫자, torchmetrics 객체)  
-    prog_bar: bool = False,       # 진행 표시줄에 표시할지 여부  
-    logger: bool = True,          # 로거에 전송할지 여부  
-    on_step: bool | None = None,  # 매 스텝마다 로깅할지 여부
-    on_epoch: bool | None = None, # 에포크 끝에 로깅할지 여부
-    reduce_fx: str = "mean",      # 분산 학습 시 값을 결합하는 방법  
-    enable_graph: bool = False,   # 그래프 추적을 활성화할지 여부  
-    sync_dist: bool = False,      # 분산 학습 시 동기화할지 여부  
-    sync_dist_group: Any = None,  # 동기화할 프로세스 그룹  
-    add_dataloader_idx: bool = True,  # 데이터로더 인덱스를 추가할지 여부  
-    batch_size: int | None = None,    # 배치 크기 (가중 평균 계산용)  
-    metric_attribute: str | None = None,  # 메트릭 속성 이름  
-    rank_zero_only: bool = False,     # rank 0에서만 로깅할지 여부
-)
+> LightningModule은 단순한 모델 래퍼가 아니라 **완전한 학습 실험의 캡슐화**이다. 모델 아키텍처, 손실 함수, 옵티마이저, 평가 메트릭이 모두 하나의 클래스 안에서 체계적으로 관리된다.
+{: .prompt-tip}
+
+### LightningDataModule: 데이터 파이프라인의 표준화
+
+**LightningDataModule** 은 데이터 처리 로직을 모듈화하고 재사용 가능하게 만드는 컴포넌트이다. 데이터 다운로드부터 전처리, 데이터로더 생성까지의 전체 파이프라인을 하나의 클래스로 관리한다.
+
+**LightningDataModule의 생명주기**
+
+```mermaid
+graph LR
+    A[prepare_data] --> B[setup]
+    B --> C[train_dataloader]
+    B --> D[val_dataloader]
+    B --> E[test_dataloader]
+    
+    subgraph "실행 시점"
+        F[한 번만 실행<br/>rank 0에서만]
+        G[각 프로세스에서 실행]
+        H[매 epoch마다]
+    end
+    
+    A --> F
+    B --> G
+    C --> H
+    D --> H
+    E --> H
 ```
 
-### Trainer - 학습의 지휘자
+```python
+class LLMDataModule(pl.LightningDataModule):
+    def __init__(self, dataset_name: str, tokenizer_name: str, batch_size: int = 8):
+        super().__init__()
+        self.dataset_name = dataset_name
+        self.tokenizer = AutoTokenizer.from_pretrained(tokenizer_name)
+        self.batch_size = batch_size
+    
+    def prepare_data(self):
+        # 데이터 다운로드 (rank 0에서만 실행)
+        datasets.load_dataset(self.dataset_name)
+    
+    def setup(self, stage: str = None):
+        # 각 프로세스에서 데이터셋 로드 및 전처리
+        if stage == "fit" or stage is None:
+            full_dataset = datasets.load_dataset(self.dataset_name)
+            
+            # 토크나이징 함수
+            def tokenize_function(examples):
+                return self.tokenizer(
+                    examples["text"], 
+                    truncation=True, 
+                    padding="max_length",
+                    max_length=512,
+                    return_tensors="pt"
+                )
+            
+            # 데이터셋 분할
+            tokenized_dataset = full_dataset.map(tokenize_function, batched=True)
+            self.train_dataset = tokenized_dataset["train"]
+            self.val_dataset = tokenized_dataset["validation"]
+    
+    def train_dataloader(self):
+        return DataLoader(
+            self.train_dataset, 
+            batch_size=self.batch_size, 
+            shuffle=True,
+            num_workers=4
+        )
+    
+    def val_dataloader(self):
+        return DataLoader(
+            self.val_dataset, 
+            batch_size=self.batch_size,
+            num_workers=4
+        )
+```
 
-**Trainer**는 실제 학습 과정을 관리하는 핵심 컴포넌트다. 에폭 반복, 배치 처리, 그래디언트 계산, 체크포인트 저장 등 모든 학습 관련 작업을 자동으로 처리한다.
+### Trainer: 학습 과정의 오케스트레이터
 
-주요 기능:
+**Trainer** 는 PyTorch Lightning의 핵심 컴포넌트로, 전체 학습 과정을 조율하고 관리한다. 개발자가 복잡한 학습 루프를 직접 구현할 필요 없이, 선언적인 방식으로 학습 설정을 정의할 수 있게 해준다.
 
-- **자동 배치 처리**: 데이터로더를 자동으로 순회
-- **멀티 GPU/TPU 지원**: 간단한 플래그로 분산 학습 가능
-- **자동 혼합 정밀도**: 메모리 효율성과 속도 향상
-- **그래디언트 클리핑**: 학습 안정성 향상
-- **조기 종료**: 과적합 방지
+**Trainer 의 주요 기능들**
+
+- **자동 GPU/TPU 활용**: 사용 가능한 하드웨어 자동 감지 및 활용
+- **분산 학습**: 멀티 GPU, 멀티 노드 학습 간단 설정
+- **체크포인팅**: 자동 모델 저장 및 복원
+- **로깅**: 다양한 로거와의 통합
+- **콜백 시스템**: 학습 과정 커스터마이징
 
 ```python
-from pytorch_lightning import Trainer
-
-# 기본 Trainer
-trainer = Trainer(
+# 기본 학습 설정
+trainer = pl.Trainer(
     max_epochs=10,
-    accelerator='gpu',  # GPU 사용
-    devices=1,          # GPU 개수
-    precision=16        # 혼합 정밀도 학습
-)
-
-# 고급 설정
-trainer = Trainer(
-    max_epochs=100,
-    accelerator='gpu',
-    devices=4,                    # 4개 GPU 사용
-    strategy='ddp',               # 분산 데이터 병렬 처리
-    precision=16,                 # 16비트 혼합 정밀도
-    gradient_clip_val=1.0,        # 그래디언트 클리핑
-    accumulate_grad_batches=4,    # 그래디언트 누적
-    val_check_interval=0.25,      # 에폭의 25%마다 검증
-    log_every_n_steps=10          # 10 스텝마다 로깅
+    accelerator="gpu",
+    devices=1,
+    precision="16-mixed",  # 자동 혼합 정밀도
+    gradient_clip_val=1.0,  # 그래디언트 클리핑
+    accumulate_grad_batches=4,  # 그래디언트 누적
+    val_check_interval=0.5,  # 검증 주기
+    logger=wandb_logger,  # Wandb 로거
+    callbacks=[early_stopping, model_checkpoint]  # 콜백 추가
 )
 
 # 학습 실행
-trainer.fit(model, train_dataloader, val_dataloader)
+trainer.fit(model, datamodule)
 ```
 
-### LightningDataModule - 데이터 관리
+> Trainer는 **100줄 이상의 복잡한 학습 루프를 단 한 줄의 메서드 호출로 대체**한다. 동시에 고급 기능들(분산 학습, 혼합 정밀도, 체크포인팅 등)을 처리한다.
+{: .prompt-tip}
 
-**LightningDataModule**은 데이터 준비, 로딩, 변환을 캡슐화한다. 데이터 관련 코드를 모델과 분리하여 재사용성을 높인다.
+### Callbacks: 학습 과정 커스터마이징
 
-```python
-class MyDataModule(pl.LightningDataModule):
-    def __init__(self, data_dir='./data', batch_size=32):
-        super().__init__()
-        self.data_dir = data_dir
-        self.batch_size = batch_size
-        
-    def prepare_data(self):
-        # 데이터 다운로드 (단일 프로세스에서만 실행)
-        MNIST(self.data_dir, train=True, download=True)
-        MNIST(self.data_dir, train=False, download=True)
-        
-    def setup(self, stage=None):
-        # 데이터셋 생성 (각 프로세스에서 실행)
-        transform = transforms.ToTensor()
-        
-        if stage == 'fit' or stage is None:
-            mnist_full = MNIST(self.data_dir, train=True, transform=transform)
-            self.mnist_train, self.mnist_val = random_split(mnist_full, [55000, 5000])
-            
-        if stage == 'test' or stage is None:
-            self.mnist_test = MNIST(self.data_dir, train=False, transform=transform)
-            
-    def train_dataloader(self):
-        return DataLoader(self.mnist_train, batch_size=self.batch_size, shuffle=True)
-    
-    def val_dataloader(self):
-        return DataLoader(self.mnist_val, batch_size=self.batch_size)
-    
-    def test_dataloader(self):
-        return DataLoader(self.mnist_test, batch_size=self.batch_size)
-```
-
-### Callbacks - 학습 과정 커스터마이징
-
-**Callback**은 학습 과정의 특정 시점에 원하는 동작을 추가할 수 있게 해준다. 모델 체크포인트, 조기 종료, 학습률 스케줄링 등이 콜백으로 구현되어 있다.
+**Callback** 은 학습 과정의 특정 시점에 원하는 동작을 추가할 수 있게 해준다. 모델 체크포인트, 조기 종료, 학습률 스케줄링 등이 콜백으로 구현되어 있다.
 
 ```python
 from pytorch_lightning.callbacks import ModelCheckpoint, EarlyStopping, LearningRateMonitor
@@ -230,7 +329,7 @@ trainer = Trainer(
 )
 ```
 
-### Loggers - 실험 추적
+### Loggers: 실험 추적
 
 **Logger**는 학습 과정의 메트릭, 하이퍼파라미터, 모델 그래프 등을 기록한다. TensorBoard, WandB, MLflow 등 다양한 로깅 도구를 지원한다.
 
@@ -255,11 +354,260 @@ trainer = Trainer(
 )
 ```
 
-[시각적 표현 넣기: PyTorch Lightning 컴포넌트 간의 관계를 보여주는 다이어그램]
 
-## 📊 Weights & Biases (wandb) 통합
+## 🤖 LLM 모델링과 PyTorch Lightning
 
-Weights & Biases는 머신러닝 실험 추적, 시각화, 협업을 위한 강력한 플랫폼이다. PyTorch Lightning과의 완벽한 통합으로 최소한의 코드 변경으로 강력한 실험 관리 기능을 사용할 수 있다.
+Large Language Model(LLM) 학습은 일반적인 딥러닝 모델과 비교했을 때 몇 가지 독특한 특성과 도전 과제를 가진다. PyTorch Lightning 은 이러한 LLM 특성에 맞춤화된 기능들을 제공한다.
+
+### LLM 학습의 특수성
+
+**메모리 효율성의 중요성** LLM은 수십억 개의 매개변수를 가지므로 메모리 사용량이 매우 크다. 
+
+이를 위해 다음과 같은 최적화 기법들이 필요하다.
+
+- **그래디언트 체크포인팅**: 메모리 사용량을 줄이기 위해 일부 중간 활성화를 재계산
+- **그래디언트 누적**: 작은 배치로 나누어 처리하여 효과적인 배치 크기 달성
+- **혼합 정밀도 학습**: FP16 또는 BF16을 사용하여 메모리 사용량 및 학습 시간 단축
+
+**분산 학습의 필수성** 단일 GPU로는 대규모 LLM을 학습하기 어려우므로 분산 학습이 필수적이다.
+
+- **데이터 병렬화**: 여러 GPU에서 동일한 모델로 서로 다른 배치 처리
+- **모델 병렬화**: 모델을 여러 GPU에 분할하여 배치
+- **파이프라인 병렬화**: 모델을 레이어별로 분할하여 파이프라인 처리
+
+### HuggingFace 와 Lightning 통합
+
+HuggingFace Transformers 라이브러리는 사전 훈련된 LLM 을 쉽게 활용할 수 있게 해주며, PyTorch Lightning 과 완벽하게 호환된다.
+
+```python
+class HuggingFaceLLM(pl.LightningModule):
+    def __init__(
+        self, 
+        model_name: str = "gpt2",
+        learning_rate: float = 5e-5,
+        warmup_steps: int = 1000,
+        max_steps: int = 10000
+    ):
+        super().__init__()
+        self.save_hyperparameters()
+        
+        # HuggingFace 모델 및 토크나이저 로드
+        self.model = AutoModelForCausalLM.from_pretrained(
+            model_name,
+            torch_dtype=torch.float16,  # 메모리 효율성을 위한 FP16
+            use_cache=False  # 그래디언트 체크포인팅과 호환성
+        )
+        self.tokenizer = AutoTokenizer.from_pretrained(model_name)
+        
+        # 패딩 토큰 설정
+        if self.tokenizer.pad_token is None:
+            self.tokenizer.pad_token = self.tokenizer.eos_token
+    
+    def training_step(self, batch, batch_idx):
+        # 언어 모델링 손실 계산
+        outputs = self.model(
+            input_ids=batch['input_ids'],
+            attention_mask=batch['attention_mask'],
+            labels=batch['input_ids']  # 자기 지도 학습
+        )
+        
+        loss = outputs.loss
+        
+        # 학습 메트릭 로깅
+        self.log('train_loss', loss, on_step=True, on_epoch=True, prog_bar=True)
+        self.log('train_ppl', torch.exp(loss), on_step=True, on_epoch=True)
+        
+        return loss
+    
+    def validation_step(self, batch, batch_idx):
+        # 검증 손실 계산
+        outputs = self.model(
+            input_ids=batch['input_ids'],
+            attention_mask=batch['attention_mask'],
+            labels=batch['input_ids']
+        )
+        
+        val_loss = outputs.loss
+        
+        # 검증 메트릭 로깅
+        self.log('val_loss', val_loss, on_step=False, on_epoch=True, prog_bar=True)
+        self.log('val_ppl', torch.exp(val_loss), on_step=False, on_epoch=True)
+        
+        return val_loss
+    
+    def configure_optimizers(self):
+        # AdamW 옵티마이저 설정 (LLM에 효과적)
+        optimizer = torch.optim.AdamW(
+            self.parameters(),
+            lr=self.hparams.learning_rate,
+            betas=(0.9, 0.95),  # LLM에 최적화된 베타 값
+            weight_decay=0.1
+        )
+        
+        # 선형 워밍업 및 코사인 감쇠 스케줄러
+        scheduler = get_cosine_schedule_with_warmup(
+            optimizer,
+            num_warmup_steps=self.hparams.warmup_steps,
+            num_training_steps=self.hparams.max_steps
+        )
+        
+        return {
+            "optimizer": optimizer,
+            "lr_scheduler": {
+                "scheduler": scheduler,
+                "interval": "step",
+                "frequency": 1
+            }
+        }
+    
+    def on_before_optimizer_step(self, optimizer):
+        # 그래디언트 노름 로깅 (LLM 학습 모니터링에 중요)
+        grad_norm = torch.nn.utils.clip_grad_norm_(self.parameters(), max_norm=1.0)
+        self.log('grad_norm', grad_norm, on_step=True)
+```
+
+### 메모리 최적화 전략
+
+LLM 학습에서 메모리 효율성은 성공의 핵심 요소이다. PyTorch Lightning 은 이를 위한 다양한 기능을 제공한다.
+
+```python
+# 메모리 효율적인 학습 설정
+trainer = pl.Trainer(
+    # 혼합 정밀도 학습 (메모리 사용량 50% 감소)
+    precision="16-mixed",
+    
+    # 그래디언트 누적 (효과적인 배치 크기 증가)
+    accumulate_grad_batches=8,
+    
+    # 그래디언트 체크포인팅 활성화
+    gradient_clip_val=1.0,
+    
+    # DeepSpeed 전략 사용 (ZeRO 최적화)
+    strategy="deepspeed_stage_2",
+    
+    # 멀티 GPU 활용
+    accelerator="gpu",
+    devices=4,
+    
+    # 콜백 설정
+    callbacks=[
+        ModelCheckpoint(
+            save_top_k=2,
+            monitor="val_loss",
+            mode="min",
+            save_last=True
+        ),
+        EarlyStopping(
+            monitor="val_loss",
+            patience=3,
+            mode="min"
+        )
+    ]
+)
+```
+
+> LLM 학습에서 PyTorch Lightning의 진가는 **복잡한 분산 학습과 메모리 최적화를 투명하게 처리**하면서도 **코드의 가독성과 재현성을 유지**한다는 점이다.
+{: .prompt-tip}
+
+## 📊 실험 추적과 Wandb 통합
+
+머신러닝 실험에서 체계적인 추적과 비교는 모델 개선의 핵심이다. 특히 LLM과 같은 대규모 모델에서는 실험 비용이 높기 때문에 효율적인 실험 관리가 더욱 중요하다.
+
+**Weights & Biases(Wandb)** 는 머신러닝 실험 추적 플랫폼으로, PyTorch Lightning과 완벽하게 통합되어 강력한 실험 관리 환경을 제공한다.
+
+```mermaid
+graph TB
+    subgraph "Wandb 실험 추적 워크플로우"
+        A[실험 시작] --> B[하이퍼파라미터 로깅]
+        B --> C[학습 메트릭 실시간 추적]
+        C --> D[모델 아티팩트 저장]
+        D --> E[실험 비교 및 분석]
+        E --> F[최적 하이퍼파라미터 발견]
+    end
+    
+    subgraph "Lightning 통합"
+        G[WandbLogger] --> H[자동 메트릭 로깅]
+        H --> I[하이퍼파라미터 스윕]
+        I --> J[모델 체크포인트 추적]
+    end
+    
+    A --> G
+    C --> H
+    F --> I
+```
+
+### Wandb Logger 설정
+
+```python
+import wandb
+from pytorch_lightning.loggers import WandbLogger
+
+# Wandb 로거 초기화
+wandb_logger = WandbLogger(
+    project="llm-experiments",
+    name="gpt2-finetuning",
+    save_dir="./logs",
+    config={
+        "architecture": "GPT-2",
+        "dataset": "custom_text",
+        "learning_rate": 5e-5,
+        "batch_size": 8,
+        "max_length": 512
+    }
+)
+
+class LLMWithWandbTracking(pl.LightningModule):
+    def __init__(self, *args, **kwargs):
+        super().__init__()
+        # 모델 초기화 코드...
+        
+    def training_step(self, batch, batch_idx):
+        outputs = self.model(**batch)
+        loss = outputs.loss
+        
+        # 자동으로 Wandb에 로깅됨
+        self.log('train_loss', loss, on_step=True, on_epoch=True)
+        self.log('learning_rate', self.optimizers().param_groups[0]['lr'])
+        
+        # 커스텀 메트릭 로깅
+        if batch_idx % 100 == 0:
+            # 생성 샘플 로깅
+            sample_text = self.generate_sample()
+            wandb.log({"generated_sample": wandb.Html(sample_text)})
+        
+        return loss
+    
+    def validation_step(self, batch, batch_idx):
+        outputs = self.model(**batch)
+        val_loss = outputs.loss
+        
+        # 검증 메트릭 로깅
+        self.log('val_loss', val_loss, on_epoch=True)
+        self.log('val_perplexity', torch.exp(val_loss), on_epoch=True)
+        
+        return val_loss
+    
+    def on_validation_epoch_end(self):
+        # 에포크 종료 시 추가 메트릭 계산
+        if hasattr(self, 'val_outputs'):
+            avg_val_loss = torch.stack(self.val_outputs).mean()
+            
+            # 학습 곡선 시각화
+            self.logger.experiment.log({
+                "epoch": self.current_epoch,
+                "validation_loss_trend": avg_val_loss
+            })
+
+# 학습 실행
+trainer = pl.Trainer(
+    logger=wandb_logger,
+    max_epochs=10,
+    log_every_n_steps=50,
+    # 기타 설정...
+)
+
+trainer.fit(model, datamodule)
+```
 
 ### wandb 기본 설정
 
@@ -514,7 +862,7 @@ class CollaborativeModel(pl.LightningModule):
             })
 ```
 
-### wandb와 PyTorch Lightning 통합 베스트 프랙티스
+### wandb 와 PyTorch Lightning 통합 베스트 프랙티스
 
 ```python
 class ProductionModel(pl.LightningModule):
@@ -646,7 +994,176 @@ if __name__ == "__main__":
     wandb.finish()
 ```
 
-> wandb와 PyTorch Lightning의 조합은 머신러닝 실험을 체계적으로 관리하고 추적하는 가장 효과적인 방법 중 하나다. 실험 재현성, 협업, 그리고 모델 개발 과정의 투명성을 크게 향상시킬 수 있다. {: .prompt-tip}
+> Wandb와 Lightning의 통합은 단순한 로깅을 넘어서 **실험의 전체 생명주기 관리**를 가능하게 한다. 하이퍼파라미터 최적화부터 모델 버전 관리까지 모든 것이 자동화된다.
+{: .prompt-tip}
+
+## 🎛️ Callback System
+
+PyTorch Lightning 의 콜백 시스템은 학습 과정의 특정 시점에서 커스텀 로직을 실행할 수 있게 해주는 강력한 메커니즘이다. 이를 통해 모델 저장, 조기 종료, 학습률 스케줄링 등을 세밀하게 제어할 수 있다.
+
+### 콜백 시스템의 동작 원리
+
+```mermaid
+graph TD
+    A[학습 시작] --> B[on_train_start]
+    B --> C[Epoch 시작]
+    C --> D[on_train_epoch_start]
+    D --> E[Batch 처리]
+    E --> F[on_train_batch_start]
+    F --> G[training_step]
+    G --> H[on_train_batch_end]
+    H --> I{더 많은 배치?}
+    I -->|Yes| E
+    I -->|No| J[on_train_epoch_end]
+    J --> K[검증 단계]
+    K --> L[on_validation_start]
+    L --> M[validation_step]
+    M --> N[on_validation_end]
+    N --> O{더 많은 에포크?}
+    O -->|Yes| C
+    O -->|No| P[on_train_end]
+```
+
+### 커스텀 콜백 구현
+
+LLM 학습에 특화된 커스텀 콜백을 구현해보자.
+
+```python
+class LLMGenerationCallback(pl.Callback):
+    """LLM 학습 중 주기적으로 텍스트 생성 샘플을 확인하는 콜백"""
+    
+    def __init__(self, prompt_texts: List[str], generation_interval: int = 1000):
+        self.prompt_texts = prompt_texts
+        self.generation_interval = generation_interval
+    
+    def on_train_batch_end(self, trainer, pl_module, outputs, batch, batch_idx):
+        # 지정된 간격마다 텍스트 생성
+        if batch_idx % self.generation_interval == 0:
+            pl_module.eval()
+            
+            with torch.no_grad():
+                for i, prompt in enumerate(self.prompt_texts):
+                    # 토크나이징
+                    inputs = pl_module.tokenizer(
+                        prompt, 
+                        return_tensors="pt",
+                        padding=True
+                    ).to(pl_module.device)
+                    
+                    # 텍스트 생성
+                    outputs = pl_module.model.generate(
+                        **inputs,
+                        max_new_tokens=100,
+                        do_sample=True,
+                        temperature=0.7,
+                        pad_token_id=pl_module.tokenizer.eos_token_id
+                    )
+                    
+                    # 생성된 텍스트 디코딩
+                    generated_text = pl_module.tokenizer.decode(
+                        outputs[0], skip_special_tokens=True
+                    )
+                    
+                    # Wandb에 로깅
+                    if trainer.logger:
+                        trainer.logger.experiment.log({
+                            f"generated_sample_{i}": wandb.Html(f"<p><strong>Prompt:</strong> {prompt}</p><p><strong>Generated:</strong> {generated_text}</p>"),
+                            "global_step": trainer.global_step
+                        })
+            
+            pl_module.train()
+
+class ModelComplexityCallback(pl.Callback):
+    """모델의 복잡성과 메모리 사용량을 추적하는 콜백"""
+    
+    def on_train_start(self, trainer, pl_module):
+        # 모델 파라미터 수 계산
+        total_params = sum(p.numel() for p in pl_module.parameters())
+        trainable_params = sum(p.numel() for p in pl_module.parameters() if p.requires_grad)
+        
+        print(f"Total parameters: {total_params:,}")
+        print(f"Trainable parameters: {trainable_params:,}")
+        
+        # Wandb에 모델 정보 로깅
+        if trainer.logger:
+            trainer.logger.experiment.config.update({
+                "total_parameters": total_params,
+                "trainable_parameters": trainable_params,
+                "model_size_mb": total_params * 4 / (1024 * 1024)  # 대략적인 크기 (FP32 기준)
+            })
+    
+    def on_train_batch_end(self, trainer, pl_module, outputs, batch, batch_idx):
+        # GPU 메모리 사용량 모니터링
+        if batch_idx % 100 == 0 and torch.cuda.is_available():
+            memory_allocated = torch.cuda.memory_allocated() / (1024 ** 3)  # GB 단위
+            memory_reserved = torch.cuda.memory_reserved() / (1024 ** 3)
+            
+            if trainer.logger:
+                trainer.logger.experiment.log({
+                    "gpu_memory_allocated_gb": memory_allocated,
+                    "gpu_memory_reserved_gb": memory_reserved,
+                    "global_step": trainer.global_step
+                })
+```
+
+### 고급 체크포인팅 전략
+
+LLM 학습에서는 체크포인팅 전략이 매우 중요하다. 학습 시간이 길고 비용이 높기 때문에 효율적인 모델 저장과 복원이 필요하다.
+
+```python
+# 다중 조건 체크포인팅
+best_checkpoint = ModelCheckpoint(
+    dirpath="checkpoints/best",
+    filename="best-{epoch:02d}-{val_loss:.2f}",
+    monitor="val_loss",
+    mode="min",
+    save_top_k=3,
+    save_last=True,
+    auto_insert_metric_name=False
+)
+
+# 주기적 체크포인팅
+periodic_checkpoint = ModelCheckpoint(
+    dirpath="checkpoints/periodic",
+    filename="periodic-{epoch:02d}-{step}",
+    every_n_train_steps=5000,  # 5000 스텝마다 저장
+    save_top_k=-1  # 모든 체크포인트 보존
+)
+
+# 조기 종료 설정
+early_stopping = EarlyStopping(
+    monitor="val_loss",
+    min_delta=0.001,
+    patience=5,
+    verbose=True,
+    mode="min"
+)
+
+# 학습률 모니터링
+lr_monitor = LearningRateMonitor(logging_interval="step")
+
+# 모든 콜백을 포함한 트레이너 설정
+trainer = pl.Trainer(
+    max_epochs=50,
+    accelerator="gpu",
+    devices=4,
+    strategy="ddp",  # 분산 데이터 병렬
+    precision="16-mixed",
+    gradient_clip_val=1.0,
+    accumulate_grad_batches=4,
+    val_check_interval=0.25,  # 에포크의 1/4마다 검증
+    logger=wandb_logger,
+    callbacks=[
+        best_checkpoint,
+        periodic_checkpoint,
+        early_stopping,
+        lr_monitor,
+        LLMGenerationCallback(["Once upon a time", "The future of AI"]),
+        ModelComplexityCallback()
+    ]
+)
+```
+
 
 ## 🎯 다양한 학습 시나리오
 
@@ -1107,8 +1624,6 @@ trainer = Trainer(
 )
 ```
 
-> PyTorch Lightning은 연구와 프로덕션 모두에서 딥러닝 개발을 가속화하는 강력한 도구다. 보일러플레이트 코드를 제거하고 모범 사례를 자동으로 적용함으로써, 개발자가 모델 아키텍처와 실험 설계에 더 집중할 수 있게 해준다. {: .prompt-tip}
-
 ## 📚 실무 활용 팁
 
 ### 실험 관리
@@ -1152,4 +1667,5 @@ with torch.no_grad():
     predictions = model(input_data)
 ```
 
-> PyTorch Lightning을 마스터하면 딥러닝 프로젝트의 개발 속도를 크게 향상시킬 수 있다. 표준화된 구조와 풍부한 기능을 통해 연구에서 프로덕션까지 일관된 워크플로우를 구축할 수 있다. {: .prompt-tip}
+> PyTorch Lightning 을 마스터하면 딥러닝 프로젝트의 개발 속도를 크게 향상시킬 수 있다. 표준화된 구조와 풍부한 기능을 통해 연구에서 프로덕션까지 일관된 워크플로우를 구축할 수 있다.
+{: .prompt-tip}
