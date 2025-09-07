@@ -14,13 +14,13 @@ timezone: Asia/Seoul
 # jekyll-seo-tag settings › https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md
 # ↓ --------------------------
 
-title: 급발진 거북이
+title: GeekAndChill
 
-tagline: 급발진 거북이의 여정
+tagline: 기깬칠 aka. GeekAndChill 의 여정
 
 description: >- 
   내가 보고 듣고 느끼고 생각한 것들의 모음집
-  Python, Djnago, FastAPI, Machine Learning, Deeplearning 등 공부한 것들의 기록
+  RAG, Langchain, Djnago, FastAPI, Machine Learning, Deeplearning 등 공부한 것들의 기록
 
 # Fill in the protocol & hostname for your site.
 # E.g. 'https://username.github.io', note that it does not end with a '/'.
@@ -32,7 +32,7 @@ github:
 social:
   # Change to your full name.
   # It will be displayed as the default author of the posts and the copyright owner in the Footer
-  name: yuiyeong
+  name: emerge.ncelab_geek.n.chill
   email: joyuiyeong@gmail.com
   links:
     # The first element serves as the copyright owner's link

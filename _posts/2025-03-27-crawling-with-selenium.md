@@ -2,7 +2,7 @@
 title: 🐍 Crawling 맛 보기(w. selenium)
 date: 2025-03-27 15:56:00 +0900
 categories: [ PYTHON, CRAWLING ]
-tags: [ '급발진거북이', 'python', 'crawling', '크롤링', 'selenium', '셀레니움' ]
+tags: [ '급발진거북이', 'python', 'crawling', '크롤링', 'selenium', '셀레니움', 'GeekAndChill', '기깬칠' ]
 toc: true
 comments: false
 mermaid: true

@@ -12,6 +12,8 @@ tags:
   - 추천시스템
   - 파이썬
   - python
+  - GeekAndChill
+  - 기깬칠
 toc: true
 comments: false
 mermaid: true

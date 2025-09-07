@@ -2,7 +2,7 @@
 title: 🎲 기초 수학 for 인공지능 03; 벡터
 date: 2025-04-07 13:32:00 +0900
 categories: [ MATHEMATICS, VECTOR ]
-tags: [ '급발진거북이', 'numpy', 'mathematics', '기초수학', 'torch', 'tensor', '행렬', 'matrix', 'machen learning', 'deeplearning', 'python', '파이썬' ]
+tags: [ '급발진거북이', 'numpy', 'mathematics', '기초수학', 'torch', 'tensor', '행렬', 'matrix', 'machen learning', 'deeplearning', 'python', '파이썬', 'GeekAndChill', '기깬칠' ]
 toc: true
 comments: false
 mermaid: true

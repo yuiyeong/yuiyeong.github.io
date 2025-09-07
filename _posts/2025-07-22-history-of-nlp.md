@@ -17,6 +17,8 @@ tags:
   - prompt-engineering
   - ai-ethics
   - ai-fairness
+  - GeekAndChill
+  - 기깬칠
 toc: true
 comments: false
 mermaid: true

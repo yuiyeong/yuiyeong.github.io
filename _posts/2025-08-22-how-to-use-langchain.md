@@ -15,6 +15,8 @@ tags:
   - agent
   - ai_agent
   - RAG
+  - GeekAndChill
+  - 기깬칠
 toc: true
 comments: false
 mermaid: true

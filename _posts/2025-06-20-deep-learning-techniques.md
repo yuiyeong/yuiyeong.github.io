@@ -12,6 +12,8 @@ tags:
   - python
   - 비지도학습
   - 지도학습
+  - GeekAndChill
+  - 기깬칠
 toc: true
 comments: false
 mermaid: true

@@ -13,6 +13,8 @@ tags:
   - jupyter-notebook
   - code-style
   - 환경설정
+  - GeekAndChill
+  - 기깬칠
 toc: true
 comments: false
 mermaid: true

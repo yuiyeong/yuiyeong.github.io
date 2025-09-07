@@ -6,6 +6,8 @@ categories:
   - EVALUATION
 tags:
   - 급발진거북이
+  - GeekAndChill
+  - 기깬칠
 toc: true
 comments: false
 mermaid: true

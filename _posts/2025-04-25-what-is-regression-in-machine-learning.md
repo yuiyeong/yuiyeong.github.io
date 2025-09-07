@@ -14,6 +14,8 @@ tags:
   - python
   - 파이썬
   - machinelearning
+  - GeekAndChill
+  - 기깬칠
 toc: true
 comments: false
 mermaid: true

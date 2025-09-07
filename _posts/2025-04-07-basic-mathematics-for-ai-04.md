@@ -2,7 +2,7 @@
 title: 🎲 기초 수학 for 인공지능 04; 확률분포
 date: 2025-04-07 13:36:00 +0900
 categories: [MATHEMATICS, PROBABILITY]
-tags: ['급발진거북이', 'numpy', 'pandas', 'mathematics', '기초수학', 'statistics', '통계', '확률', '정규분포', 'normal distribution', 'statistic']
+tags: ['급발진거북이', 'numpy', 'pandas', 'mathematics', '기초수학', 'statistics', '통계', '확률', '정규분포', 'normal distribution', 'statistic', 'GeekAndChill', '기깬칠']
 toc: true
 comments: false
 mermaid: true

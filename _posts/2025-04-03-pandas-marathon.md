@@ -2,7 +2,7 @@
 title: 🐼 Pandas 켠김에 왕까지
 date: 2025-04-03 10:09:00 +0900
 categories: [PYTHON, PANDAS]
-tags: ['급발진거북이', 'pandas', 'excel', 'csv', 'python', '파이썬', '데이터분석']
+tags: ['급발진거북이', 'pandas', 'excel', 'csv', 'python', '파이썬', '데이터분석', 'GeekAndChill', '기깬칠']
 toc: true
 comments: false
 mermaid: true

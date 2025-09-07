@@ -2,7 +2,7 @@
 title: 😀 Python 실용 팁 01
 date: 2025-04-01 17:15:00 +0900
 categories: [ PYTHON, ETC ]
-tags: [ '급발진거북이', 'python' ]
+tags: [ '급발진거북이', 'python', 'GeekAndChill', '기깬칠' ]
 toc: true
 comments: false
 mermaid: true

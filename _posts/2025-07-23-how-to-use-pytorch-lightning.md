@@ -13,6 +13,8 @@ tags:
   - python
   - 파이썬
   - deeplearning
+  - GeekAndChill
+  - 기깬칠
 toc: true
 comments: false
 mermaid: true

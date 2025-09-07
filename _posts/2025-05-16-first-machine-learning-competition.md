@@ -15,6 +15,8 @@ tags:
   - 국비지원
   - 후기
   - ML경진대회
+  - GeekAndChill
+  - 기깬칠
 toc: true
 comments: false
 mermaid: true

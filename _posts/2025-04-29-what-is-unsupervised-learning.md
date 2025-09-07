@@ -14,6 +14,8 @@ tags:
   - PCA
   - Clustering
   - Manifold
+  - GeekAndChill
+  - 기깬칠
 toc: true
 comments: false
 mermaid: true

@@ -15,6 +15,8 @@ tags:
   - tensor
   - torch
   - 파이썬
+  - GeekAndChill
+  - 기깬칠
 toc: true
 comments: false
 mermaid: true

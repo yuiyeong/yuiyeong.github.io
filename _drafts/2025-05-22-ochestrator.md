@@ -2,7 +2,7 @@
 title: Ochestrator
 date: 2025-05-22 19:00:00 +0900
 categories: [ ]
-tags: [ "급발진거북이" ]
+tags: [ "급발진거북이", "GeekAndChill" ]
 toc: true
 comments: false
 mermaid: true

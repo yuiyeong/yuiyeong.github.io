@@ -2,7 +2,7 @@
 title: 😜 Selenium with Python Cheat Sheet
 date: 2025-03-31 19:59:00 +0900
 categories: [ PYTHON, CRAWLING ]
-tags: [ '급발진거북이', 'python', 'crawling', '크롤링', 'selenium', '셀레니움', '파이썬' ]
+tags: [ '급발진거북이', 'python', 'crawling', '크롤링', 'selenium', '셀레니움', '파이썬', 'GeekAndChill', '기깬칠' ]
 toc: true
 comments: false
 mermaid: true

@@ -13,6 +13,8 @@ tags:
   - machinelearning
   - time-series
   - python
+  - GeekAndChill
+  - 기깬칠
 toc: true
 comments: false
 mermaid: true

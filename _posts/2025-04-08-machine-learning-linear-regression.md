@@ -16,6 +16,8 @@ tags:
   - 딥러닝
   - machinelearning
   - linear-regression
+  - GeekAndChill
+  - 기깬칠
 toc: true
 comments: false
 mermaid: true

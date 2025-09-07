@@ -13,6 +13,8 @@ tags:
   - graph
   - 그래프
   - 파이썬
+  - GeekAndChill
+  - 기깬칠
 toc: true
 comments: false
 mermaid: true

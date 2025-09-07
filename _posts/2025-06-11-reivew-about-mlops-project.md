@@ -2,7 +2,7 @@
 title: 🚣 (AI 부트캠프 13기) MLOps 프로젝트 후기
 date: 2025-06-11 10:51:00 +0900
 categories: [ "BOOTCAMP", "KERNEL_ACADEMY" ]
-tags: [ "급발진거북이", "패스트캠퍼스", "패스트캠퍼스AI부트캠프", "패스트캠퍼스업스테이지부트캠프", "패스트캠퍼스업스테이지에이아이랩", "업스테이지패스트캠퍼스", "UpstageAILab", "국비지원", "후기" ]
+tags: [ "급발진거북이", "패스트캠퍼스", "패스트캠퍼스AI부트캠프", "패스트캠퍼스업스테이지부트캠프", "패스트캠퍼스업스테이지에이아이랩", "업스테이지패스트캠퍼스", "UpstageAILab", "국비지원", "후기", 'GeekAndChill', '기깬칠' ]
 toc: true
 comments: false
 mermaid: true

@@ -10,6 +10,8 @@ tags:
   - 딥러닝
   - deeplearning
   - eda
+  - GeekAndChill
+  - 기깬칠
 toc: true
 comments: false
 mermaid: true
