@@ -3,7 +3,7 @@ title: 📘 Jupyter Notebook 코드 스타일 관리 (w. Ruff and Pre-commit)
 date: 2025-04-22 21:17:00 +0900
 categories:
   - PYTHON
-  - ETC
+  - MANAGING
 tags:
   - 급발진거북이
   - python

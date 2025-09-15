@@ -15,6 +15,8 @@ tags:
   - 크롤링
   - annotation
   - planning
+  - 에이아이
+  - AI
 toc: true
 comments: false
 mermaid: true

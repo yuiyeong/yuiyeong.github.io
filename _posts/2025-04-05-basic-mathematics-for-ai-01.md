@@ -1,8 +1,19 @@
 ---
 title: 🎲 기초 수학 for 인공지능 01; 확률
 date: 2025-04-05 06:02:00 +0900
-categories: [ MATHEMATICS, PROBABILITY ]
-tags: [ '급발진거북이', 'numpy', 'mathematics', '기초수학', '확률', 'GeekAndChill', '기깬칠' ]
+categories:
+  - MATHEMATICS
+  - PROBABILITY
+tags:
+  - 급발진거북이
+  - numpy
+  - mathematics
+  - 기초수학
+  - 확률
+  - GeekAndChill
+  - 기깬칠
+  - 에이아이
+  - AI
 toc: true
 comments: false
 mermaid: true

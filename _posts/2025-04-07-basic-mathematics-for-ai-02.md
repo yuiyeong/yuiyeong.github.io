@@ -1,8 +1,22 @@
 ---
 title: 🎲 기초 수학 for 인공지능 02; 통계
 date: 2025-04-07 13:27:00 +0900
-categories: [ MATHEMATICS, STATISTICS ]
-tags: [ '급발진거북이', 'numpy', 'mathematics', 'statistics', '통계', '기초수학', 'statistic', '기술통계', 'GeekAndChill', '기깬칠' ]
+categories:
+  - MATHEMATICS
+  - STATISTICS
+tags:
+  - 급발진거북이
+  - numpy
+  - mathematics
+  - statistics
+  - 통계
+  - 기초수학
+  - statistic
+  - 기술통계
+  - GeekAndChill
+  - 기깬칠
+  - 에이아이
+  - AI
 toc: true
 comments: false
 mermaid: true

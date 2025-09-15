@@ -1,8 +1,17 @@
 ---
 title: 🐍 자료 구조(w. Python)
 date: 2025-04-16 09:48:00 +0900
-categories: [ PYTHON, CODING_TEST ]
-tags: [ '급발진거북이', 'python', '파이썬', '자료구조', '코딩테스트', 'data structure', 'GeekAndChill', '기깬칠' ]
+categories:
+  - PYTHON
+  - CODING_TEST
+tags:
+  - 급발진거북이
+  - python
+  - 파이썬
+  - 자료구조
+  - 코딩테스트
+  - GeekAndChill
+  - 기깬칠
 toc: true
 comments: false
 mermaid: true

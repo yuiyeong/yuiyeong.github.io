@@ -18,6 +18,8 @@ tags:
   - linear-regression
   - GeekAndChill
   - 기깬칠
+  - AI
+  - 에이아이
 toc: true
 comments: false
 mermaid: true

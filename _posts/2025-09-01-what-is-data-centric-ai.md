@@ -13,6 +13,8 @@ tags:
   - data-centric-ai
   - labeling
   - annotation
+  - AI
+  - 에이아이
 toc: true
 comments: false
 mermaid: true

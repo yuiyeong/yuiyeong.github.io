@@ -15,6 +15,9 @@ tags:
   - python
   - GeekAndChill
   - 기깬칠
+  - 에이아이
+  - AI
+  - LSTM
 toc: true
 comments: false
 mermaid: true

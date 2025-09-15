@@ -1,8 +1,25 @@
 ---
 title: 🎲 기초 수학 for 인공지능 05; 추리 통계
 date: 2025-04-08 10:41:00 +0900
-categories: [ MATHEMATICS, PROBABILITY ]
-tags: [ '급발진거북이', 'numpy', 'pandas', 'mathematics', '기초수학', 'statistics', '통계', '확률', 'estimation', '추정', 'GeekAndChill', '기깬칠' ]
+categories:
+  - MATHEMATICS
+  - PROBABILITY
+tags:
+  - 급발진거북이
+  - numpy
+  - pandas
+  - mathematics
+  - 기초수학
+  - statistics
+  - 통계
+  - 확률
+  - estimation
+  - 추정
+  - GeekAndChill
+  - 기깬칠
+  - machinelearning
+  - deeplearning
+  - AI
 toc: true
 comments: false
 mermaid: true

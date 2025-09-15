@@ -14,6 +14,8 @@ tags:
   - python
   - GeekAndChill
   - 기깬칠
+  - 에이아이
+  - AI
 toc: true
 comments: false
 mermaid: true

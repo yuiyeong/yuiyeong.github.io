@@ -1,8 +1,18 @@
 ---
 title: 😜 NumPy Cheat Sheet
 date: 2025-04-01 12:26:00 +0900
-categories: [ PYTHON, NUMPY ]
-tags: [ '급발진거북이', 'python', 'numpy', 'cheat sheet', 'GeekAndChill', '기깬칠' ]
+categories:
+  - PYTHON
+  - NUMPY
+tags:
+  - 급발진거북이
+  - python
+  - numpy
+  - GeekAndChill
+  - 기깬칠
+  - cheet_sheet
+  - AI
+  - 에이아이
 toc: true
 comments: false
 mermaid: true

@@ -1,8 +1,19 @@
 ---
 title: 🐼 (연습) 서울 인구 데이터 분석 (w. Pandas)
 date: 2025-04-03 11:52:00 +0900
-categories: [ PYTHON, PANDAS ]
-tags: [ '급발진거북이', 'pandas', 'python', '데이터분석', '서울 열린데이터 광장', 'GeekAndChill', '기깬칠' ]
+categories:
+  - PYTHON
+  - PANDAS
+tags:
+  - 급발진거북이
+  - pandas
+  - python
+  - 데이터분석
+  - GeekAndChill
+  - 기깬칠
+  - 서울열린데이터광장
+  - 에이아이
+  - AI
 toc: true
 comments: false
 mermaid: true
