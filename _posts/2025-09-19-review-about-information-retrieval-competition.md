@@ -17,7 +17,7 @@ tags:
   - GeekAndChill
   - 기깬칠
   - AI부트캠프13기
-  - UpstageAILab13기
+  - UpstageAILab6기
 toc: true
 comments: false
 mermaid: true
