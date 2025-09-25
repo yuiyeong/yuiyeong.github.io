@@ -1,6 +1,6 @@
 ---
 title: "🧠 Attention 메커니즘 완전 정복: Standard부터 Flash, MLA까지"
-date: 2025-09-24 14:54:00 +0900
+date: 2025-09-17 14:54:00 +0900
 categories:
   - DEEP_LEARNING
   - TRANSFORMER
