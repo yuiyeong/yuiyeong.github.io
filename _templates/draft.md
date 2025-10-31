@@ -15,7 +15,7 @@ const frontMatter = `---
 title: ${title}
 date: ${tp.date.now("YYYY-MM-DD HH:mm:00 +0900")}
 categories: [ ]
-tags: [ "급발진거북이", "GeekAndChill", "기깬칠", "에이아이", "업스테이지에이아이랩", "UpstageAILab", "UpstageAILab6기", "ML", "DL", "machinelearning", "deeplearning"]
+tags: [ "급발진거북이", "GeekAndChill", "기깬칠", "에이아이", "업스테이지에이아이랩", "UpstageAILab", "UpstageAILab7기", "ML", "DL", "machinelearning", "deeplearning"]
 toc: true
 comments: false
 mermaid: true

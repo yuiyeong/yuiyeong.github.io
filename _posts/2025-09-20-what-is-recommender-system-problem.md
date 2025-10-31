@@ -11,7 +11,6 @@ tags:
   - 에이아이
   - AI
   - UpstageAILab
-  - UpstageAILab6기
   - recommender-system
   - 추천시스템
   - ML
@@ -19,6 +18,7 @@ tags:
   - DL
   - deeplearning
   - 업스테이지에이아이랩
+  - UpstageAILab7기
 toc: true
 comments: false
 mermaid: true

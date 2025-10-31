@@ -11,7 +11,7 @@ tags:
   - 에이아이
   - AI
   - UpstageAILab
-  - UpstageAILab6기
+  - UpstageAILab7기
   - 업스테이지에이아이랩
   - 추천시스템
   - recommender-system

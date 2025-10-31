@@ -9,7 +9,7 @@ tags:
   - 에이아이
   - 업스테이지에이아이랩
   - UpstageAILab
-  - UpstageAILab6기
+  - UpstageAILab7기
   - ML
   - DL
   - machinelearning

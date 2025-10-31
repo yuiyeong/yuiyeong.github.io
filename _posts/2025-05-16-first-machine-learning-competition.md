@@ -19,7 +19,7 @@ tags:
   - 기깬칠
   - AI
   - 에이아이
-  - UpstageAILab6기
+  - UpstageAILab7기
   - AI부트캠프13기
 toc: true
 comments: false
